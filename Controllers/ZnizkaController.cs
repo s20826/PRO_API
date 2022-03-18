@@ -32,6 +32,7 @@ namespace PRO_API.Controllers
                 from x in context.Znizkas
                 select new
                 {
+                    ID_znizka = x.IdZnizka,
                     Nazwa = x.NazwaZnizki,
                     Procent = x.ProcentZnizki
                 };
@@ -64,7 +65,7 @@ namespace PRO_API.Controllers
         [HttpGet("klient_znizka/{id}")]
         public IActionResult GetKlientZnizka(int id)
         {
-            if (context.KlientZnizkas.Where(x => x.KlientIdOsoba == id).Any() != true)
+            if (context.KlientZnizkas.Where(x => x.IdOsoba == id).Any() != true)
             {
                 return BadRequest("Nie ma przyznanych znizek dla klienta o ID = " + id);
             }
@@ -72,7 +73,7 @@ namespace PRO_API.Controllers
             {
                 var results =
                 from x in context.Znizkas
-                join y in context.KlientZnizkas on x.IdZnizka equals y.ZnizkaIdZnizka into ps
+                join y in context.KlientZnizkas on x.IdZnizka equals y.IdZnizka into ps
                 from p in ps
                 where x.IdZnizka == id
                 select new

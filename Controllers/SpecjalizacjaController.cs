@@ -82,7 +82,30 @@ namespace PRO_API.Controllers
                 };
 
                 return Ok(results);
+            }
+        }
 
+        [HttpGet("weterynarz_specjalizacja/{id, idSpecjalizacja}")]
+        public IActionResult GetOpisSpecjalizacjiWeterynarza(int id, int idSpecjalizacja)
+        {
+            if (context.WeterynarzSpecjalizacjas.Where(x => x.IdOsoba == id && x.IdSpecjalizacja == idSpecjalizacja).Any() != true)
+            {
+                return BadRequest("Weterynarz o ID = " + id + " nie ma specjalizacji o ID = " + idSpecjalizacja);
+            }
+            else
+            {
+                var results =
+                from x in context.WeterynarzSpecjalizacjas
+                join y in context.Specjalizacjas on x.IdSpecjalizacja equals y.IdSpecjalizacja into ps
+                from p in ps
+                where x.IdOsoba == id && x.IdSpecjalizacja == idSpecjalizacja
+                select new
+                {
+                    Nazwa = p.NazwaSpecjalizacji,
+                    Opis = x.Opis
+                };
+
+                return Ok(results);
             }
         }
     }

@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-#nullable disable
-
-namespace PRO_API.Models
+namespace PRO_API.DTO
 {
-    public partial class Osoba
+    public class KlientRequest
     {
-        public int IdOsoba { get; set; }
         public string Imie { get; set; }
         public string Nazwisko { get; set; }
         public DateTime DataUrodzenia { get; set; }
@@ -15,8 +14,5 @@ namespace PRO_API.Models
         public string Email { get; set; }
         public string Login { get; set; }
         public string Haslo { get; set; }
-
-        public virtual Klient Klient { get; set; }
-        public virtual Weterynarz Weterynarz { get; set; }
     }
 }

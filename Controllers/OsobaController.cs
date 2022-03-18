@@ -26,7 +26,7 @@ namespace PRO_API.Controllers
         public IActionResult GetOsoby()
         {
             var results = context.Osobas.ToList();
-            return Ok(context);
+            return Ok(results);
         }
     }
 }

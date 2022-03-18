@@ -1,14 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using PRO_API.DTO;
 using PRO_API.Models;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace PRO_API.Controllers
 {
@@ -34,6 +28,7 @@ namespace PRO_API.Controllers
                 from p in ps
                 select new
                 {
+                    ID_Osoba = x.IdOsoba,
                     Imie = x.Imie,
                     Nazwisko = x.Nazwisko,
                     Numer_Telefonu = x.NumerTelefonu,
@@ -63,9 +58,10 @@ namespace PRO_API.Controllers
                 {
                     Imie = x.Imie,
                     Nazwisko = x.Nazwisko,
+                    Data_Urodzenia = x.DataUrodzenia,
                     Numer_Telefonu = x.NumerTelefonu,
                     Email = x.Email,
-                    Data_zalozenia_konta = p.DataZatrudnienia,
+                    Data_zatrudnienia = p.DataZatrudnienia,
                     Pensja = p.Pensja
                 };
 

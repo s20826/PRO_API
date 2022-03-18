@@ -34,13 +34,13 @@ namespace PRO_API.Controllers
                 from p in ps
                 select new
                 {
+                    ID_osoba = x.IdOsoba,
                     Imie = x.Imie,
                     Nazwisko = x.Nazwisko,
                     Numer_Telefonu = x.NumerTelefonu,
                     Email = x.Email,
                     Data_zalozenia_konta = p.DataZalozeniaKonta
                 };
-
 
             return Ok(results);
         }
@@ -61,6 +61,7 @@ namespace PRO_API.Controllers
                 where x.IdOsoba == id
                 select new
                 {
+                    ID_osoba = id,
                     Imie = x.Imie,
                     Nazwisko = x.Nazwisko,
                     Numer_Telefonu = x.NumerTelefonu,
@@ -71,6 +72,42 @@ namespace PRO_API.Controllers
                 return Ok(results.First());
             }
         }
+
+        [HttpPost]
+        public IActionResult addKlient(KlientRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Niepoprawne dane");
+            }
+
+            SqlConnection connection = new SqlConnection(configuration.GetConnectionString("KlinikaDatabase"));
+            connection.Open();
+            SqlTransaction trans = connection.BeginTransaction();
+
+            var query = "exec P1 @imie, @nazwisko, @dataUr, @numerTel, @email, @login, @haslo";
+            SqlCommand command = new SqlCommand(query, connection, trans);
+            command.Parameters.AddWithValue("@imie", request.Imie);
+            command.Parameters.AddWithValue("@nazwisko", request.Nazwisko);
+            command.Parameters.AddWithValue("@dataUr", request.DataUrodzenia);
+            command.Parameters.AddWithValue("@numerTel", request.NumerTelefonu);
+            command.Parameters.AddWithValue("@email", request.Email);
+            command.Parameters.AddWithValue("@login", request.Login);
+            command.Parameters.AddWithValue("@haslo", request.Haslo);
+
+
+            if (command.ExecuteNonQuery() == 2)
+            {
+                trans.Commit();
+                return Ok("Dodano klienta " + request.Imie + " " + request.Nazwisko);
+            }
+            else
+            {
+                trans.Rollback();
+                return BadRequest("Error, nie udało się dodać klienta ");
+            }
+        }
+
 
         /*[HttpGet]
         public IActionResult GetKlienci2()

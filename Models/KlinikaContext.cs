@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Protocols;
 
 #nullable disable
 
@@ -19,7 +16,6 @@ namespace PRO_API.Models
             : base(options)
         {
         }
-
 
         public virtual DbSet<Badanie> Badanies { get; set; }
         public virtual DbSet<Klient> Klients { get; set; }
@@ -43,13 +39,11 @@ namespace PRO_API.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            
-            /*if (!optionsBuilder.IsConfigured)
+            if (!optionsBuilder.IsConfigured)
             {
-
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-
-            }*/
+                
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -58,23 +52,23 @@ namespace PRO_API.Models
 
             modelBuilder.Entity<Badanie>(entity =>
             {
-                entity.HasKey(e => e.IdBadanie)
+                entity.HasKey(e => e.IdUsluga)
                     .HasName("Badanie_pk");
 
                 entity.ToTable("Badanie");
 
-                entity.Property(e => e.IdBadanie).HasColumnName("ID_badanie");
+                entity.Property(e => e.IdUsluga)
+                    .ValueGeneratedNever()
+                    .HasColumnName("ID_usluga");
 
                 entity.Property(e => e.Dolegliwosc)
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.IdUsluga).HasColumnName("ID_usluga");
-
                 entity.HasOne(d => d.IdUslugaNavigation)
-                    .WithMany(p => p.Badanies)
-                    .HasForeignKey(d => d.IdUsluga)
+                    .WithOne(p => p.Badanie)
+                    .HasForeignKey<Badanie>(d => d.IdUsluga)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Badanie_Usluga");
             });
@@ -87,7 +81,7 @@ namespace PRO_API.Models
                 entity.ToTable("Klient");
 
                 entity.Property(e => e.IdOsoba)
-                    .ValueGeneratedOnAdd()
+                    .ValueGeneratedNever()
                     .HasColumnName("ID_osoba");
 
                 entity.Property(e => e.DataZalozeniaKonta)
@@ -103,14 +97,14 @@ namespace PRO_API.Models
 
             modelBuilder.Entity<KlientZnizka>(entity =>
             {
-                entity.HasKey(e => new { e.KlientIdOsoba, e.ZnizkaIdZnizka })
+                entity.HasKey(e => new { e.IdOsoba, e.IdZnizka })
                     .HasName("Klient_znizka_pk");
 
                 entity.ToTable("Klient_znizka");
 
-                entity.Property(e => e.KlientIdOsoba).HasColumnName("Klient_ID_osoba");
+                entity.Property(e => e.IdOsoba).HasColumnName("ID_osoba");
 
-                entity.Property(e => e.ZnizkaIdZnizka).HasColumnName("Znizka_ID_znizka");
+                entity.Property(e => e.IdZnizka).HasColumnName("ID_znizka");
 
                 entity.Property(e => e.CzyWykorzystana).HasColumnName("Czy_wykorzystana");
 
@@ -118,15 +112,15 @@ namespace PRO_API.Models
                     .HasColumnType("date")
                     .HasColumnName("Data_przyznania");
 
-                entity.HasOne(d => d.KlientIdOsobaNavigation)
+                entity.HasOne(d => d.IdOsobaNavigation)
                     .WithMany(p => p.KlientZnizkas)
-                    .HasForeignKey(d => d.KlientIdOsoba)
+                    .HasForeignKey(d => d.IdOsoba)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Klient_znizka_Klient");
 
-                entity.HasOne(d => d.ZnizkaIdZnizkaNavigation)
+                entity.HasOne(d => d.IdZnizkaNavigation)
                     .WithMany(p => p.KlientZnizkas)
-                    .HasForeignKey(d => d.ZnizkaIdZnizka)
+                    .HasForeignKey(d => d.IdZnizka)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Klient_znizka_Znizka");
             });
@@ -207,13 +201,17 @@ namespace PRO_API.Models
 
                 entity.Property(e => e.IdOsoba).HasColumnName("ID_osoba");
 
+                entity.Property(e => e.DataUrodzenia)
+                    .HasColumnType("date")
+                    .HasColumnName("Data_urodzenia");
+
                 entity.Property(e => e.Email)
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Haslo)
                     .IsRequired()
-                    .HasMaxLength(50)
+                    .HasMaxLength(60)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Imie)
@@ -401,7 +399,7 @@ namespace PRO_API.Models
                 entity.ToTable("Weterynarz");
 
                 entity.Property(e => e.IdOsoba)
-                    .ValueGeneratedOnAdd()
+                    .ValueGeneratedNever()
                     .HasColumnName("ID_osoba");
 
                 entity.Property(e => e.DataZatrudnienia)
@@ -511,18 +509,18 @@ namespace PRO_API.Models
 
             modelBuilder.Entity<Zabieg>(entity =>
             {
-                entity.HasKey(e => e.IdZabieg)
+                entity.HasKey(e => e.IdUsluga)
                     .HasName("Zabieg_pk");
 
                 entity.ToTable("Zabieg");
 
-                entity.Property(e => e.IdZabieg).HasColumnName("ID_zabieg");
-
-                entity.Property(e => e.IdUsluga).HasColumnName("ID_usluga");
+                entity.Property(e => e.IdUsluga)
+                    .ValueGeneratedNever()
+                    .HasColumnName("ID_usluga");
 
                 entity.HasOne(d => d.IdUslugaNavigation)
-                    .WithMany(p => p.Zabiegs)
-                    .HasForeignKey(d => d.IdUsluga)
+                    .WithOne(p => p.Zabieg)
+                    .HasForeignKey<Zabieg>(d => d.IdUsluga)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Zabieg_Usluga");
             });
@@ -535,6 +533,10 @@ namespace PRO_API.Models
                 entity.ToTable("Znizka");
 
                 entity.Property(e => e.IdZnizka).HasColumnName("ID_znizka");
+
+                entity.Property(e => e.DoKiedy)
+                    .HasColumnType("date")
+                    .HasColumnName("Do_kiedy");
 
                 entity.Property(e => e.NazwaZnizki)
                     .IsRequired()

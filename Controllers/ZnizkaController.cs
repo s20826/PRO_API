@@ -1,14 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using PRO_API.DTO;
 using PRO_API.Models;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace PRO_API.Controllers
 {
@@ -75,7 +69,7 @@ namespace PRO_API.Controllers
                 from x in context.Znizkas
                 join y in context.KlientZnizkas on x.IdZnizka equals y.IdZnizka into ps
                 from p in ps
-                where x.IdZnizka == id
+                where p.IdOsoba == id
                 select new
                 {
                     Nazwa = x.NazwaZnizki,
@@ -85,7 +79,6 @@ namespace PRO_API.Controllers
                 };
 
                 return Ok(results);
-
             }
         }
     }

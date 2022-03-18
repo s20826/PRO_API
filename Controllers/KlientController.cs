@@ -108,6 +108,39 @@ namespace PRO_API.Controllers
             }
         }
 
+        [HttpPut("{id}")]
+        public IActionResult UpdateKlient(int id, KlientRequest request)
+        {
+            if (!context.Klients.Where(x => x.IdOsoba == id).Any())
+            {
+                return BadRequest("Nie ma konta o ID = " + id);
+            }
+            var konto = context.Osobas.Where(x => x.IdOsoba == id).First();
+            konto.Imie = request.Imie;
+            konto.Nazwisko = request.Nazwisko;
+            konto.NumerTelefonu = request.NumerTelefonu;
+            konto.Email = request.Email;
+            konto.Login = request.Login;
+            konto.Haslo = request.Haslo;
+
+            context.SaveChanges();
+
+            return Ok("Pomyślnie zaktuzalizowano dane.");
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteKlient(int id)
+        {
+            if (!context.Klients.Where(x => x.IdOsoba == id).Any())
+            {
+                return BadRequest("Nie ma konta o ID = " + id);
+            }
+            context.Remove(context.Klients.Where(x => x.IdOsoba == id));
+            context.Remove(context.Osobas.Where(x => x.IdOsoba == id));
+            context.SaveChanges();
+
+            return Ok("Pomyślnie usunięto klienta.");
+        }
 
         /*[HttpGet]
         public IActionResult GetKlienci2()

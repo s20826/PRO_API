@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using PRO_API.DTO;
 using PRO_API.Models;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 
 namespace PRO_API.Controllers
@@ -67,6 +69,101 @@ namespace PRO_API.Controllers
 
                 return Ok(results.First());
             }
+        }
+
+        [HttpPost]
+        public IActionResult addWeterynarz(WeterynarzRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Niepoprawne dane");
+            }
+
+            SqlConnection connection = new SqlConnection(configuration.GetConnectionString("KlinikaDatabase"));
+            connection.Open();
+            SqlTransaction trans = connection.BeginTransaction();
+
+            var query = "exec DodajWeterynarza @imie, @nazwisko, @dataUr, @numerTel, @email, @login, @haslo, @pensja, @dataZatrudnienia";
+            SqlCommand command = new SqlCommand(query, connection, trans);
+            command.Parameters.AddWithValue("@imie", request.Imie);
+            command.Parameters.AddWithValue("@nazwisko", request.Nazwisko);
+            command.Parameters.AddWithValue("@dataUr", request.DataUrodzenia);
+            command.Parameters.AddWithValue("@numerTel", request.NumerTelefonu);
+            command.Parameters.AddWithValue("@email", request.Email);
+            command.Parameters.AddWithValue("@login", request.Login);
+            command.Parameters.AddWithValue("@haslo", request.Haslo);
+            command.Parameters.AddWithValue("@pensja", request.Pensja);
+            command.Parameters.AddWithValue("@dataZatrudnienia", request.DataZatrudnienia);
+
+
+            if (command.ExecuteNonQuery() == 2)
+            {
+                trans.Commit();
+                return Ok("Dodano weterynarza " + request.Imie + " " + request.Nazwisko);
+            }
+            else
+            {
+                trans.Rollback();
+                return BadRequest("Error, nie udało się dodać weterynarza");
+            }
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult UpdateWeterynarz(int id, KlientRequest request)
+        {
+            if (context.Klients.Where(x => x.IdOsoba == id).Any())
+            {
+                return BadRequest("Nie ma konta o ID = " + id);
+            }
+            var konto = context.Osobas.Where(x => x.IdOsoba == id).First();
+            konto.Imie = request.Imie;
+            konto.Nazwisko = request.Nazwisko;
+            konto.NumerTelefonu = request.NumerTelefonu;
+            konto.Email = request.Email;
+            konto.Login = request.Login;
+            konto.Haslo = request.Haslo;
+
+            context.SaveChanges();
+
+            return Ok("Pomyślnie zaktuzalizowano dane.");
+        }
+
+        [HttpPut("zatrudnienie/{id}")]
+        public IActionResult UpdateWeterynarzZatrudnienie(int id, WeterynarzRequest request)
+        {
+            if (context.Klients.Where(x => x.IdOsoba == id).Any())
+            {
+                return BadRequest("Nie ma konta o ID = " + id);
+            }
+            var konto = context.Osobas.Where(x => x.IdOsoba == id).First();
+            konto.Imie = request.Imie;
+            konto.Nazwisko = request.Nazwisko;
+            konto.NumerTelefonu = request.NumerTelefonu;
+            konto.Email = request.Email;
+            konto.Login = request.Login;
+            konto.Haslo = request.Haslo;
+            
+            var weterynarz = context.Weterynarzs.Where(x => x.IdOsoba == id).First();
+            weterynarz.Pensja = request.Pensja;
+            weterynarz.DataZatrudnienia = request.DataZatrudnienia;
+
+            context.SaveChanges();
+
+            return Ok("Pomyślnie zaktuzalizowano dane.");
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteWeterynarz(int id)
+        {
+            if (context.Weterynarzs.Where(x => x.IdOsoba == id).Any())
+            {
+                return BadRequest("Nie ma konta o ID = " + id);
+            }
+            context.Remove(context.Weterynarzs.Where(x => x.IdOsoba == id));
+            context.Remove(context.Osobas.Where(x => x.IdOsoba == id));
+            context.SaveChanges();
+
+            return Ok("Pomyślnie usunięto klienta.");
         }
     }
 }

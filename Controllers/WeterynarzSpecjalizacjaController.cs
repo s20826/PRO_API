@@ -51,7 +51,7 @@ namespace PRO_API.Controllers
             }
         }
 
-        [HttpGet("{id, idSpecjalizacja}")]
+        [HttpGet("{id}/{idSpecjalizacja}")]
         public IActionResult GetWeterynarzSpecjalizacja(int id, int idSpecjalizacja)
         {
             if (context.WeterynarzSpecjalizacjas.Where(x => x.IdOsoba == id && x.IdSpecjalizacja == idSpecjalizacja).Any() != true)
@@ -75,14 +75,14 @@ namespace PRO_API.Controllers
             }
         }
 
-        [HttpPost("{id, idSpecjalizacja}")]
+        [HttpPost("{id}/{idSpecjalizacja}")]
         public IActionResult addWeterynarzSpecjalizacja(int id, int idSpecjalizacja, WeterynarzSpecjalizacjaRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest("Niepoprawne dane");
             }
-            if (context.WeterynarzSpecjalizacjas.Where(x => x.IdOsoba == id || x.IdSpecjalizacja == idSpecjalizacja).Any() == true)
+            if (context.WeterynarzSpecjalizacjas.Where(x => x.IdOsoba == id && x.IdSpecjalizacja == idSpecjalizacja).Any() == true)
             {
                 return BadRequest("Już istnieje podany weterynarz o tej specjalizacji.");
             }
@@ -96,10 +96,10 @@ namespace PRO_API.Controllers
 
             context.SaveChanges();
 
-            return Ok("Pomyślnie usunięto specjalizację.");
+            return Ok("Pomyślnie dodano specjalizację weterynarzowi.");
         }
 
-        [HttpPut("{id, idSpecjalizacja}")]
+        [HttpPut("{id}/{idSpecjalizacja}")]
         public IActionResult updateWeterynarzSpecjalizacja(int id, int idSpecjalizacja, WeterynarzSpecjalizacjaRequest request)
         {
             if (!ModelState.IsValid)
@@ -116,10 +116,10 @@ namespace PRO_API.Controllers
 
             context.SaveChanges();
 
-            return Ok("Pomyślnie usunięto specjalizację.");
+            return Ok("Pomyślnie zaktuzalizowano dane.");
         }
 
-        [HttpDelete("{id, idSpecjalizacja}")]
+        [HttpDelete("{id}/{idSpecjalizacja}")]
         public IActionResult deleteWeterynarzSpecjalizacja(int id, int idSpecjalizacja)
         {
             if (!ModelState.IsValid)
@@ -131,7 +131,7 @@ namespace PRO_API.Controllers
                 return BadRequest("Weterynarz o ID = " + id + " nie ma specjalizacji o ID = " + idSpecjalizacja);
             }
 
-            context.Remove(context.WeterynarzSpecjalizacjas.Where(x => x.IdSpecjalizacja == idSpecjalizacja && x.IdOsoba == id));
+            context.Remove(context.WeterynarzSpecjalizacjas.Where(x => x.IdSpecjalizacja == idSpecjalizacja && x.IdOsoba == id).First());
 
             context.SaveChanges();
 

@@ -114,8 +114,7 @@ namespace PRO_API.Controllers
                 return BadRequest("Nie ma specjalizacji o ID = " + id);
             }
 
-            context.Remove(context.Specjalizacjas.Where(x => x.IdSpecjalizacja == id));
-
+            context.Remove(context.Specjalizacjas.Where(x => x.IdSpecjalizacja == id).First());
             context.SaveChanges();
 
             return Ok("Pomyślnie usunięto specjalizację.");

@@ -135,8 +135,8 @@ namespace PRO_API.Controllers
             {
                 return BadRequest("Nie ma konta o ID = " + id);
             }
-            context.Remove(context.Klients.Where(x => x.IdOsoba == id));
-            context.Remove(context.Osobas.Where(x => x.IdOsoba == id));
+            context.Remove(context.Klients.Where(x => x.IdOsoba == id).First());
+            context.Remove(context.Osobas.Where(x => x.IdOsoba == id).First());
             context.SaveChanges();
 
             return Ok("Pomyślnie usunięto klienta.");

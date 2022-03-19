@@ -34,7 +34,7 @@ namespace PRO_API.Controllers
             return Ok(results);
         }
 
-        [HttpGet("details/{id}")]
+        [HttpGet("{id}")]
         public IActionResult GetZnizkaById(int id)
         {
             if (context.Znizkas.Where(x => x.IdZnizka == id).Any() != true)
@@ -56,30 +56,64 @@ namespace PRO_API.Controllers
             }
         }
 
-        [HttpGet("klient_znizka/{id}")]
-        public IActionResult GetKlientZnizka(int id)
+        [HttpPost]
+        public IActionResult addZnizka(ZnizkaRequest request)
         {
-            if (context.KlientZnizkas.Where(x => x.IdOsoba == id).Any() != true)
+            if (!ModelState.IsValid)
             {
-                return BadRequest("Nie ma przyznanych znizek dla klienta o ID = " + id);
+                return BadRequest("Niepoprawne dane");
             }
-            else
-            {
-                var results =
-                from x in context.Znizkas
-                join y in context.KlientZnizkas on x.IdZnizka equals y.IdZnizka into ps
-                from p in ps
-                where p.IdOsoba == id
-                select new
-                {
-                    Nazwa = x.NazwaZnizki,
-                    Procent = x.ProcentZnizki,
-                    Data_przyznania = p.DataPrzyznania,
-                    Czy_wykorzystana = p.CzyWykorzystana
-                };
 
-                return Ok(results);
+            context.Znizkas.Add(new Znizka
+            {
+                NazwaZnizki = request.NazwaZnizki,
+                ProcentZnizki = request.ProcentZnizki,
+                DoKiedy = request.DoKiedy
+            });
+
+            context.SaveChanges();
+
+            return Ok("Dodano zniżkę: " + request.NazwaZnizki);
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult updateZnizka(int id, ZnizkaRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Niepoprawne dane");
             }
+            if (!context.Znizkas.Where(x => x.IdZnizka == id).Any())
+            {
+                return BadRequest("Nie ma zniżki o ID = " + id);
+            }
+
+            var znizka = context.Znizkas.Where(x => x.IdZnizka == id).First();
+            znizka.NazwaZnizki = request.NazwaZnizki;
+            znizka.ProcentZnizki = request.ProcentZnizki;
+            znizka.DoKiedy = request.DoKiedy;
+            
+            context.SaveChanges();
+
+            return Ok("Pomyślnie zaktuzalizowano dane.");
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult deleteZnizka(int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Niepoprawne dane");
+            }
+            if (!context.Znizkas.Where(x => x.IdZnizka == id).Any())
+            {
+                return BadRequest("Nie ma zniżki o ID = " + id);
+            }
+
+            context.Remove(context.Znizkas.Where(x => x.IdZnizka == id).First());
+            context.SaveChanges();
+
+            return Ok("Pomyślnie usunięto zniżkę.");
         }
     }
 }

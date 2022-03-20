@@ -42,12 +42,12 @@ namespace PRO_API.Controllers
             return Ok(results);
         }
 
-        [HttpGet("{id}")]
-        public IActionResult GetWeterynarzById(int id)
+        [HttpGet("{ID_osoba}")]
+        public IActionResult GetWeterynarzById(int ID_osoba)
         {
-            if (context.Weterynarzs.Where(x => x.IdOsoba == id).Any() != true)
+            if (context.Weterynarzs.Where(x => x.IdOsoba == ID_osoba).Any() != true)
             {
-                return BadRequest("Nie ma weterynarza o ID = " + id);
+                return BadRequest("Nie ma weterynarza o ID = " + ID_osoba);
             } 
             else
             {
@@ -55,7 +55,7 @@ namespace PRO_API.Controllers
                 from x in context.Osobas
                 join y in context.Weterynarzs on x.IdOsoba equals y.IdOsoba into ps
                 from p in ps
-                where x.IdOsoba == id
+                where x.IdOsoba == ID_osoba
                 select new
                 {
                     Imie = x.Imie,
@@ -108,14 +108,14 @@ namespace PRO_API.Controllers
             }
         }
 
-        [HttpPut("{id}")]
-        public IActionResult UpdateWeterynarz(int id, KlientRequest request)
+        [HttpPut("{ID_osoba}")]
+        public IActionResult UpdateWeterynarz(int ID_osoba, KlientRequest request)
         {
-            if (context.Klients.Where(x => x.IdOsoba == id).Any())
+            if (context.Klients.Where(x => x.IdOsoba == ID_osoba).Any())
             {
-                return BadRequest("Nie ma konta o ID = " + id);
+                return BadRequest("Nie ma konta o ID = " + ID_osoba);
             }
-            var konto = context.Osobas.Where(x => x.IdOsoba == id).First();
+            var konto = context.Osobas.Where(x => x.IdOsoba == ID_osoba).First();
             konto.Imie = request.Imie;
             konto.Nazwisko = request.Nazwisko;
             konto.NumerTelefonu = request.NumerTelefonu;
@@ -128,14 +128,14 @@ namespace PRO_API.Controllers
             return Ok("Pomyślnie zaktuzalizowano dane.");
         }
 
-        [HttpPut("zatrudnienie/{id}")]
-        public IActionResult UpdateWeterynarzZatrudnienie(int id, WeterynarzRequest request)
+        [HttpPut("zatrudnienie/{ID_osoba}")]
+        public IActionResult UpdateWeterynarzZatrudnienie(int ID_osoba, WeterynarzRequest request)
         {
-            if (context.Klients.Where(x => x.IdOsoba == id).Any())
+            if (context.Klients.Where(x => x.IdOsoba == ID_osoba).Any())
             {
-                return BadRequest("Nie ma konta o ID = " + id);
+                return BadRequest("Nie ma konta o ID = " + ID_osoba);
             }
-            var konto = context.Osobas.Where(x => x.IdOsoba == id).First();
+            var konto = context.Osobas.Where(x => x.IdOsoba == ID_osoba).First();
             konto.Imie = request.Imie;
             konto.Nazwisko = request.Nazwisko;
             konto.NumerTelefonu = request.NumerTelefonu;
@@ -143,7 +143,7 @@ namespace PRO_API.Controllers
             konto.Login = request.Login;
             konto.Haslo = request.Haslo;
             
-            var weterynarz = context.Weterynarzs.Where(x => x.IdOsoba == id).First();
+            var weterynarz = context.Weterynarzs.Where(x => x.IdOsoba == ID_osoba).First();
             weterynarz.Pensja = request.Pensja;
             weterynarz.DataZatrudnienia = request.DataZatrudnienia;
 
@@ -152,15 +152,15 @@ namespace PRO_API.Controllers
             return Ok("Pomyślnie zaktuzalizowano dane.");
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult DeleteWeterynarz(int id)
+        [HttpDelete("{ID_osoba}")]
+        public IActionResult DeleteWeterynarz(int ID_osoba)
         {
-            if (context.Weterynarzs.Where(x => x.IdOsoba == id).Any())
+            if (context.Weterynarzs.Where(x => x.IdOsoba == ID_osoba).Any())
             {
-                return BadRequest("Nie ma konta o ID = " + id);
+                return BadRequest("Nie ma konta o ID = " + ID_osoba);
             }
-            context.Remove(context.Weterynarzs.Where(x => x.IdOsoba == id).First());
-            context.Remove(context.Osobas.Where(x => x.IdOsoba == id).First());
+            context.Remove(context.Weterynarzs.Where(x => x.IdOsoba == ID_osoba).First());
+            context.Remove(context.Osobas.Where(x => x.IdOsoba == ID_osoba).First());
             context.SaveChanges();
 
             return Ok("Pomyślnie usunięto klienta.");

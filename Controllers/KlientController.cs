@@ -45,12 +45,12 @@ namespace PRO_API.Controllers
             return Ok(results);
         }
 
-        [HttpGet("{id}")]
-        public IActionResult GetKlientById(int id)
+        [HttpGet("{ID_osoba}")]
+        public IActionResult GetKlientById(int ID_osoba)
         {
-            if (context.Klients.Where(x => x.IdOsoba == id).Any() != true)
+            if (context.Klients.Where(x => x.IdOsoba == ID_osoba).Any() != true)
             {
-                return BadRequest("Nie ma klienta o ID = " + id);
+                return BadRequest("Nie ma klienta o ID = " + ID_osoba);
             } 
             else
             {
@@ -58,10 +58,10 @@ namespace PRO_API.Controllers
                 from x in context.Osobas
                 join y in context.Klients on x.IdOsoba equals y.IdOsoba into ps
                 from p in ps
-                where x.IdOsoba == id
+                where x.IdOsoba == ID_osoba
                 select new
                 {
-                    ID_osoba = id,
+                    ID_osoba = ID_osoba,
                     Imie = x.Imie,
                     Nazwisko = x.Nazwisko,
                     Numer_Telefonu = x.NumerTelefonu,
@@ -108,14 +108,14 @@ namespace PRO_API.Controllers
             }
         }
 
-        [HttpPut("{id}")]
-        public IActionResult UpdateKlient(int id, KlientRequest request)
+        [HttpPut("{ID_osoba}")]
+        public IActionResult UpdateKlient(int ID_osoba, KlientRequest request)
         {
-            if (!context.Klients.Where(x => x.IdOsoba == id).Any())
+            if (!context.Klients.Where(x => x.IdOsoba == ID_osoba).Any())
             {
-                return BadRequest("Nie ma konta o ID = " + id);
+                return BadRequest("Nie ma konta o ID = " + ID_osoba);
             }
-            var konto = context.Osobas.Where(x => x.IdOsoba == id).First();
+            var konto = context.Osobas.Where(x => x.IdOsoba == ID_osoba).First();
             konto.Imie = request.Imie;
             konto.Nazwisko = request.Nazwisko;
             konto.NumerTelefonu = request.NumerTelefonu;
@@ -128,15 +128,15 @@ namespace PRO_API.Controllers
             return Ok("Pomyślnie zaktuzalizowano dane.");
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult DeleteKlient(int id)
+        [HttpDelete("{ID_osoba}")]
+        public IActionResult DeleteKlient(int ID_osoba)
         {
-            if (!context.Klients.Where(x => x.IdOsoba == id).Any())
+            if (!context.Klients.Where(x => x.IdOsoba == ID_osoba).Any())
             {
-                return BadRequest("Nie ma konta o ID = " + id);
+                return BadRequest("Nie ma konta o ID = " + ID_osoba);
             }
-            context.Remove(context.Klients.Where(x => x.IdOsoba == id).First());
-            context.Remove(context.Osobas.Where(x => x.IdOsoba == id).First());
+            context.Remove(context.Klients.Where(x => x.IdOsoba == ID_osoba).First());
+            context.Remove(context.Osobas.Where(x => x.IdOsoba == ID_osoba).First());
             context.SaveChanges();
 
             return Ok("Pomyślnie usunięto klienta.");

@@ -22,12 +22,12 @@ namespace PRO_API.Controllers
 
         
 
-        [HttpGet("{id}")]
-        public IActionResult GetKlientZnizka(int id)
+        [HttpGet("{ID_osoba}")]
+        public IActionResult GetKlientZnizka(int ID_osoba)
         {
-            if (context.KlientZnizkas.Where(x => x.IdOsoba == id).Any() != true)
+            if (context.KlientZnizkas.Where(x => x.IdOsoba == ID_osoba).Any() != true)
             {
-                return BadRequest("Nie ma przyznanych znizek dla klienta o ID = " + id);
+                return BadRequest("Nie ma przyznanych znizek dla klienta o ID = " + ID_osoba);
             }
             else
             {
@@ -35,7 +35,7 @@ namespace PRO_API.Controllers
                 from x in context.Znizkas
                 join y in context.KlientZnizkas on x.IdZnizka equals y.IdZnizka into ps
                 from p in ps
-                where p.IdOsoba == id
+                where p.IdOsoba == ID_osoba
                 select new
                 {
                     Nazwa = x.NazwaZnizki,
@@ -48,8 +48,8 @@ namespace PRO_API.Controllers
             }
         }
 
-        [HttpPost("{id}/{idZnizka}")]
-        public IActionResult addKlientZnizka(int id, int idZnizka)
+        [HttpPost("{ID_osoba}/{idZnizka}")]
+        public IActionResult addKlientZnizka(int ID_osoba, int idZnizka)
         {
             if (!ModelState.IsValid)
             {
@@ -58,7 +58,7 @@ namespace PRO_API.Controllers
 
             context.KlientZnizkas.Add(new KlientZnizka
             {
-                IdOsoba = id,
+                IdOsoba = ID_osoba,
                 IdZnizka = idZnizka,
                 DataPrzyznania = DateTime.Now,
                 CzyWykorzystana = false
@@ -69,19 +69,19 @@ namespace PRO_API.Controllers
             return Ok("Pomyślnie dodano zniżkę klientowi");
         }
 
-        [HttpDelete("{id}/{idZnizka}")]
-        public IActionResult deleteKlientZnizka(int id, int idZnizka)
+        [HttpDelete("{ID_osoba}/{idZnizka}")]
+        public IActionResult deleteKlientZnizka(int ID_osoba, int idZnizka)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest("Niepoprawne dane");
             }
-            if (!context.Znizkas.Where(x => x.IdZnizka == id).Any())
+            if (!context.Znizkas.Where(x => x.IdZnizka == ID_osoba).Any())
             {
-                return BadRequest("Nie ma zniżki o ID = " + id);
+                return BadRequest("Nie ma zniżki o ID = " + ID_osoba);
             }
 
-            context.Remove(context.KlientZnizkas.Where(x => x.IdZnizka == idZnizka && x.IdOsoba == id).First());
+            context.Remove(context.KlientZnizkas.Where(x => x.IdZnizka == idZnizka && x.IdOsoba == ID_osoba).First());
             context.SaveChanges();
 
             return Ok("Pomyślnie usunięto zniżkę.");

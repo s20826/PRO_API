@@ -26,12 +26,12 @@ namespace PRO_API.Controllers
         }
 
         
-        [HttpGet("{id}")]
-        public IActionResult GetWeterynarzSpecjalizacjaList(int id)
+        [HttpGet("{ID_osoba}")]
+        public IActionResult GetWeterynarzSpecjalizacjaList(int ID_osoba)
         {
-            if (context.WeterynarzSpecjalizacjas.Where(x => x.IdOsoba == id).Any() != true)
+            if (context.WeterynarzSpecjalizacjas.Where(x => x.IdOsoba == ID_osoba).Any() != true)
             {
-                return BadRequest("Weterynarz o ID = " + id + " nie ma specjalizacji zapisanych w systemie");
+                return BadRequest("Weterynarz o ID = " + ID_osoba + " nie ma specjalizacji zapisanych w systemie");
             }
             else
             {
@@ -39,7 +39,7 @@ namespace PRO_API.Controllers
                 from x in context.WeterynarzSpecjalizacjas
                 join y in context.Specjalizacjas on x.IdSpecjalizacja equals y.IdSpecjalizacja into ps
                 from p in ps
-                where x.IdOsoba == id
+                where x.IdOsoba == ID_osoba
                 select new
                 {
                     ID_specjalizacja = x.IdSpecjalizacja,
@@ -51,12 +51,12 @@ namespace PRO_API.Controllers
             }
         }
 
-        [HttpGet("{id}/{idSpecjalizacja}")]
-        public IActionResult GetWeterynarzSpecjalizacja(int id, int idSpecjalizacja)
+        [HttpGet("{ID_osoba}/{idSpecjalizacja}")]
+        public IActionResult GetWeterynarzSpecjalizacja(int ID_osoba, int idSpecjalizacja)
         {
-            if (context.WeterynarzSpecjalizacjas.Where(x => x.IdOsoba == id && x.IdSpecjalizacja == idSpecjalizacja).Any() != true)
+            if (context.WeterynarzSpecjalizacjas.Where(x => x.IdOsoba == ID_osoba && x.IdSpecjalizacja == idSpecjalizacja).Any() != true)
             {
-                return BadRequest("Weterynarz o ID = " + id + " nie ma specjalizacji o ID = " + idSpecjalizacja);
+                return BadRequest("Weterynarz o ID = " + ID_osoba + " nie ma specjalizacji o ID = " + idSpecjalizacja);
             }
             else
             {
@@ -64,7 +64,7 @@ namespace PRO_API.Controllers
                 from x in context.WeterynarzSpecjalizacjas
                 join y in context.Specjalizacjas on x.IdSpecjalizacja equals y.IdSpecjalizacja into ps
                 from p in ps
-                where x.IdOsoba == id && x.IdSpecjalizacja == idSpecjalizacja
+                where x.IdOsoba == ID_osoba && x.IdSpecjalizacja == idSpecjalizacja
                 select new
                 {
                     Nazwa = p.NazwaSpecjalizacji,
@@ -75,21 +75,21 @@ namespace PRO_API.Controllers
             }
         }
 
-        [HttpPost("{id}/{idSpecjalizacja}")]
-        public IActionResult addWeterynarzSpecjalizacja(int id, int idSpecjalizacja, WeterynarzSpecjalizacjaRequest request)
+        [HttpPost("{ID_osoba}/{idSpecjalizacja}")]
+        public IActionResult addWeterynarzSpecjalizacja(int ID_osoba, int idSpecjalizacja, WeterynarzSpecjalizacjaRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest("Niepoprawne dane");
             }
-            if (context.WeterynarzSpecjalizacjas.Where(x => x.IdOsoba == id && x.IdSpecjalizacja == idSpecjalizacja).Any() == true)
+            if (context.WeterynarzSpecjalizacjas.Where(x => x.IdOsoba == ID_osoba && x.IdSpecjalizacja == idSpecjalizacja).Any() == true)
             {
                 return BadRequest("Już istnieje podany weterynarz o tej specjalizacji.");
             }
 
             context.WeterynarzSpecjalizacjas.Add(new WeterynarzSpecjalizacja
             {
-                IdOsoba = id,
+                IdOsoba = ID_osoba,
                 IdSpecjalizacja =idSpecjalizacja,
                 Opis = request.Opis
             });
@@ -99,19 +99,19 @@ namespace PRO_API.Controllers
             return Ok("Pomyślnie dodano specjalizację weterynarzowi.");
         }
 
-        [HttpPut("{id}/{idSpecjalizacja}")]
-        public IActionResult updateWeterynarzSpecjalizacja(int id, int idSpecjalizacja, WeterynarzSpecjalizacjaRequest request)
+        [HttpPut("{ID_osoba}/{idSpecjalizacja}")]
+        public IActionResult updateWeterynarzSpecjalizacja(int ID_osoba, int idSpecjalizacja, WeterynarzSpecjalizacjaRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest("Niepoprawne dane");
             }
-            if (context.WeterynarzSpecjalizacjas.Where(x => x.IdOsoba == id && x.IdSpecjalizacja == idSpecjalizacja).Any() != true)
+            if (context.WeterynarzSpecjalizacjas.Where(x => x.IdOsoba == ID_osoba && x.IdSpecjalizacja == idSpecjalizacja).Any() != true)
             {
-                return BadRequest("Weterynarz o ID = " + id + " nie ma specjalizacji o ID = " + idSpecjalizacja);
+                return BadRequest("Weterynarz o ID = " + ID_osoba + " nie ma specjalizacji o ID = " + idSpecjalizacja);
             }
 
-            var weterynarzSpecjalizacja = context.WeterynarzSpecjalizacjas.Where(x => x.IdOsoba == id && x.IdSpecjalizacja == idSpecjalizacja).First();
+            var weterynarzSpecjalizacja = context.WeterynarzSpecjalizacjas.Where(x => x.IdOsoba == ID_osoba && x.IdSpecjalizacja == idSpecjalizacja).First();
             weterynarzSpecjalizacja.Opis = request.Opis;
 
             context.SaveChanges();
@@ -119,19 +119,19 @@ namespace PRO_API.Controllers
             return Ok("Pomyślnie zaktuzalizowano dane.");
         }
 
-        [HttpDelete("{id}/{idSpecjalizacja}")]
-        public IActionResult deleteWeterynarzSpecjalizacja(int id, int idSpecjalizacja)
+        [HttpDelete("{ID_osoba}/{idSpecjalizacja}")]
+        public IActionResult deleteWeterynarzSpecjalizacja(int ID_osoba, int idSpecjalizacja)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest("Niepoprawne dane");
             }
-            if (context.WeterynarzSpecjalizacjas.Where(x => x.IdOsoba == id && x.IdSpecjalizacja == idSpecjalizacja).Any() != true)
+            if (context.WeterynarzSpecjalizacjas.Where(x => x.IdOsoba == ID_osoba && x.IdSpecjalizacja == idSpecjalizacja).Any() != true)
             {
-                return BadRequest("Weterynarz o ID = " + id + " nie ma specjalizacji o ID = " + idSpecjalizacja);
+                return BadRequest("Weterynarz o ID = " + ID_osoba + " nie ma specjalizacji o ID = " + idSpecjalizacja);
             }
 
-            context.Remove(context.WeterynarzSpecjalizacjas.Where(x => x.IdSpecjalizacja == idSpecjalizacja && x.IdOsoba == id).First());
+            context.Remove(context.WeterynarzSpecjalizacjas.Where(x => x.IdSpecjalizacja == idSpecjalizacja && x.IdOsoba == ID_osoba).First());
 
             context.SaveChanges();
 

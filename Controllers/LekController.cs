@@ -79,7 +79,7 @@ namespace PRO_API.Controllers
             }
             else if(context.LekWMagazynies.Where(x => x.IdStanLeku == ID_stan_leku).Any() != true)
             {
-                return BadRequest("Nie ma leku o ID = " + ID_lek + "w magazynie");
+                return BadRequest("Nie ma leku o ID = " + ID_lek + " w magazynie");
             }
             else
             {
@@ -101,64 +101,67 @@ namespace PRO_API.Controllers
             }
         }
 
-        /*[HttpPost]
-        public IActionResult addZnizka(ZnizkaRequest request)
+        [HttpPost("{ID_lek}")]
+        public IActionResult addStanLeku(int ID_lek, StanLekuRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest("Niepoprawne dane");
             }
-
-            context.Znizkas.Add(new Znizka
+            else if (!context.Leks.Where(x => x.IdLek == ID_lek).Any())
             {
-                NazwaZnizki = request.NazwaZnizki,
-                ProcentZnizki = request.ProcentZnizki,
-                DoKiedy = request.DoKiedy
+                return BadRequest("Nie ma leku o ID = " + ID_lek);
+            }
+
+            context.LekWMagazynies.Add(new LekWMagazynie
+            {
+                IdLek = ID_lek,
+                DataWaznosci = request.DataWaznosci,
+                Ilosc = request.Ilosc
             });
 
             context.SaveChanges();
 
-            return Ok("Dodano zniżkę: " + request.NazwaZnizki);
+            return Ok("Dodano informacje o leku.");
         }
 
-        [HttpPut("{id}")]
-        public IActionResult updateZnizka(int id, ZnizkaRequest request)
+        [HttpPut("{ID_lek}/{ID_stan_leku}")]
+        public IActionResult updateStanLeku(int ID_lek, int ID_stan_leku, StanLekuRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest("Niepoprawne dane");
             }
-            if (!context.Znizkas.Where(x => x.IdZnizka == id).Any())
+            else if(!context.LekWMagazynies.Where(x => x.IdStanLeku == ID_stan_leku && x.IdLek == ID_lek).Any())
             {
-                return BadRequest("Nie ma zniżki o ID = " + id);
+                return BadRequest("Nie ma informacji o takim leku w magazynie.");
             }
 
-            var znizka = context.Znizkas.Where(x => x.IdZnizka == id).First();
-            znizka.NazwaZnizki = request.NazwaZnizki;
-            znizka.ProcentZnizki = request.ProcentZnizki;
-            znizka.DoKiedy = request.DoKiedy;
+            var stanLeku = context.LekWMagazynies.Where(x => x.IdLek == ID_lek && x.IdStanLeku ==ID_stan_leku).First();
+            stanLeku.Ilosc = request.Ilosc;
+            stanLeku.DataWaznosci = request.DataWaznosci;
 
             context.SaveChanges();
 
             return Ok("Pomyślnie zaktuzalizowano dane.");
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult deleteZnizka(int id)
+        [HttpDelete("{ID_lek}/{ID_stan_leku}")]
+        public IActionResult deleteStanLeku(int ID_lek, int ID_stan_leku)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest("Niepoprawne dane");
             }
-            if (!context.Znizkas.Where(x => x.IdZnizka == id).Any())
+            else if(!context.LekWMagazynies.Where(x => x.IdStanLeku == ID_stan_leku && x.IdLek == ID_lek).Any())
             {
-                return BadRequest("Nie ma zniżki o ID = " + id);
+                return BadRequest("Nie ma informacji o takim leku w magazynie.");
             }
 
-            context.Remove(context.Znizkas.Where(x => x.IdZnizka == id).First());
+            context.Remove(context.LekWMagazynies.Where(x => x.IdStanLeku == ID_stan_leku && x.IdLek == ID_lek).First());
             context.SaveChanges();
 
-            return Ok("Pomyślnie usunięto zniżkę.");
-        }*/
+            return Ok("Pomyślnie usunięto informacje o leku.");
+        }
     }
 }

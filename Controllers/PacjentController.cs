@@ -61,7 +61,7 @@ namespace PRO_API.Controllers
             }
         }
         
-        [HttpPost]  //weterynarz
+        [HttpPost]  //weterynarz/admin
         public IActionResult addPacjent(PacjentRequest request)
         {
             if (!ModelState.IsValid)

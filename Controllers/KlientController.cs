@@ -1,13 +1,21 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using PRO_API.DTO;
+using PRO_API.DTO.Request;
 using PRO_API.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace PRO_API.Controllers
@@ -45,6 +53,7 @@ namespace PRO_API.Controllers
             return Ok(results);
         }
 
+        [Authorize]
         [HttpGet("{ID_osoba}")]
         public IActionResult GetKlientById(int ID_osoba)
         {
@@ -72,6 +81,60 @@ namespace PRO_API.Controllers
                 return Ok(results.First());
             }
         }
+        [AllowAnonymous]
+        [HttpPost("login")]
+        public IActionResult Login(LoginRequest request)
+        {
+            var user = context.Osobas.Where(x => x.Login == request.Login).FirstOrDefault();
+            if (user == null)
+            {
+                return NotFound("Nie ma takiego użytkownika.");
+            }
+
+            string passwordHash = user.Haslo;
+            byte[] salt = Convert.FromBase64String(user.Salt);
+
+            string currentHashedPassword = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                password: request.Haslo,
+                salt: salt,
+                prf: KeyDerivationPrf.HMACSHA1,
+                iterationCount: 10000,
+                numBytesRequested: 256 / 8));
+
+            if (passwordHash != currentHashedPassword)
+            {
+                return Unauthorized("Błędne hasło!");
+            }
+
+            Claim[] userclaim = new[]
+            {
+                new Claim(ClaimTypes.Role, "user"),
+                new Claim(ClaimTypes.Role, "admin")
+                //Dodanie dodatkowych danych
+            };
+
+            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["SecretKey"]));
+            SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            JwtSecurityToken token = new JwtSecurityToken(
+                issuer: "https://localhost:5001",
+                audience: "https://localhost:5001",
+                //claims: userclaim,
+                expires: DateTime.Now.AddMinutes(30),
+                signingCredentials: creds
+                );
+
+            //user.RefreshToken = Guid.NewGuid().ToString();
+            //user.RefreshTokenExp = DateTime.Now.AddDays(1);
+            //context.SaveChanges();
+
+            //return Ok("Udało się zalogować");
+
+            return Ok(new
+            {
+                Token = new JwtSecurityTokenHandler().WriteToken(token)
+            });
+        }
 
         [HttpPost]
         public IActionResult addKlient(KlientRequest request)
@@ -81,11 +144,29 @@ namespace PRO_API.Controllers
                 return BadRequest("Niepoprawne dane");
             }
 
+            byte[] salt = new byte[128 / 8];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(salt);
+            }
+
+            // derive a 256-bit subkey (use HMACSHA1 with 10,000 iterations)
+            //Password based key derivation function
+            string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                password: request.Haslo,
+                salt: salt,
+                prf: KeyDerivationPrf.HMACSHA1,
+                iterationCount: 10000,
+                numBytesRequested: 256 / 8));
+
+            string saltBase64 = Convert.ToBase64String(salt);
+
+
             SqlConnection connection = new SqlConnection(configuration.GetConnectionString("KlinikaDatabase"));
             connection.Open();
             SqlTransaction trans = connection.BeginTransaction();
 
-            var query = "exec P1 @imie, @nazwisko, @dataUr, @numerTel, @email, @login, @haslo";
+            var query = "exec P1 @imie, @nazwisko, @dataUr, @numerTel, @email, @login, @haslo, @salt";
             SqlCommand command = new SqlCommand(query, connection, trans);
             command.Parameters.AddWithValue("@imie", request.Imie);
             command.Parameters.AddWithValue("@nazwisko", request.Nazwisko);
@@ -93,7 +174,8 @@ namespace PRO_API.Controllers
             command.Parameters.AddWithValue("@numerTel", request.NumerTelefonu);
             command.Parameters.AddWithValue("@email", request.Email);
             command.Parameters.AddWithValue("@login", request.Login);
-            command.Parameters.AddWithValue("@haslo", request.Haslo);
+            command.Parameters.AddWithValue("@haslo", hashed);
+            command.Parameters.AddWithValue("@salt", saltBase64);
 
 
             if (command.ExecuteNonQuery() == 2)

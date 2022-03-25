@@ -234,6 +234,12 @@ namespace PRO_API.Models
                     .IsUnicode(false)
                     .HasColumnName("Numer_telefonu");
 
+                entity.Property(e => e.RefreshToken)
+                    .HasMaxLength(80)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.RefreshTokenExp).HasColumnType("date");
+
                 entity.Property(e => e.Salt)
                     .HasMaxLength(64)
                     .IsUnicode(false);

@@ -16,6 +16,8 @@ namespace PRO_API.Models
         public string Login { get; set; }
         public string Haslo { get; set; }
         public string Salt { get; set; }
+        public string RefreshToken { get; set; }
+        public DateTime? RefreshTokenExp { get; set; }
 
         public virtual Klient Klient { get; set; }
         public virtual Weterynarz Weterynarz { get; set; }

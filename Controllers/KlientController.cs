@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using PRO_API.DTO;
 using PRO_API.DTO.Request;
 using PRO_API.Models;
+using PRO_API.Other;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -26,13 +27,15 @@ namespace PRO_API.Controllers
     {
         private readonly IConfiguration configuration;
         private readonly KlinikaContext context;
-
+        private readonly TokensGenerator tokensGenerator;
         public KlientController(IConfiguration config, KlinikaContext klinikaContext)
         {
             configuration = config;
             context = klinikaContext;
+            tokensGenerator = new TokensGenerator(config);
         }
 
+        [Authorize]
         [HttpGet]
         public IActionResult GetKlientList()
         {
@@ -81,6 +84,7 @@ namespace PRO_API.Controllers
                 return Ok(results.First());
             }
         }
+
         [AllowAnonymous]
         [HttpPost("login")]
         public IActionResult Login(LoginRequest request)
@@ -88,7 +92,7 @@ namespace PRO_API.Controllers
             var user = context.Osobas.Where(x => x.Login == request.Login).FirstOrDefault();
             if (user == null)
             {
-                return NotFound("Nie ma takiego użytkownika.");
+                return NotFound("Niepoprawne hasło lub login.");
             }
 
             string passwordHash = user.Haslo;
@@ -103,14 +107,13 @@ namespace PRO_API.Controllers
 
             if (passwordHash != currentHashedPassword)
             {
-                return Unauthorized("Błędne hasło!");
+                return Unauthorized("Niepoprawne hasło lub login.");
             }
 
             Claim[] userclaim = new[]
             {
-                new Claim(ClaimTypes.Role, "user"),
-                new Claim(ClaimTypes.Role, "admin")
-                //Dodanie dodatkowych danych
+                new Claim(ClaimTypes.Name, user.IdOsoba.ToString()),
+                //new Claim(ClaimTypes.Role, "admin")
             };
 
             SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["SecretKey"]));
@@ -119,16 +122,59 @@ namespace PRO_API.Controllers
             JwtSecurityToken token = new JwtSecurityToken(
                 issuer: "https://localhost:5001",
                 audience: "https://localhost:5001",
-                //claims: userclaim,
-                expires: DateTime.Now.AddMinutes(30),
+                claims: userclaim,
+                expires: DateTime.Now.AddMinutes(15),
                 signingCredentials: creds
                 );
 
-            //user.RefreshToken = Guid.NewGuid().ToString();
-            //user.RefreshTokenExp = DateTime.Now.AddDays(1);
-            //context.SaveChanges();
 
-            //return Ok("Udało się zalogować");
+            //var token = tokensGenerator.GenerateAccessToken();
+
+             
+            var refreshToken = Guid.NewGuid().ToString();
+            user.RefreshToken = refreshToken;
+            user.RefreshTokenExp = DateTime.Now.AddDays(3);
+            context.SaveChanges();
+
+
+            return Ok(new
+            {
+                Token = new JwtSecurityTokenHandler().WriteToken(token),
+                RefreshToken = refreshToken
+            });
+        }
+
+        [AllowAnonymous]
+        [HttpPost("refreshToken")]
+        public IActionResult getToken(Guid refreshToken)
+        {
+            var user = context.Osobas.SingleOrDefault(x => x.RefreshToken == refreshToken.ToString());
+            if (user == null)
+            {
+                return NotFound("Nie znaleziono Refresh Token");
+            }
+
+            if (user.RefreshTokenExp < DateTime.Now)
+            {
+                return BadRequest("Refresh Token wygasł");
+            }
+
+            Claim[] userclaim = new[]
+             {
+                new Claim(ClaimTypes.Name, user.IdOsoba.ToString()),
+                //new Claim(ClaimTypes.Role, "admin")
+            };
+
+            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["SecretKey"]));
+            SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            JwtSecurityToken token = new JwtSecurityToken(
+                issuer: "http://loclahost:5001",
+                audience: "http://loclahost:5001",
+                claims: userclaim,
+                expires: DateTime.Now.AddMinutes(15),
+                signingCredentials: creds
+            );
 
             return Ok(new
             {
@@ -150,8 +196,6 @@ namespace PRO_API.Controllers
                 rng.GetBytes(salt);
             }
 
-            // derive a 256-bit subkey (use HMACSHA1 with 10,000 iterations)
-            //Password based key derivation function
             string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
                 password: request.Haslo,
                 salt: salt,

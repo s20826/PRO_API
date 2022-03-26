@@ -7,7 +7,6 @@ using Microsoft.IdentityModel.Tokens;
 using PRO_API.DTO;
 using PRO_API.DTO.Request;
 using PRO_API.Models;
-using PRO_API.Other;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -27,15 +26,13 @@ namespace PRO_API.Controllers
     {
         private readonly IConfiguration configuration;
         private readonly KlinikaContext context;
-        private readonly TokensGenerator tokensGenerator;
         public KlientController(IConfiguration config, KlinikaContext klinikaContext)
         {
             configuration = config;
             context = klinikaContext;
-            tokensGenerator = new TokensGenerator(config);
         }
 
-        [Authorize]
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult GetKlientList()
         {
@@ -56,7 +53,7 @@ namespace PRO_API.Controllers
             return Ok(results);
         }
 
-        [Authorize]
+        [Authorize(Roles = "admin")]
         [HttpGet("{ID_osoba}")]
         public IActionResult GetKlientById(int ID_osoba)
         {
@@ -110,11 +107,20 @@ namespace PRO_API.Controllers
                 return Unauthorized("Niepoprawne hasło lub login.");
             }
 
-            Claim[] userclaim = new[]
+            List<Claim> userclaim = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, user.IdOsoba.ToString()),
-                //new Claim(ClaimTypes.Role, "admin")
+                new Claim("idUser", user.IdOsoba.ToString()),
+                new Claim("login", user.Login)
             };
+
+            if(user.Rola != null)
+            {
+                if (user.Rola.Equals("A"))
+                {
+                    userclaim.Add(new Claim(ClaimTypes.Role, "admin"));
+                }
+            }
+            
 
             SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["SecretKey"]));
             SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -125,7 +131,7 @@ namespace PRO_API.Controllers
                 claims: userclaim,
                 expires: DateTime.Now.AddMinutes(15),
                 signingCredentials: creds
-                );
+            );
 
 
             //var token = tokensGenerator.GenerateAccessToken();
@@ -182,6 +188,7 @@ namespace PRO_API.Controllers
             });
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public IActionResult addKlient(KlientRequest request)
         {
@@ -234,6 +241,7 @@ namespace PRO_API.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut("{ID_osoba}")]
         public IActionResult UpdateKlient(int ID_osoba, KlientRequest request)
         {
@@ -254,6 +262,7 @@ namespace PRO_API.Controllers
             return Ok("Pomyślnie zaktuzalizowano dane.");
         }
 
+        [Authorize]
         [HttpDelete("{ID_osoba}")]
         public IActionResult DeleteKlient(int ID_osoba)
         {

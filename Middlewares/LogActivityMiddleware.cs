@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace PRO_API.Middlewares
@@ -25,13 +26,10 @@ namespace PRO_API.Middlewares
             {
                 string userInfo = "";
 
-                var rolesClaims = httpContext.User.Claims.Where(x => x.Type == "idUser" || x.Type == "Rola").ToList();
+                var rolesClaims = httpContext.User.Claims.Where(x => x.Type == "idUser" || x.Type == ClaimTypes.Role).ToArray();
                 if (rolesClaims != null)
                 {
-                    foreach (var claim in rolesClaims)
-                    {
-                        userInfo += ", " + claim.Type + " = " + claim.Value;
-                    }
+                    userInfo += "ID = " + rolesClaims[0].Value + ", Rola: " + rolesClaims[1].Value;
                 }
 
 

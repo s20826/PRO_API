@@ -119,6 +119,14 @@ namespace PRO_API.Controllers
                 {
                     userclaim.Add(new Claim(ClaimTypes.Role, "admin"));
                 }
+                if(user.Rola.Equals("W"))
+                {
+                    userclaim.Add(new Claim(ClaimTypes.Role, "weterynarz"));
+                }
+            }
+            else
+            {
+                userclaim.Add(new Claim(ClaimTypes.Role, "klient"));
             }
             
 

@@ -32,7 +32,7 @@ namespace PRO_API.Middlewares
                         string requestPath = httpContext.Request.Path;
                         string queryString = httpContext.Request.Query.ToString();
                         string method = httpContext.Request.Method;
-                        string outputString = requestPath + " " + queryString + " " + method + " " + DateTime.Now + " error: " + error + "\n";
+                        string outputString = requestPath + " " + queryString + " " + method + " error: " + error + " at: " + DateTime.Now + "\n";
 
                         await fileStream.WriteAsync(outputString);
                     }

@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using PRO_API.DTO;
 using PRO_API.Models;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Security.Cryptography;
 
 namespace PRO_API.Controllers
 {
@@ -79,11 +82,26 @@ namespace PRO_API.Controllers
                 return BadRequest("Niepoprawne dane");
             }
 
+            byte[] salt = new byte[128 / 8];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(salt);
+            }
+
+            string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                password: request.Haslo,
+                salt: salt,
+                prf: KeyDerivationPrf.HMACSHA1,
+                iterationCount: 10000,
+                numBytesRequested: 256 / 8));
+
+            string saltBase64 = Convert.ToBase64String(salt);
+
             SqlConnection connection = new SqlConnection(configuration.GetConnectionString("KlinikaDatabase"));
             connection.Open();
             SqlTransaction trans = connection.BeginTransaction();
 
-            var query = "exec DodajWeterynarza @imie, @nazwisko, @dataUr, @numerTel, @email, @login, @haslo, @pensja, @dataZatrudnienia";
+            var query = "exec DodajWeterynarza @imie, @nazwisko, @dataUr, @numerTel, @email, @login, @haslo, @pensja, @dataZatrudnienia, @salt";
             SqlCommand command = new SqlCommand(query, connection, trans);
             command.Parameters.AddWithValue("@imie", request.Imie);
             command.Parameters.AddWithValue("@nazwisko", request.Nazwisko);
@@ -91,9 +109,10 @@ namespace PRO_API.Controllers
             command.Parameters.AddWithValue("@numerTel", request.NumerTelefonu);
             command.Parameters.AddWithValue("@email", request.Email);
             command.Parameters.AddWithValue("@login", request.Login);
-            command.Parameters.AddWithValue("@haslo", request.Haslo);
+            command.Parameters.AddWithValue("@haslo", hashed);
             command.Parameters.AddWithValue("@pensja", request.Pensja);
             command.Parameters.AddWithValue("@dataZatrudnienia", request.DataZatrudnienia);
+            command.Parameters.AddWithValue("@salt", saltBase64);
 
 
             if (command.ExecuteNonQuery() == 2)

@@ -1,0 +1,9 @@
+/api/Lek/2 Microsoft.AspNetCore.Http.QueryCollection POST 27.03.2022 15:34:02 error: System.IndexOutOfRangeException: Index was outside the bounds of the array.
+   at PRO_API.Middlewares.LogActivityMiddleware.InvokeAsync(HttpContext httpContext) in C:\Users\Michal\Desktop\PRO_API\Middlewares\LogActivityMiddleware.cs:line 32
+   at PRO_API.Middlewares.LogErrorMiddleware.InvokeAsync(HttpContext httpContext) in C:\Users\Michal\Desktop\PRO_API\Middlewares\LogErrorMiddleware.cs:line 25
+/api/Klient Microsoft.AspNetCore.Http.QueryCollection POST 30.03.2022 14:57:12 error: System.IndexOutOfRangeException: Index was outside the bounds of the array.
+   at PRO_API.Middlewares.LogActivityMiddleware.InvokeAsync(HttpContext httpContext) in C:\Users\Michal\Desktop\PRO_API\Middlewares\LogActivityMiddleware.cs:line 32
+   at PRO_API.Middlewares.LogErrorMiddleware.InvokeAsync(HttpContext httpContext) in C:\Users\Michal\Desktop\PRO_API\Middlewares\LogErrorMiddleware.cs:line 25
+/api/Klient Microsoft.AspNetCore.Http.QueryCollection POST 30.03.2022 15:03:26 error: System.IndexOutOfRangeException: Index was outside the bounds of the array.
+   at PRO_API.Middlewares.LogActivityMiddleware.InvokeAsync(HttpContext httpContext) in C:\Users\Michal\Desktop\PRO_API\Middlewares\LogActivityMiddleware.cs:line 32
+   at PRO_API.Middlewares.LogErrorMiddleware.InvokeAsync(HttpContext httpContext) in C:\Users\Michal\Desktop\PRO_API\Middlewares\LogErrorMiddleware.cs:line 25

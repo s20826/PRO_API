@@ -27,7 +27,7 @@ namespace PRO_API.Middlewares
                 string userInfo = "";
 
                 var rolesClaims = httpContext.User.Claims.Where(x => x.Type == "idUser" || x.Type == ClaimTypes.Role).ToArray();
-                if (rolesClaims != null)
+                if (rolesClaims.ToList().Any())
                 {
                     userInfo += "ID = " + rolesClaims[0].Value + ", Rola: " + rolesClaims[1].Value;
                 }

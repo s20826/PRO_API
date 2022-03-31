@@ -89,7 +89,7 @@ namespace PRO_API.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest("Niepoprawne dane");
+                return BadRequest(ModelState);
             }
 
             byte[] salt = new byte[128 / 8];
@@ -144,6 +144,12 @@ namespace PRO_API.Controllers
             {
                 return BadRequest("Nie ma konta o ID = " + ID_osoba);
             }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var konto = context.Osobas.Where(x => x.IdOsoba == ID_osoba).First();
             konto.Imie = request.Imie;
             konto.Nazwisko = request.Nazwisko;

@@ -42,6 +42,11 @@ namespace PRO_API.Controllers
         [HttpPost("login")]
         public IActionResult Login(LoginRequest request)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var user = context.Osobas.Where(x => x.Login == request.Login).FirstOrDefault();
             if (user == null)
             {
@@ -155,6 +160,11 @@ namespace PRO_API.Controllers
             if (!context.Osobas.Where(x => x.IdOsoba == ID_osoba).Any())
             {
                 return BadRequest("Nie ma konta o ID = " + ID_osoba);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
             }
 
             var user = context.Osobas.Where(x => x.IdOsoba == ID_osoba).First();

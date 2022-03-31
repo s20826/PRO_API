@@ -20,3 +20,8 @@ PUT /api/Account/5 Microsoft.AspNetCore.Http.QueryCollection Microsoft.AspNetCor
 PUT /api/Account/5 Microsoft.AspNetCore.Http.QueryCollection Microsoft.AspNetCore.Server.IIS.Core.HttpRequestStream at: 30.03.2022 15:58:26 - ()
 PUT /api/Account/5 Microsoft.AspNetCore.Http.QueryCollection Microsoft.AspNetCore.Server.IIS.Core.HttpRequestStream at: 30.03.2022 15:58:35 - ()
 PUT /api/Account/5 Microsoft.AspNetCore.Http.QueryCollection Microsoft.AspNetCore.Server.IIS.Core.HttpRequestStream at: 30.03.2022 15:59:00 - ()
+POST /api/Klient Microsoft.AspNetCore.Http.QueryCollection Microsoft.AspNetCore.Server.IIS.Core.HttpRequestStream at: 31.03.2022 19:34:15 - ()
+POST /api/Klient Microsoft.AspNetCore.Http.QueryCollection Microsoft.AspNetCore.Server.IIS.Core.HttpRequestStream at: 31.03.2022 19:38:03 - ()
+POST /api/Klient Microsoft.AspNetCore.Http.QueryCollection Microsoft.AspNetCore.Server.IIS.Core.HttpRequestStream at: 31.03.2022 19:59:23 - ()
+POST /api/Klient Microsoft.AspNetCore.Http.QueryCollection Microsoft.AspNetCore.Server.IIS.Core.HttpRequestStream at: 31.03.2022 20:03:53 - ()
+POST /api/Klient Microsoft.AspNetCore.Http.QueryCollection Microsoft.AspNetCore.Server.IIS.Core.HttpRequestStream at: 31.03.2022 20:05:28 - ()

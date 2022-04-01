@@ -85,7 +85,7 @@ namespace PRO_API.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public IActionResult addKlient(KlientRequest request)
+        public IActionResult addKlient(KlientPostRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -138,7 +138,7 @@ namespace PRO_API.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpPut("{ID_osoba}")]
-        public IActionResult UpdateKlient(int ID_osoba, KlientRequest request)
+        public IActionResult UpdateKlient(int ID_osoba, KlientPostRequest request)      //admin
         {
             if (!context.Klients.Where(x => x.IdOsoba == ID_osoba).Any())
             {

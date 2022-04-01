@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using PRO_API.DTO;
@@ -75,7 +76,7 @@ namespace PRO_API.Controllers
         }
 
         [HttpPost]
-        public IActionResult addWeterynarz(WeterynarzRequest request)
+        public IActionResult addWeterynarz(WeterynarzPostRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -127,40 +128,48 @@ namespace PRO_API.Controllers
             }
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPut("{ID_osoba}")]
-        public IActionResult UpdateWeterynarz(int ID_osoba, KlientRequest request)
+        public IActionResult UpdateWeterynarz(int ID_osoba, KlientPutRequest request)      //admin
         {
             if (context.Klients.Where(x => x.IdOsoba == ID_osoba).Any())
             {
                 return BadRequest("Nie ma konta o ID = " + ID_osoba);
             }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var konto = context.Osobas.Where(x => x.IdOsoba == ID_osoba).First();
             konto.Imie = request.Imie;
             konto.Nazwisko = request.Nazwisko;
             konto.NumerTelefonu = request.NumerTelefonu;
             konto.Email = request.Email;
-            konto.Login = request.Login;
-            konto.Haslo = request.Haslo;
 
             context.SaveChanges();
 
             return Ok("Pomyślnie zaktuzalizowano dane.");
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPut("zatrudnienie/{ID_osoba}")]
-        public IActionResult UpdateWeterynarzZatrudnienie(int ID_osoba, WeterynarzRequest request)
+        public IActionResult UpdateWeterynarzZatrudnienie(int ID_osoba, WeterynarzPutRequest request)       //admin
         {
             if (context.Klients.Where(x => x.IdOsoba == ID_osoba).Any())
             {
                 return BadRequest("Nie ma konta o ID = " + ID_osoba);
             }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var konto = context.Osobas.Where(x => x.IdOsoba == ID_osoba).First();
             konto.Imie = request.Imie;
             konto.Nazwisko = request.Nazwisko;
             konto.NumerTelefonu = request.NumerTelefonu;
             konto.Email = request.Email;
-            konto.Login = request.Login;
-            konto.Haslo = request.Haslo;
             
             var weterynarz = context.Weterynarzs.Where(x => x.IdOsoba == ID_osoba).First();
             weterynarz.Pensja = request.Pensja;

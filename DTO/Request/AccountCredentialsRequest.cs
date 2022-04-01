@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PRO_API.DTO.Request
 {
-    public class AccountRequest
+    public class AccountCredentialsRequest
     {
         [Required]
         [DataType(DataType.PhoneNumber)]

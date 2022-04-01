@@ -155,13 +155,12 @@ namespace PRO_API.Controllers
 
         
         [HttpPut("{ID_osoba}")]
-        public IActionResult UpdateAccount(int ID_osoba, AccountRequest request)
+        public IActionResult UpdateAccountCredentials(int ID_osoba, AccountCredentialsRequest request)
         {
             if (!context.Osobas.Where(x => x.IdOsoba == ID_osoba).Any())
             {
                 return BadRequest("Nie ma konta o ID = " + ID_osoba);
             }
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);

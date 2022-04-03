@@ -155,7 +155,7 @@ namespace PRO_API.Controllers
             konto.Nazwisko = request.Nazwisko;
             konto.NumerTelefonu = request.NumerTelefonu;
             konto.Email = request.Email;
-            konto.Login = request.Login;
+            konto.NazwaUzytkownika = request.Login;
             konto.Haslo = request.Haslo;
 
             context.SaveChanges();

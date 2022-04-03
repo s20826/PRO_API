@@ -41,12 +41,13 @@ namespace PRO_API.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
+
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:Collation", "Polish_CI_AS");
+            modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
             modelBuilder.Entity<Badanie>(entity =>
             {
@@ -197,6 +198,8 @@ namespace PRO_API.Models
 
                 entity.ToTable("Osoba");
 
+                entity.HasIndex(e => e.NazwaUzytkownika, "Nazwa_uzytkownika_index");
+
                 entity.Property(e => e.IdOsoba).HasColumnName("ID_osoba");
 
                 entity.Property(e => e.DataUrodzenia)
@@ -217,10 +220,11 @@ namespace PRO_API.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Login)
+                entity.Property(e => e.NazwaUzytkownika)
                     .IsRequired()
                     .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .IsUnicode(false)
+                    .HasColumnName("Nazwa_uzytkownika");
 
                 entity.Property(e => e.Nazwisko)
                     .IsRequired()
@@ -245,6 +249,7 @@ namespace PRO_API.Models
                     .IsFixedLength(true);
 
                 entity.Property(e => e.Salt)
+                    .IsRequired()
                     .HasMaxLength(64)
                     .IsUnicode(false);
             });

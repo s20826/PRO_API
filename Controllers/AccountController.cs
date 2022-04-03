@@ -47,7 +47,7 @@ namespace PRO_API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = context.Osobas.Where(x => x.Login == request.Login).FirstOrDefault();
+            var user = context.Osobas.Where(x => x.NazwaUzytkownika == request.NazwaUzytkownika).FirstOrDefault();
             if (user == null)
             {
                 return NotFound("Niepoprawne hasło lub login.");
@@ -71,7 +71,7 @@ namespace PRO_API.Controllers
             List<Claim> userclaim = new List<Claim>
             {
                 new Claim("idUser", user.IdOsoba.ToString()),
-                new Claim("login", user.Login)
+                new Claim("login", user.NazwaUzytkownika)
             };
 
             if (user.Rola != null)

@@ -84,7 +84,7 @@ namespace PRO_API.Controllers
 
             context.SaveChanges();
 
-            return Ok("Dodano pacjenta");
+            return Ok("Dodano pacjenta " + request.Nazwa);
         }
         
         [HttpPut("{ID_Pacjent}")]   //weterynarz/admin

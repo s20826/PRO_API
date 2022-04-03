@@ -13,7 +13,7 @@ namespace PRO_API.Models
         public DateTime DataUrodzenia { get; set; }
         public string NumerTelefonu { get; set; }
         public string Email { get; set; }
-        public string Login { get; set; }
+        public string NazwaUzytkownika { get; set; }
         public string Haslo { get; set; }
         public string Salt { get; set; }
         public string RefreshToken { get; set; }

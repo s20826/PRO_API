@@ -9,7 +9,7 @@ namespace PRO_API.DTO.Request
     public class LoginRequest
     {
         [Required]
-        public string Login { get; set; }
+        public string NazwaUzytkownika { get; set; }
 
         [Required]
         public string Haslo { get; set; }

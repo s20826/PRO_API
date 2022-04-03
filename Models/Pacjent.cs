@@ -20,7 +20,7 @@ namespace PRO_API.Models
         public string Masc { get; set; }
         public string Plec { get; set; }
         public DateTime DataUrodzenia { get; set; }
-        public int Waga { get; set; }
+        public float Waga { get; set; }
         public bool Agresywne { get; set; }
 
         public virtual Klient IdOsobaNavigation { get; set; }

@@ -47,3 +47,8 @@ POST /api/Klient Microsoft.AspNetCore.Http.QueryCollection Microsoft.AspNetCore.
 POST /api/Account/login Microsoft.AspNetCore.Http.QueryCollection Microsoft.AspNetCore.Server.IIS.Core.HttpRequestStream at: 03.04.2022 13:28:02 - ()
 POST /api/Pacjent Microsoft.AspNetCore.Http.QueryCollection Microsoft.AspNetCore.Server.IIS.Core.HttpRequestStream at: 03.04.2022 13:34:11 - ()
 POST /api/Pacjent Microsoft.AspNetCore.Http.QueryCollection Microsoft.AspNetCore.Server.IIS.Core.HttpRequestStream at: 03.04.2022 13:34:20 - ()
+POST /api/Klient Microsoft.AspNetCore.Http.QueryCollection Microsoft.AspNetCore.Server.IIS.Core.HttpRequestStream at: 06.04.2022 10:56:51 - ()
+POST /api/Klient Microsoft.AspNetCore.Http.QueryCollection Microsoft.AspNetCore.Server.IIS.Core.HttpRequestStream at: 06.04.2022 10:58:24 - ()
+POST /api/Klient Microsoft.AspNetCore.Http.QueryCollection Microsoft.AspNetCore.Server.IIS.Core.HttpRequestStream at: 06.04.2022 11:03:29 - ()
+POST /api/Klient Microsoft.AspNetCore.Http.QueryCollection Microsoft.AspNetCore.Server.IIS.Core.HttpRequestStream at: 06.04.2022 11:03:36 - ()
+POST /api/Klient Microsoft.AspNetCore.Http.QueryCollection Microsoft.AspNetCore.Server.IIS.Core.HttpRequestStream at: 06.04.2022 11:03:49 - ()

@@ -32,7 +32,7 @@ namespace PRO_API.DTO
 
         [Required]
         [StringLength(50, MinimumLength = 2, ErrorMessage = "Pole wymaga od 2 do 50 znaków")]
-        public string Login { get; set; }
+        public string NazwaUzytkownika { get; set; }
 
         [PasswordPropertyText]
         [Required]

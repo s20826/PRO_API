@@ -27,5 +27,12 @@ namespace PRO_API.Controllers
             var results = context.Wizyta;
             return Ok(results);
         }
+
+        [HttpGet("ID_wizyta")]   //admin
+        public IActionResult GetWizytaById(int ID_wizyta)
+        {
+            var result = context.Wizyta.Where(x => x.IdWizyta == ID_wizyta).FirstOrDefault();
+            return Ok(result);
+        }
     }
 }

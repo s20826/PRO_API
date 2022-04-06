@@ -119,7 +119,7 @@ namespace PRO_API.Controllers
             command.Parameters.AddWithValue("@dataUr", request.DataUrodzenia);
             command.Parameters.AddWithValue("@numerTel", request.NumerTelefonu);
             command.Parameters.AddWithValue("@email", request.Email);
-            command.Parameters.AddWithValue("@login", request.Login);
+            command.Parameters.AddWithValue("@login", request.NazwaUzytkownika);
             command.Parameters.AddWithValue("@haslo", hashed);
             command.Parameters.AddWithValue("@salt", saltBase64);
 
@@ -155,7 +155,7 @@ namespace PRO_API.Controllers
             konto.Nazwisko = request.Nazwisko;
             konto.NumerTelefonu = request.NumerTelefonu;
             konto.Email = request.Email;
-            konto.NazwaUzytkownika = request.Login;
+            konto.NazwaUzytkownika = request.NazwaUzytkownika;
             konto.Haslo = request.Haslo;
 
             context.SaveChanges();

@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using PRO_API.DTO;
 using PRO_API.DTO.Request;
+using PRO_API.Helpers;
 using PRO_API.Models;
 using System;
 using System.Collections.Generic;
@@ -55,13 +56,7 @@ namespace PRO_API.Controllers
 
             string passwordHash = user.Haslo;
             byte[] salt = Convert.FromBase64String(user.Salt);
-
-            string currentHashedPassword = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-                password: request.Haslo,
-                salt: salt,
-                prf: KeyDerivationPrf.HMACSHA1,
-                iterationCount: 10000,
-                numBytesRequested: 256 / 8));
+            string currentHashedPassword = PasswordHelper.HashPassword(salt, request.Haslo, int.Parse(configuration["PasswordIterations"]));
 
             if (passwordHash != currentHashedPassword)
             {
@@ -170,27 +165,14 @@ namespace PRO_API.Controllers
 
             string passwordHash = user.Haslo;
             byte[] salt = Convert.FromBase64String(user.Salt);
-
-            string currentHashedPassword = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-                password: request.currentHaslo,
-                salt: salt,
-                prf: KeyDerivationPrf.HMACSHA1,
-                iterationCount: 10000,
-                numBytesRequested: 256 / 8));
+            string currentHashedPassword = PasswordHelper.HashPassword(salt, request.currentHaslo, int.Parse(configuration["PasswordIterations"]));
 
             if (passwordHash != currentHashedPassword)
             {
                 return BadRequest("Niepoprawne hasło.");
             }
 
-
-            string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-                password: request.newHaslo,
-                salt: salt,
-                prf: KeyDerivationPrf.HMACSHA1,
-                iterationCount: 10000,
-                numBytesRequested: 256 / 8));
-
+            string hashed = PasswordHelper.HashPassword(salt, request.newHaslo, int.Parse(configuration["PasswordIterations"]));
 
             user.NumerTelefonu = request.NumerTelefonu;
             user.Email = request.Email;

@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using PRO_API.DTO;
 using PRO_API.DTO.Request;
+using PRO_API.Helpers;
 using PRO_API.Models;
 using System;
 using System.Collections.Generic;
@@ -92,21 +93,9 @@ namespace PRO_API.Controllers
                 return BadRequest(ModelState);
             }
 
-            byte[] salt = new byte[128 / 8];
-            using (var rng = RandomNumberGenerator.Create())
-            {
-                rng.GetBytes(salt);
-            }
-
-            string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-                password: request.Haslo,
-                salt: salt,
-                prf: KeyDerivationPrf.HMACSHA1,
-                iterationCount: 10000,
-                numBytesRequested: 256 / 8));
-
+            byte[] salt = PasswordHelper.GenerateSalt();
+            string hashed = PasswordHelper.HashPassword(salt, request.Haslo, int.Parse(configuration["PasswordIterations"]));
             string saltBase64 = Convert.ToBase64String(salt);
-
 
             SqlConnection connection = new SqlConnection(configuration.GetConnectionString("KlinikaDatabase"));
             connection.Open();

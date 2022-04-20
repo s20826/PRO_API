@@ -26,9 +26,9 @@ namespace PRO_API.Controllers
         }
 
         [HttpGet("hashid/{id}")]
-        public async Task<IActionResult> GetLekList(int id)
+        public async Task<IActionResult> GetLekList(int id)        //test
         {
-            return Ok(hashids.Encode(1) + "  " + hashids.Encode(2));
+            return Ok(hashids.Encode(id));
         }
 
         [HttpGet]

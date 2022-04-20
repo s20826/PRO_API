@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PRO_API", "PRO_API.csproj",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "..\Domain\Domain.csproj", "{CC8A206E-380A-4040-A89E-57A96E9F013D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{27E1BB4D-C7E8-4FEC-9076-BA1C16343483}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,6 +26,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7B4B6FC6-E651-4B0B-9F23-EF907076C582} = {27E1BB4D-C7E8-4FEC-9076-BA1C16343483}
+		{CC8A206E-380A-4040-A89E-57A96E9F013D} = {27E1BB4D-C7E8-4FEC-9076-BA1C16343483}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {17B456DD-5CB9-49FC-A9AA-8D966E29BE56}

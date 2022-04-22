@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class Klient : AuditableEntity, IHasDomainEvent
+    public class Weterynarz : AuditableEntity, IHasDomainEvent
     {
         public uint IdOsoba { get; set; }
         public string Imie { get; set; }
@@ -18,16 +18,16 @@ namespace Domain.Entities
         public string Salt { get; set; }
         public string? RefreshToken { get; set; }
         public DateTime? RefreshTokenExp { get; set; }
+        public decimal Pensja { get; set; }
+        public DateTime DataZatrudnienia { get; set; }
 
-        public DateTime DataZalozeniaKonta { get; }
         public Account Account { get; }
         public NumerTelefonu NumerTelefonu { get; set; }
 
-        public Klient(uint idOsoba, string imie, string nazwisko, DateTime dataUrodzenia, string numerTelefonu, string? email, string salt, string? refreshToken, 
-            DateTime? refreshTokenExp, DateTime dataZalozeniaKonta, string userName, string haslo)
+        public Weterynarz(uint idOsoba, string imie, string nazwisko, DateTime dataUrodzenia, string numerTelefonu, string? email, string salt, string? refreshToken,
+            DateTime? refreshTokenExp, decimal pensja, DateTime dataZatrudnienia, string userName, string haslo)
         {
             Account = new Account(userName, haslo);
-            DataZalozeniaKonta = DateTimeNow.Now;
             NumerTelefonu = new NumerTelefonu(numerTelefonu);
             IdOsoba = idOsoba;
             Imie = imie;
@@ -37,6 +37,8 @@ namespace Domain.Entities
             Salt = salt;
             RefreshToken = refreshToken;
             RefreshTokenExp = refreshTokenExp;
+            Pensja = pensja;
+            DataZatrudnienia = dataZatrudnienia;
         }
 
         public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();

@@ -5,13 +5,13 @@ using System.Collections.Generic;
 
 namespace PRO_API.Models
 {
-    public partial class Skierowanie
+    public partial class Szczepienie
     {
-        public int IdUsluga { get; set; }
+        public int IdSzczepionka { get; set; }
         public int IdWizyta { get; set; }
-        public DateTime DataWystawienia { get; set; }
+        public DateTime DataWaznosci { get; set; }
 
-        public virtual Usluga IdUslugaNavigation { get; set; }
+        public virtual Szczepionka IdSzczepionkaNavigation { get; set; }
         public virtual Wizytum IdWizytaNavigation { get; set; }
     }
 }

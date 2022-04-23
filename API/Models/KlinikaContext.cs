@@ -17,31 +17,35 @@ namespace PRO_API.Models
         {
         }
 
-        public virtual DbSet<Badanie> Badanies { get; set; }
+        public virtual DbSet<Choroba> Chorobas { get; set; }
+        public virtual DbSet<ChorobaLek> ChorobaLeks { get; set; }
+        public virtual DbSet<GodzinyPracy> GodzinyPracies { get; set; }
+        public virtual DbSet<Harmonogram> Harmonograms { get; set; }
         public virtual DbSet<Klient> Klients { get; set; }
         public virtual DbSet<KlientZnizka> KlientZnizkas { get; set; }
         public virtual DbSet<Lek> Leks { get; set; }
         public virtual DbSet<LekWMagazynie> LekWMagazynies { get; set; }
         public virtual DbSet<LekWizytum> LekWizyta { get; set; }
+        public virtual DbSet<Nagrodum> Nagroda { get; set; }
         public virtual DbSet<Osoba> Osobas { get; set; }
         public virtual DbSet<Pacjent> Pacjents { get; set; }
         public virtual DbSet<ReceptaLek> ReceptaLeks { get; set; }
         public virtual DbSet<Receptum> Recepta { get; set; }
         public virtual DbSet<Skierowanie> Skierowanies { get; set; }
         public virtual DbSet<Specjalizacja> Specjalizacjas { get; set; }
+        public virtual DbSet<Szczepienie> Szczepienies { get; set; }
+        public virtual DbSet<Szczepionka> Szczepionkas { get; set; }
         public virtual DbSet<Usluga> Uslugas { get; set; }
         public virtual DbSet<Weterynarz> Weterynarzs { get; set; }
         public virtual DbSet<WeterynarzSpecjalizacja> WeterynarzSpecjalizacjas { get; set; }
         public virtual DbSet<WizytaUsluga> WizytaUslugas { get; set; }
         public virtual DbSet<Wizytum> Wizyta { get; set; }
-        public virtual DbSet<Zabieg> Zabiegs { get; set; }
         public virtual DbSet<Znizka> Znizkas { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-
             }
         }
 
@@ -49,27 +53,117 @@ namespace PRO_API.Models
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
-            modelBuilder.Entity<Badanie>(entity =>
+            modelBuilder.Entity<Choroba>(entity =>
             {
-                entity.HasKey(e => e.IdUsluga)
-                    .HasName("Badanie_pk");
+                entity.HasKey(e => e.IdChoroba)
+                    .HasName("Choroba_pk");
 
-                entity.ToTable("Badanie");
+                entity.ToTable("Choroba");
 
-                entity.Property(e => e.IdUsluga)
-                    .ValueGeneratedNever()
-                    .HasColumnName("ID_usluga");
+                entity.Property(e => e.IdChoroba).HasColumnName("ID_choroba");
 
-                entity.Property(e => e.Dolegliwosc)
+                entity.Property(e => e.Nazwa)
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
+            });
 
-                entity.HasOne(d => d.IdUslugaNavigation)
-                    .WithOne(p => p.Badanie)
-                    .HasForeignKey<Badanie>(d => d.IdUsluga)
+            modelBuilder.Entity<ChorobaLek>(entity =>
+            {
+                entity.HasKey(e => new { e.IdChoroba, e.IdLek })
+                    .HasName("Choroba_lek_pk");
+
+                entity.ToTable("Choroba_lek");
+
+                entity.Property(e => e.IdChoroba).HasColumnName("ID_choroba");
+
+                entity.Property(e => e.IdLek).HasColumnName("ID_lek");
+
+                entity.HasOne(d => d.IdChorobaNavigation)
+                    .WithMany(p => p.ChorobaLeks)
+                    .HasForeignKey(d => d.IdChoroba)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Badanie_Usluga");
+                    .HasConstraintName("choroba_lek_Choroba");
+
+                entity.HasOne(d => d.IdLekNavigation)
+                    .WithMany(p => p.ChorobaLeks)
+                    .HasForeignKey(d => d.IdLek)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("choroba_lek_Lek");
+            });
+
+            modelBuilder.Entity<GodzinyPracy>(entity =>
+            {
+                entity.HasKey(e => e.IdGodzinyPracy)
+                    .HasName("Godziny_pracy_pk");
+
+                entity.ToTable("Godziny_pracy");
+
+                entity.Property(e => e.IdGodzinyPracy).HasColumnName("ID_godziny_pracy");
+
+                entity.Property(e => e.DzienTygodnia)
+                    .IsRequired()
+                    .HasMaxLength(20)
+                    .IsUnicode(false)
+                    .HasColumnName("Dzien_tygodnia");
+
+                entity.Property(e => e.GodzinaRozpoczecia)
+                    .HasColumnType("time(0)")
+                    .HasColumnName("Godzina_rozpoczecia");
+
+                entity.Property(e => e.GodzinaZakonczenia)
+                    .HasColumnType("time(0)")
+                    .HasColumnName("Godzina_zakonczenia");
+
+                entity.Property(e => e.IdOsoba).HasColumnName("ID_osoba");
+
+                entity.HasOne(d => d.IdOsobaNavigation)
+                    .WithMany(p => p.GodzinyPracies)
+                    .HasForeignKey(d => d.IdOsoba)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Table_35_Weterynarz");
+            });
+
+            modelBuilder.Entity<Harmonogram>(entity =>
+            {
+                entity.HasKey(e => e.IdHarmonogram)
+                    .HasName("Harmonogram_pk");
+
+                entity.ToTable("Harmonogram");
+
+                entity.Property(e => e.IdHarmonogram).HasColumnName("ID_harmonogram");
+
+                entity.Property(e => e.CzyWeekend).HasColumnName("Czy_weekend");
+
+                entity.Property(e => e.DataRozpoczecia)
+                    .HasColumnType("datetime")
+                    .HasColumnName("Data_rozpoczecia");
+
+                entity.Property(e => e.DataZakonczenia)
+                    .HasColumnType("datetime")
+                    .HasColumnName("Data_zakonczenia");
+
+                entity.Property(e => e.IdPacjent).HasColumnName("ID_pacjent");
+
+                entity.Property(e => e.KlientIdOsoba).HasColumnName("Klient_ID_osoba");
+
+                entity.Property(e => e.WeterynarzIdOsoba).HasColumnName("Weterynarz_ID_osoba");
+
+                entity.HasOne(d => d.IdPacjentNavigation)
+                    .WithMany(p => p.Harmonograms)
+                    .HasForeignKey(d => d.IdPacjent)
+                    .HasConstraintName("Harmonogram_Pacjent");
+
+                entity.HasOne(d => d.KlientIdOsobaNavigation)
+                    .WithMany(p => p.Harmonograms)
+                    .HasForeignKey(d => d.KlientIdOsoba)
+                    .HasConstraintName("Harmonogram_Klient");
+
+                entity.HasOne(d => d.WeterynarzIdOsobaNavigation)
+                    .WithMany(p => p.Harmonograms)
+                    .HasForeignKey(d => d.WeterynarzIdOsoba)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Harmonogram_Weterynarz");
             });
 
             modelBuilder.Entity<Klient>(entity =>
@@ -131,6 +225,8 @@ namespace PRO_API.Models
 
                 entity.ToTable("Lek");
 
+                entity.HasIndex(e => e.Nazwa, "Lek_idx_1");
+
                 entity.Property(e => e.IdLek).HasColumnName("ID_lek");
 
                 entity.Property(e => e.JednostkaMiary)
@@ -191,6 +287,32 @@ namespace PRO_API.Models
                     .HasConstraintName("Lek_wizyta_Wizyta");
             });
 
+            modelBuilder.Entity<Nagrodum>(entity =>
+            {
+                entity.HasKey(e => e.IdNagroda)
+                    .HasName("Nagroda_pk");
+
+                entity.Property(e => e.IdNagroda).HasColumnName("ID_nagroda");
+
+                entity.Property(e => e.IdOsoba).HasColumnName("ID_osoba");
+
+                entity.Property(e => e.Nazwa)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Opis)
+                    .IsRequired()
+                    .HasMaxLength(300)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.IdOsobaNavigation)
+                    .WithMany(p => p.Nagroda)
+                    .HasForeignKey(d => d.IdOsoba)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Nagroda_Weterynarz");
+            });
+
             modelBuilder.Entity<Osoba>(entity =>
             {
                 entity.HasKey(e => e.IdOsoba)
@@ -200,7 +322,14 @@ namespace PRO_API.Models
 
                 entity.HasIndex(e => e.NazwaUzytkownika, "Nazwa_uzytkownika_index");
 
+                entity.HasIndex(e => e.NazwaUzytkownika, "Osoba_ak_1")
+                    .IsUnique();
+
                 entity.Property(e => e.IdOsoba).HasColumnName("ID_osoba");
+
+                entity.Property(e => e.DataBlokady)
+                    .HasColumnType("datetime")
+                    .HasColumnName("Data_blokady");
 
                 entity.Property(e => e.DataUrodzenia)
                     .HasColumnType("date")
@@ -295,6 +424,8 @@ namespace PRO_API.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
+                entity.Property(e => e.Waga).HasColumnType("decimal(5, 2)");
+
                 entity.HasOne(d => d.IdOsobaNavigation)
                     .WithMany(p => p.Pacjents)
                     .HasForeignKey(d => d.IdOsoba)
@@ -358,6 +489,10 @@ namespace PRO_API.Models
 
                 entity.Property(e => e.IdWizyta).HasColumnName("ID_wizyta");
 
+                entity.Property(e => e.DataWystawienia)
+                    .HasColumnType("date")
+                    .HasColumnName("Data_wystawienia");
+
                 entity.HasOne(d => d.IdUslugaNavigation)
                     .WithMany(p => p.Skierowanies)
                     .HasForeignKey(d => d.IdUsluga)
@@ -387,6 +522,54 @@ namespace PRO_API.Models
                     .HasColumnName("Nazwa_specjalizacji");
             });
 
+            modelBuilder.Entity<Szczepienie>(entity =>
+            {
+                entity.HasKey(e => new { e.IdSzczepionka, e.IdWizyta })
+                    .HasName("Szczepienie_pk");
+
+                entity.ToTable("Szczepienie");
+
+                entity.Property(e => e.IdSzczepionka).HasColumnName("ID_szczepionka");
+
+                entity.Property(e => e.IdWizyta).HasColumnName("ID_wizyta");
+
+                entity.Property(e => e.DataWaznosci)
+                    .HasColumnType("date")
+                    .HasColumnName("Data_waznosci");
+
+                entity.HasOne(d => d.IdSzczepionkaNavigation)
+                    .WithMany(p => p.Szczepienies)
+                    .HasForeignKey(d => d.IdSzczepionka)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Szczepienie_Pacjent_Szczepienie");
+
+                entity.HasOne(d => d.IdWizytaNavigation)
+                    .WithMany(p => p.Szczepienies)
+                    .HasForeignKey(d => d.IdWizyta)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Szczepienie_Wizyta");
+            });
+
+            modelBuilder.Entity<Szczepionka>(entity =>
+            {
+                entity.HasKey(e => e.IdSzczepionka)
+                    .HasName("Szczepionka_pk");
+
+                entity.ToTable("Szczepionka");
+
+                entity.Property(e => e.IdSzczepionka).HasColumnName("ID_szczepionka");
+
+                entity.Property(e => e.Nazwa)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Zastosowanie)
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+            });
+
             modelBuilder.Entity<Usluga>(entity =>
             {
                 entity.HasKey(e => e.IdUsluga)
@@ -397,6 +580,10 @@ namespace PRO_API.Models
                 entity.Property(e => e.IdUsluga).HasColumnName("ID_usluga");
 
                 entity.Property(e => e.Cena).HasColumnType("money");
+
+                entity.Property(e => e.Dolegliwosc)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.NazwaUslugi)
                     .IsRequired()
@@ -443,6 +630,10 @@ namespace PRO_API.Models
                 entity.Property(e => e.IdOsoba).HasColumnName("ID_osoba");
 
                 entity.Property(e => e.IdSpecjalizacja).HasColumnName("ID_specjalizacja");
+
+                entity.Property(e => e.DataUzyskania)
+                    .HasColumnType("date")
+                    .HasColumnName("Data_uzyskania");
 
                 entity.Property(e => e.Opis)
                     .HasMaxLength(300)
@@ -492,55 +683,43 @@ namespace PRO_API.Models
 
                 entity.Property(e => e.IdWizyta).HasColumnName("ID_wizyta");
 
-                entity.Property(e => e.DataGodzina)
-                    .HasColumnType("datetime")
-                    .HasColumnName("Data_godzina");
+                entity.Property(e => e.Cena).HasColumnType("money");
 
-                entity.Property(e => e.IdOsoba).HasColumnName("ID_osoba");
+                entity.Property(e => e.CenaZnizka)
+                    .HasColumnType("money")
+                    .HasColumnName("Cena_znizka");
 
-                entity.Property(e => e.IdPacjent).HasColumnName("ID_pacjent");
+                entity.Property(e => e.CzyOplacona).HasColumnName("Czy_oplacona");
 
-                entity.Property(e => e.Koszt).HasColumnType("money");
+                entity.Property(e => e.IdHarmonogram).HasColumnName("ID_harmonogram");
+
+                entity.Property(e => e.IdZnizka).HasColumnName("ID_znizka");
+
+                entity.Property(e => e.NotatkaKlient)
+                    .HasMaxLength(300)
+                    .IsUnicode(false)
+                    .HasColumnName("Notatka_klient");
 
                 entity.Property(e => e.Opis)
                     .IsRequired()
-                    .HasMaxLength(300)
+                    .HasMaxLength(500)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Status)
                     .IsRequired()
-                    .HasMaxLength(20)
+                    .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.HasOne(d => d.IdOsobaNavigation)
+                entity.HasOne(d => d.IdHarmonogramNavigation)
                     .WithMany(p => p.Wizyta)
-                    .HasForeignKey(d => d.IdOsoba)
+                    .HasForeignKey(d => d.IdHarmonogram)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Wizyta_Weterynarz");
+                    .HasConstraintName("Wizyta_Harmonogram");
 
-                entity.HasOne(d => d.IdPacjentNavigation)
+                entity.HasOne(d => d.IdZnizkaNavigation)
                     .WithMany(p => p.Wizyta)
-                    .HasForeignKey(d => d.IdPacjent)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Wizyta_Pacjent");
-            });
-
-            modelBuilder.Entity<Zabieg>(entity =>
-            {
-                entity.HasKey(e => e.IdUsluga)
-                    .HasName("Zabieg_pk");
-
-                entity.ToTable("Zabieg");
-
-                entity.Property(e => e.IdUsluga)
-                    .ValueGeneratedNever()
-                    .HasColumnName("ID_usluga");
-
-                entity.HasOne(d => d.IdUslugaNavigation)
-                    .WithOne(p => p.Zabieg)
-                    .HasForeignKey<Zabieg>(d => d.IdUsluga)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Zabieg_Usluga");
+                    .HasForeignKey(d => d.IdZnizka)
+                    .HasConstraintName("Wizyta_Znizka");
             });
 
             modelBuilder.Entity<Znizka>(entity =>

@@ -9,7 +9,7 @@ namespace PRO_API.Models
     {
         public Pacjent()
         {
-            Wizyta = new HashSet<Wizytum>();
+            Harmonograms = new HashSet<Harmonogram>();
         }
 
         public int IdPacjent { get; set; }
@@ -20,10 +20,10 @@ namespace PRO_API.Models
         public string Masc { get; set; }
         public string Plec { get; set; }
         public DateTime DataUrodzenia { get; set; }
-        public float Waga { get; set; }
+        public decimal Waga { get; set; }
         public bool Agresywne { get; set; }
 
         public virtual Klient IdOsobaNavigation { get; set; }
-        public virtual ICollection<Wizytum> Wizyta { get; set; }
+        public virtual ICollection<Harmonogram> Harmonograms { get; set; }
     }
 }

@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace Domain.Enums
 {
-    public enum WizytaStatus
+    public enum Plec
     {
-        Zaplanowana,
-        Zrealizowana,
-        AnulowanaKlient,
-        AnulowanaKlinika
+        M,
+        F
     }
 }

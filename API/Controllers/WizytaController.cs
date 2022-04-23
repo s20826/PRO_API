@@ -39,7 +39,7 @@ namespace PRO_API.Controllers
             return Ok(result);
         }
 
-        [HttpGet("/weterynarz/{ID_osoba}")]   //weterynarz
+        /*[HttpGet("/weterynarz/{ID_osoba}")]   //weterynarz
         public IActionResult GetWizytaListByWeterynarz(int ID_osoba)
         {
             if (context.Wizyta.Where(x => x.IdOsoba == ID_osoba).Any() != true)
@@ -70,6 +70,6 @@ namespace PRO_API.Controllers
                 return BadRequest("Nie masz zapisanych pacjentów");
             }
             return Ok(results);
-        }
+        }*/
     }
 }

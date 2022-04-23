@@ -37,6 +37,7 @@ namespace Domain.Entities
             Salt = salt;
             RefreshToken = refreshToken;
             RefreshTokenExp = refreshTokenExp;
+            DataZalozeniaKonta = dataZalozeniaKonta;
         }
 
         public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();

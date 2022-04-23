@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Application.DTO.Responses;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ namespace Application.Interfaces
 {
     public interface ILekRepository
     { 
-        public Task GetLekList();
-        public Task GetLekById(string ID_lek);
+        public Task<GetLekListResponse> GetLekList();
+        public Task<GetLekResponse> GetLekById(string ID_lek);
     }
 }

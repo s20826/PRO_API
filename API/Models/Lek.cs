@@ -9,6 +9,7 @@ namespace PRO_API.Models
     {
         public Lek()
         {
+            ChorobaLeks = new HashSet<ChorobaLek>();
             LekWMagazynies = new HashSet<LekWMagazynie>();
             LekWizyta = new HashSet<LekWizytum>();
             ReceptaLeks = new HashSet<ReceptaLek>();
@@ -18,6 +19,7 @@ namespace PRO_API.Models
         public string Nazwa { get; set; }
         public string JednostkaMiary { get; set; }
 
+        public virtual ICollection<ChorobaLek> ChorobaLeks { get; set; }
         public virtual ICollection<LekWMagazynie> LekWMagazynies { get; set; }
         public virtual ICollection<LekWizytum> LekWizyta { get; set; }
         public virtual ICollection<ReceptaLek> ReceptaLeks { get; set; }

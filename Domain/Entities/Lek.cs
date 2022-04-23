@@ -1,4 +1,5 @@
 ﻿using Domain.Common;
+using Domain.Enums;
 using Domain.Events;
 using Domain.Exceptions;
 using Domain.ValueObjects;
@@ -13,8 +14,8 @@ namespace Domain.Entities
     public class Lek : AuditableEntity, IHasDomainEvent
     {
         public uint IdLek { get; }
-        public string Nazwa { get; set; }
-        public string JednostkaMiary { get; set; }
+        public LekNazwa Nazwa { get; set; }
+        public LekJednostka JednostkaMiary { get; set; }
         private uint _Ilosc { get; set; }
         public DateTime DataWaznosci { get; set; }
 
@@ -33,7 +34,7 @@ namespace Domain.Entities
         }
 
         
-        public Lek(uint idLek, string nazwa, string jednostkaMiary, uint ilosc, DateTime dataWaznosci)
+        public Lek(uint idLek, LekNazwa nazwa, LekJednostka jednostkaMiary, uint ilosc, DateTime dataWaznosci)
         {
             if(dataWaznosci < DateTimeNow.Now)
             {

@@ -10,6 +10,7 @@ namespace PRO_API.Models
         public Znizka()
         {
             KlientZnizkas = new HashSet<KlientZnizka>();
+            Wizyta = new HashSet<Wizytum>();
         }
 
         public int IdZnizka { get; set; }
@@ -18,5 +19,6 @@ namespace PRO_API.Models
         public DateTime? DoKiedy { get; set; }
 
         public virtual ICollection<KlientZnizka> KlientZnizkas { get; set; }
+        public virtual ICollection<Wizytum> Wizyta { get; set; }
     }
 }

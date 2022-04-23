@@ -5,14 +5,13 @@ using System.Collections.Generic;
 
 namespace PRO_API.Models
 {
-    public partial class WeterynarzSpecjalizacja
+    public partial class Nagrodum
     {
+        public int IdNagroda { get; set; }
         public int IdOsoba { get; set; }
-        public int IdSpecjalizacja { get; set; }
+        public string Nazwa { get; set; }
         public string Opis { get; set; }
-        public DateTime? DataUzyskania { get; set; }
 
         public virtual Weterynarz IdOsobaNavigation { get; set; }
-        public virtual Specjalizacja IdSpecjalizacjaNavigation { get; set; }
     }
 }

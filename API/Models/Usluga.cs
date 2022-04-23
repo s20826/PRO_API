@@ -17,9 +17,9 @@ namespace PRO_API.Models
         public string NazwaUslugi { get; set; }
         public string Opis { get; set; }
         public decimal Cena { get; set; }
+        public bool Narkoza { get; set; }
+        public string Dolegliwosc { get; set; }
 
-        public virtual Badanie Badanie { get; set; }
-        public virtual Zabieg Zabieg { get; set; }
         public virtual ICollection<Skierowanie> Skierowanies { get; set; }
         public virtual ICollection<WizytaUsluga> WizytaUslugas { get; set; }
     }

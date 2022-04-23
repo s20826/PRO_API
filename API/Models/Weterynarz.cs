@@ -9,8 +9,10 @@ namespace PRO_API.Models
     {
         public Weterynarz()
         {
+            GodzinyPracies = new HashSet<GodzinyPracy>();
+            Harmonograms = new HashSet<Harmonogram>();
+            Nagroda = new HashSet<Nagrodum>();
             WeterynarzSpecjalizacjas = new HashSet<WeterynarzSpecjalizacja>();
-            Wizyta = new HashSet<Wizytum>();
         }
 
         public int IdOsoba { get; set; }
@@ -18,7 +20,9 @@ namespace PRO_API.Models
         public DateTime DataZatrudnienia { get; set; }
 
         public virtual Osoba IdOsobaNavigation { get; set; }
+        public virtual ICollection<GodzinyPracy> GodzinyPracies { get; set; }
+        public virtual ICollection<Harmonogram> Harmonograms { get; set; }
+        public virtual ICollection<Nagrodum> Nagroda { get; set; }
         public virtual ICollection<WeterynarzSpecjalizacja> WeterynarzSpecjalizacjas { get; set; }
-        public virtual ICollection<Wizytum> Wizyta { get; set; }
     }
 }

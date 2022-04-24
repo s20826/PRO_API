@@ -23,7 +23,7 @@ namespace PRO_API.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private readonly IConfiguration configuration;
+        /*private readonly IConfiguration configuration;
         private readonly KlinikaContext context;
         public AccountController(IConfiguration config, KlinikaContext klinikaContext)
         {
@@ -180,6 +180,6 @@ namespace PRO_API.Controllers
 
             context.SaveChanges();
             return Ok("Pomyślnie zaktuzalizowano dane.");
-        }
+        }*/
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace PRO_API.Models
+namespace Infrastructure.Models
 {
     public partial class Receptum
     {

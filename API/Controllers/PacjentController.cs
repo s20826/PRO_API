@@ -16,7 +16,7 @@ namespace PRO_API.Controllers
     [ApiController]
     public class PacjentController : ControllerBase
     {
-        private readonly IConfiguration configuration;
+        /*private readonly IConfiguration configuration;
         private readonly KlinikaContext context;
 
         public PacjentController(IConfiguration config, KlinikaContext klinikaContext)
@@ -120,6 +120,6 @@ namespace PRO_API.Controllers
             context.SaveChanges();
 
             return Ok("Pomyślnie usunięto pacjenta.");
-        }
+        }*/
     }
 }

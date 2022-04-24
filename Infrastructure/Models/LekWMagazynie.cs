@@ -3,15 +3,15 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace PRO_API.Models
+namespace Infrastructure.Models
 {
-    public partial class LekWizytum
+    public partial class LekWMagazynie
     {
-        public int IdWizyta { get; set; }
+        public int IdStanLeku { get; set; }
         public int IdLek { get; set; }
         public int Ilosc { get; set; }
+        public DateTime DataWaznosci { get; set; }
 
         public virtual Lek IdLekNavigation { get; set; }
-        public virtual Wizytum IdWizytaNavigation { get; set; }
     }
 }

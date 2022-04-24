@@ -3,28 +3,31 @@ using Application.Interfaces;
 using MediatR;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace Application.Queries.Lek
 {
-    public class GetLekListQuery : IRequest<GetLekListResponse>
+    public class GetLekListQuery : IRequest<List<GetLekListResponse>>
     {
        
     }
 
-    public class GetLekListQueryHandle : IRequestHandler<GetLekListQuery, GetLekListResponse>
+    public class GetLekListQueryHandle : IRequestHandler<GetLekListQuery, List<GetLekListResponse>>
     {
-        private ILekRepository repository;
+        private readonly ILekRepository repository;
 
         public GetLekListQueryHandle(ILekRepository lekRepository)
         {
             repository = lekRepository;
         }
 
-        public async Task<GetLekListResponse> Handle(GetLekListQuery request, CancellationToken cancellationToken)
+        public async Task<List<GetLekListResponse>> Handle(GetLekListQuery request, CancellationToken cancellationToken)
         {
             return await repository.GetLekList();
         }

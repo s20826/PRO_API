@@ -16,7 +16,7 @@ namespace PRO_API.Controllers
     [ApiController]
     public class WeterynarzController : ControllerBase
     {
-        private readonly IConfiguration configuration;
+        /*private readonly IConfiguration configuration;
         private readonly KlinikaContext context;
 
         public WeterynarzController(IConfiguration config, KlinikaContext klinikaContext)
@@ -192,6 +192,6 @@ namespace PRO_API.Controllers
             context.SaveChanges();
 
             return Ok("Pomyślnie usunięto klienta.");
-        }
+        }*/
     }
 }

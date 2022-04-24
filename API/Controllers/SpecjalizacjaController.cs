@@ -17,7 +17,7 @@ namespace PRO_API.Controllers
     [ApiController]
     public class SpecjalizacjaController : ControllerBase
     {
-        private readonly IConfiguration configuration;
+        /*private readonly IConfiguration configuration;
         private readonly KlinikaContext context;
 
         public SpecjalizacjaController(IConfiguration config, KlinikaContext klinikaContext)
@@ -119,6 +119,6 @@ namespace PRO_API.Controllers
             context.SaveChanges();
 
             return Ok("Pomyślnie usunięto specjalizację.");
-        }
+        }*/
     }
 }

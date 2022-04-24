@@ -1,55 +1,37 @@
-﻿using HashidsNet;
+﻿using Application.Queries.Lek;
+using HashidsNet;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using PRO_API.DTO.Request;
 using PRO_API.Models;
 using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PRO_API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class LekController : ControllerBase
+    public class LekController : ApiControllerBase
     {
         private readonly IConfiguration configuration;
-        private readonly KlinikaContext context;
         private readonly IHashids hashids;
-        public LekController(IConfiguration config, KlinikaContext klinikaContext, IHashids ihashids)
+        public LekController(IConfiguration config, IHashids ihashids)
         {
             configuration = config;
-            context = klinikaContext;
             hashids = ihashids;
-        }
-
-        [HttpGet("hashid/{id}")]
-        public async Task<IActionResult> GetLekList(int id)        //test
-        {
-            return Ok(hashids.Encode(id));
         }
 
         [HttpGet]
         public async Task<IActionResult> GetLekList()
         {
-            var query = "Select l.ID_lek, l.Nazwa, SUM(ilosc) as Ilosc, l.Jednostka_Miary from Lek l, Lek_W_Magazynie m " +
-                "where l.ID_lek = m.ID_lek AND Data_waznosci > GETDATE()" +
-                "group by Nazwa, Jednostka_Miary, l.ID_lek";
+            return Ok(await Mediator.Send(new GetLekListQuery
+            {
 
-            DataTable table = new DataTable();
-            SqlConnection connection = new SqlConnection(configuration.GetConnectionString("KlinikaDatabase"));
-            await connection.OpenAsync();
-
-            SqlCommand command = new SqlCommand(query, connection);
-            SqlDataReader reader = await command.ExecuteReaderAsync();
-            table.Load(reader);
-
-            await reader.CloseAsync();
-            await connection.CloseAsync();
-
-            return Ok(table);
+            }));
         }
 
         [HttpGet("{ID_lek}")]
@@ -62,28 +44,18 @@ namespace PRO_API.Controllers
             }
             int id = idArray[0];
 
-            if (context.Leks.Where(x => x.IdLek == id).Any() != true)
+            /*if (context.Leks.Where(x => x.IdLek == id).Any() != true)
             {
                 return BadRequest("Nie ma leku o ID = " + ID_lek);
-            }
+            }*/
 
-            var results =
-            from x in context.Leks
-            join y in context.LekWMagazynies on x.IdLek equals y.IdLek into ps
-            from p in ps
-            where x.IdLek == id
-            select new
+            return Ok(await Mediator.Send(new GetLekQuery
             {
-                IdStanLeku = p.IdStanLeku,
-                Nazwa = x.Nazwa,
-                Jednostka_Miary = x.JednostkaMiary,
-                Ilosc = p.Ilosc,
-                Data_Waznosci = p.DataWaznosci
-            };
-
-            return Ok(results);
+                ID_lek = id
+            }));
         }
 
+        /*
         [HttpGet("{ID_lek}/{ID_stan_leku}")]
         public IActionResult GetLekWMagazynieById(string ID_lek, string ID_stan_leku)
         {
@@ -212,6 +184,6 @@ namespace PRO_API.Controllers
             context.SaveChangesAsync();
 
             return Ok("Pomyślnie usunięto informacje o leku.");
-        }
+        }*/
     }
 }

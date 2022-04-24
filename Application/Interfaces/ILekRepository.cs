@@ -9,7 +9,8 @@ namespace Application.Interfaces
 {
     public interface ILekRepository
     { 
-        public Task<GetLekListResponse> GetLekList();
-        public Task<GetLekResponse> GetLekById(string ID_lek);
+        public Task<List<GetLekListResponse>> GetLekList();
+        public Task<List<GetLekResponse>> GetLekById(int ID_lek);
+        //public Task<> AddStanLeku(int ID_lek, StanLekuRequest request);
     }
 }

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 #nullable disable
 
-namespace PRO_API.Models
+namespace Infrastructure.Models
 {
     public partial class KlinikaContext : DbContext
     {
@@ -341,7 +341,7 @@ namespace PRO_API.Models
 
                 entity.Property(e => e.Haslo)
                     .IsRequired()
-                    .HasMaxLength(60)
+                    .HasMaxLength(64)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Imie)

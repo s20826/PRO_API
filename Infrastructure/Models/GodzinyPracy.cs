@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace PRO_API.Models
+namespace Infrastructure.Models
 {
     public partial class GodzinyPracy
     {
@@ -13,6 +13,7 @@ namespace PRO_API.Models
         public TimeSpan GodzinaRozpoczecia { get; set; }
         public TimeSpan GodzinaZakonczenia { get; set; }
 
-        public virtual Weterynarz IdOsobaNavigation { get; set; }
+        public virtual 
+            Weterynarz IdOsobaNavigation { get; set; }
     }
 }

@@ -12,7 +12,7 @@ namespace PRO_API.Controllers
     [ApiController]
     public class WizytaController : ControllerBase
     {
-        private readonly IConfiguration configuration;
+        /*private readonly IConfiguration configuration;
         private readonly KlinikaContext context;
 
         public WizytaController(IConfiguration config, KlinikaContext klinikaContext)
@@ -39,7 +39,7 @@ namespace PRO_API.Controllers
             return Ok(result);
         }
 
-        /*[HttpGet("/weterynarz/{ID_osoba}")]   //weterynarz
+        [HttpGet("/weterynarz/{ID_osoba}")]   //weterynarz
         public IActionResult GetWizytaListByWeterynarz(int ID_osoba)
         {
             if (context.Wizyta.Where(x => x.IdOsoba == ID_osoba).Any() != true)

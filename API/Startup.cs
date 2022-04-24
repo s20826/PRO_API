@@ -1,4 +1,10 @@
+using Application;
+using Application.Interfaces;
 using HashidsNet;
+using Infrastructure;
+using Infrastructure.Models;
+using Infrastructure.Services;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -37,7 +43,7 @@ namespace PRO_API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IHashids>(x => new Hashids(Configuration["HashidsSecret"], 5));
-
+            
             services.AddAuthentication(opt =>
             {
                 opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -56,11 +62,17 @@ namespace PRO_API
                 };
             });
 
+            
             services.AddDbContext<KlinikaContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("KlinikaDatabase")));
 
 
             services.AddControllers().AddNewtonsoftJson(Configuration => Configuration.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+            services.AddInfrastructure()
+                .AddApplication();
+            services.AddMediatR(typeof(Startup).Assembly);
+
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "PRO_API", Version = "v1" });

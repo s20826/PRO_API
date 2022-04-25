@@ -5,9 +5,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PRO_API.DTO
+namespace Application.DTO
 {
-    public class KlientPostRequest
+    public class KlientPutRequest
     {
         [Required]
         [StringLength(50, MinimumLength = 2, ErrorMessage = "Pole wymaga od 2 do 50 znaków")]
@@ -29,16 +29,5 @@ namespace PRO_API.DTO
         [EmailAddress(ErrorMessage = "Niepoprawny format e-mail")]
         [StringLength(50, MinimumLength = 2, ErrorMessage = "Pole wymaga od 2 do 50 znaków")]
         public string Email { get; set; }
-
-        [Required]
-        [StringLength(50, MinimumLength = 2, ErrorMessage = "Pole wymaga od 2 do 50 znaków")]
-        public string NazwaUzytkownika { get; set; }
-
-        [PasswordPropertyText]
-        [Required]
-        [StringLength(30, MinimumLength = 1, ErrorMessage = "Pole wymaga od 8 do 30 znaków")]
-        [RegularExpression(@"^((?=.*[a-z])(?=.*[A-Z])(?=.*\d)).+$")]
-        [DataType(DataType.Password)]
-        public string Haslo { get; set; }
     }
 }

@@ -5,7 +5,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using PRO_API.DTO;
 using PRO_API.DTO.Request;
-using PRO_API.Helpers;
 using PRO_API.Models;
 using System;
 using System.Collections.Generic;
@@ -29,13 +28,6 @@ namespace PRO_API.Controllers
         {
             configuration = config;
             context = klinikaContext;
-        }
-
-        [HttpGet]
-        public IActionResult GetOsoby()     //do testów
-        {
-            var results = context.Osobas.ToList();
-            return Ok(results);
         }
 
 

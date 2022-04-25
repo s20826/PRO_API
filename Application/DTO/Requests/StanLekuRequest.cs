@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 #nullable disable
 
-namespace PRO_API.DTO.Request
+namespace Application.DTO.Request
 {
     public partial class StanLekuRequest
     {

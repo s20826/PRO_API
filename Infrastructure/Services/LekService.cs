@@ -1,4 +1,5 @@
-﻿using Application.DTO.Responses;
+﻿using Application.DTO.Request;
+using Application.DTO.Responses;
 using Application.Interfaces;
 using Infrastructure.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -24,9 +25,9 @@ namespace Infrastructure.Services
 
         public async Task<List<GetLekListResponse>> GetLekList()
         {
-            var query = "Select l.ID_lek, l.Nazwa, SUM(ilosc) as Ilosc, l.Jednostka_Miary from Lek l, Lek_W_Magazynie m " +
-                "where l.ID_lek = m.ID_lek AND Data_waznosci > GETDATE()" +
-                "group by Nazwa, Jednostka_Miary, l.ID_lek";
+            var query = "SELECT l.ID_lek, l.Nazwa, SUM(ilosc) AS Ilosc, l.Jednostka_Miary FROM Lek l, Lek_W_Magazynie m " +
+                "WHERE l.ID_lek = m.ID_lek AND Data_waznosci > GETDATE()" +
+                "GROUP BY Nazwa, Jednostka_Miary, l.ID_lek";
 
             SqlConnection connection = new SqlConnection(configuration.GetConnectionString("KlinikaDatabase"));
             await connection.OpenAsync();
@@ -59,7 +60,7 @@ namespace Infrastructure.Services
             join y in context.LekWMagazynies on x.IdLek equals y.IdLek into ps
             from p in ps
             where x.IdLek == ID_lek
-            select new 
+            select new GetLekResponse()
             {
                 IdStanLeku = (uint)p.IdStanLeku,
                 Nazwa = x.Nazwa,
@@ -68,20 +69,53 @@ namespace Infrastructure.Services
                 DataWaznosci = p.DataWaznosci
             };
 
-            var list = new List<GetLekResponse>();
-            foreach (var x in results)
-            {
-                list.Add(new GetLekResponse
-                {
-                    IdStanLeku = x.IdStanLeku,
-                    Nazwa = x.Nazwa,
-                    JednostkaMiary = x.JednostkaMiary,
-                    Ilosc = x.Ilosc,
-                    DataWaznosci = x.DataWaznosci
-                });
-            }
+            return results.ToList();
+        }
 
-            return list;
+        public async Task<GetStanLekuResponse> GetLekWMagazynieById(int ID_stan_leku)
+        {
+            var result =
+            from x in context.Leks
+            join y in context.LekWMagazynies on x.IdLek equals y.IdLek into ps
+            from p in ps
+            where p.IdStanLeku == ID_stan_leku
+            select new GetStanLekuResponse()
+            {
+                IdStanLeku = (uint)p.IdStanLeku,
+                Nazwa = x.Nazwa,
+                JednostkaMiary = x.JednostkaMiary,
+                Ilosc = (uint)p.Ilosc,
+                DataWaznosci = p.DataWaznosci
+            };
+
+            return result.First();
+        }
+
+        public async Task<int> AddStanLeku(int ID_lek, StanLekuRequest request)
+        {
+            context.LekWMagazynies.Add(new LekWMagazynie
+            {
+                IdLek = ID_lek,
+                DataWaznosci = request.DataWaznosci,
+                Ilosc = request.Ilosc
+            });
+
+            return await context.SaveChangesAsync();
+        }
+
+        public async Task<int> UpdateStanLeku(int ID_stan_leku, StanLekuRequest request)
+        {
+            var stanLeku = context.LekWMagazynies.Where(x => x.IdStanLeku == ID_stan_leku).First();
+            stanLeku.Ilosc = request.Ilosc;
+            stanLeku.DataWaznosci = request.DataWaznosci;
+
+            return await context.SaveChangesAsync();
+        }
+
+        public async Task<int> DeleteStanLeku(int ID_stan_leku)
+        {
+            context.Remove(context.LekWMagazynies.Where(x => x.IdStanLeku == ID_stan_leku).First());
+            return await context.SaveChangesAsync();
         }
     }
 }

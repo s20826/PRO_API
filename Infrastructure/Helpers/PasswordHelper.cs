@@ -5,7 +5,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 
-namespace PRO_API.Helpers
+namespace Infrastructure.Helpers
 {
     public abstract class PasswordHelper
     {
@@ -14,9 +14,9 @@ namespace PRO_API.Helpers
             string hashedPassword = Convert.ToBase64String(KeyDerivation.Pbkdf2(
                 password: plainPassword,
                 salt: salt,
-                prf: KeyDerivationPrf.HMACSHA1,
+                prf: KeyDerivationPrf.HMACSHA512,
                 iterationCount: iterations,
-                numBytesRequested: 256 / 8));
+                numBytesRequested: 512 / 8));
             return hashedPassword;
         }
 

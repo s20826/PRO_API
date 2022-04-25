@@ -22,8 +22,10 @@ using PRO_API.Middlewares;
 using PRO_API.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -35,15 +37,15 @@ namespace PRO_API
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            
+
         }
-        
+
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IHashids>(x => new Hashids(Configuration["HashidsSecret"], 5));
-            
+
             services.AddAuthentication(opt =>
             {
                 opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -62,7 +64,7 @@ namespace PRO_API
                 };
             });
 
-            
+
             services.AddDbContext<KlinikaContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("KlinikaDatabase")));
 
@@ -76,6 +78,35 @@ namespace PRO_API
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "PRO_API", Version = "v1" });
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = @"JWT Authorization header using the Bearer scheme. \r\n\r\n 
+                      Enter 'Bearer' [space] and then your token in the text input below.
+                      \r\n\r\nExample: 'Bearer 12345abcdef'",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            },
+                            Scheme = "oauth2",
+                        Name = "Bearer",
+                        In = ParameterLocation.Header,
+                        },
+                    new List<string>()
+                    }
+                });
+                
             });
 
 

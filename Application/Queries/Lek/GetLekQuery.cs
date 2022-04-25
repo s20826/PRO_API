@@ -24,9 +24,9 @@ namespace Application.Queries.Lek
             repository = lekRepository;
         }
 
-        public async Task<List<GetLekResponse>> Handle(GetLekQuery request, CancellationToken cancellationToken)
+        public async Task<List<GetLekResponse>> Handle(GetLekQuery req, CancellationToken cancellationToken)
         {
-            return await repository.GetLekById(request.ID_lek);
+            return await repository.GetLekById(req.ID_lek);
         }
     }
 }

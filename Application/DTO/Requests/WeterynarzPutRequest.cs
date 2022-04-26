@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PRO_API.DTO
+namespace Application.DTO
 {
     public class WeterynarzPutRequest
     {

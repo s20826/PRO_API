@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 #nullable disable
 
-namespace PRO_API.Models
+namespace Application.Models
 {
     public partial class PacjentRequest
     {

@@ -19,7 +19,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
 using PRO_API.Middlewares;
-using PRO_API.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;

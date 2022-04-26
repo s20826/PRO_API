@@ -14,6 +14,7 @@ namespace Infrastructure
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
             services.AddScoped<ILekRepository, LekService>();
+            services.AddScoped<IKontoRepository, KontoService>();
 
             return services;
         }

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using PRO_API.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

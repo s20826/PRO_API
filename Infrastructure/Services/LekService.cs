@@ -88,7 +88,7 @@ namespace Infrastructure.Services
                 DataWaznosci = p.DataWaznosci
             };
 
-            return result.First();
+            return result.FirstOrDefault();
         }
 
         public async Task<int> AddStanLeku(int ID_lek, StanLekuRequest request)

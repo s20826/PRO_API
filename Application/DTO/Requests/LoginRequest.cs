@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PRO_API.DTO.Request
+namespace Application.DTO.Request
 {
     public class LoginRequest
     {

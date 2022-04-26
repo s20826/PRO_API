@@ -5,7 +5,6 @@ using HashidsNet;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using PRO_API.Models;
 using System;
 using System.Data;
 using System.Data.SqlClient;
@@ -44,11 +43,6 @@ namespace PRO_API.Controllers
             }
             int id = idArray[0];
 
-            /*if (context.Leks.Where(x => x.IdLek == id).Any() != true)
-            {
-                return BadRequest("Nie ma leku o ID = " + ID_lek);
-            }*/
-
             return Ok(await Mediator.Send(new GetLekQuery
             {
                 ID_lek = id
@@ -64,16 +58,6 @@ namespace PRO_API.Controllers
                 return NotFound();
             }
             int id = idArray[0];
-
-            /*if (context.Leks.Where(x => x.IdLek == id1).Any() != true)
-            {
-                return BadRequest("Nie ma leku o ID = " + ID_lek);
-            }
-
-            if (context.LekWMagazynies.Where(x => x.IdStanLeku == id2).Any() != true)
-            {
-                return BadRequest("Nie ma leku o ID = " + ID_lek + " w magazynie");
-            }*/
 
             return Ok(await Mediator.Send(new GetStanLekuQuery
             {
@@ -120,11 +104,6 @@ namespace PRO_API.Controllers
                 return BadRequest("Niepoprawne dane");
             }
 
-            /*if (!context.LekWMagazynies.Where(x => x.IdStanLeku == id2 && x.IdLek == id1).Any())
-            {
-                return BadRequest("Nie ma informacji o takim leku w magazynie.");
-            }*/
-
             await Mediator.Send(new UpdateStanLekuCommand
             {
                 ID_stan_leku = id,
@@ -148,11 +127,6 @@ namespace PRO_API.Controllers
             {
                 return BadRequest("Niepoprawne dane");
             }
-
-            /*if (!context.LekWMagazynies.Where(x => x.IdStanLeku == id).Any())
-            {
-                return BadRequest("Nie ma informacji o takim leku w magazynie.");
-            }*/
 
             await Mediator.Send(new DeleteStanLekuCommand
             {

@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Application.Commands.Konto;
+using Application.DTO.Request;
+using Application.Queries.Konto;
+using Infrastructure.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using PRO_API.DTO;
-using PRO_API.DTO.Request;
-using PRO_API.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -20,89 +21,54 @@ namespace PRO_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AccountController : ControllerBase
+    public class KontoController : ApiControllerBase
     {
-        /*private readonly IConfiguration configuration;
-        private readonly KlinikaContext context;
-        public AccountController(IConfiguration config, KlinikaContext klinikaContext)
+        private readonly IConfiguration configuration;
+        public KontoController(IConfiguration config)
         {
             configuration = config;
-            context = klinikaContext;
+        }
+
+        [HttpGet("{ID_osoba}")]
+        public async Task<IActionResult> GetKonto(int ID_osoba)
+        {
+            return Ok(await Mediator.Send(new GetKontoQuery
+            {
+                ID_osoba = ID_osoba
+            }));
         }
 
 
         [AllowAnonymous]
         [HttpPost("login")]
-        public IActionResult Login(LoginRequest request)
+        public async Task<IActionResult> Login(LoginRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var user = context.Osobas.Where(x => x.NazwaUzytkownika == request.NazwaUzytkownika).FirstOrDefault();
-            if (user == null)
+            try
             {
-                return NotFound("Niepoprawne hasło lub login.");
-            }
-
-            string passwordHash = user.Haslo;
-            byte[] salt = Convert.FromBase64String(user.Salt);
-            string currentHashedPassword = PasswordHelper.HashPassword(salt, request.Haslo, int.Parse(configuration["PasswordIterations"]));
-
-            if (passwordHash != currentHashedPassword)
-            {
-                return Unauthorized("Niepoprawne hasło lub login.");
-            }
-
-            List<Claim> userclaim = new List<Claim>
-            {
-                new Claim("idUser", user.IdOsoba.ToString()),
-                new Claim("login", user.NazwaUzytkownika)
-            };
-
-            if (user.Rola != null)
-            {
-                if (user.Rola.Equals("A"))
+                return Ok(await Mediator.Send(new LoginCommand
                 {
-                    userclaim.Add(new Claim(ClaimTypes.Role, "admin"));
-                }
-                if (user.Rola.Equals("W"))
+                    request = request
+                }));
+            } catch (Exception e)
+            {
+                switch (e)
                 {
-                    userclaim.Add(new Claim(ClaimTypes.Role, "weterynarz"));
+                    case NotFoundException:
+                        return NotFound(e.Message);
+                    case UserNotAuthorizedException:
+                        return Unauthorized(e.Message);
+                    default:
+                        return BadRequest();
                 }
             }
-            else
-            {
-                userclaim.Add(new Claim(ClaimTypes.Role, "klient"));
-            }
-
-
-            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["SecretKey"]));
-            SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-            JwtSecurityToken token = new JwtSecurityToken(
-                issuer: "https://localhost:5001",
-                audience: "https://localhost:5001",
-                claims: userclaim,
-                expires: DateTime.Now.AddMinutes(15),
-                signingCredentials: creds
-            );
-
-            var refreshToken = Guid.NewGuid().ToString();
-            user.RefreshToken = refreshToken;
-            user.RefreshTokenExp = DateTime.Now.AddDays(3);
-            context.SaveChanges();
-
-
-            return Ok(new
-            {
-                Token = new JwtSecurityTokenHandler().WriteToken(token),
-                RefreshToken = refreshToken
-            });
         }
 
-        [AllowAnonymous]
+        /*[AllowAnonymous]
         [HttpPost("refreshToken")]
         public IActionResult GetToken(Guid refreshToken)
         {

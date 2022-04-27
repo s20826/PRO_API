@@ -29,6 +29,7 @@ namespace PRO_API.Controllers
             configuration = config;
         }
 
+
         [HttpGet("{ID_osoba}")]
         public async Task<IActionResult> GetKonto(int ID_osoba)
         {
@@ -54,7 +55,8 @@ namespace PRO_API.Controllers
                 {
                     request = request
                 }));
-            } catch (Exception e)
+            } 
+            catch (Exception e)
             {
                 switch (e)
                 {
@@ -68,76 +70,31 @@ namespace PRO_API.Controllers
             }
         }
 
-        /*[AllowAnonymous]
+        [AllowAnonymous]
         [HttpPost("refreshToken")]
-        public IActionResult GetToken(Guid refreshToken)
+        public async Task<IActionResult> GetToken(Guid refreshToken)
         {
-            var user = context.Osobas.SingleOrDefault(x => x.RefreshToken == refreshToken.ToString());
-            if (user == null)
+            return Ok(await Mediator.Send(new RefreshCommand
             {
-                return NotFound("Nie znaleziono Refresh Token");
-            }
-
-            if (user.RefreshTokenExp < DateTime.Now)
-            {
-                return BadRequest("Refresh Token wygasł");
-            }
-
-            Claim[] userclaim = new[]
-             {
-                new Claim(ClaimTypes.Name, user.IdOsoba.ToString()),
-                //new Claim(ClaimTypes.Role, "admin")
-            };
-
-            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["SecretKey"]));
-            SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-            JwtSecurityToken token = new JwtSecurityToken(
-                issuer: "http://loclahost:5001",
-                audience: "http://loclahost:5001",
-                claims: userclaim,
-                expires: DateTime.Now.AddMinutes(15),
-                signingCredentials: creds
-            );
-
-            return Ok(new
-            {
-                Token = new JwtSecurityTokenHandler().WriteToken(token)
-            });
+                RefreshToken = refreshToken
+            }));
         }
 
         
+        [Authorize]
         [HttpPut("{ID_osoba}")]
-        public IActionResult UpdateAccountCredentials(int ID_osoba, AccountCredentialsRequest request)
+        public async Task<IActionResult> UpdateKontoCredentials(int ID_osoba, KontoUpdateRequest request)
         {
-            if (!context.Osobas.Where(x => x.IdOsoba == ID_osoba).Any())
-            {
-                return BadRequest("Nie ma konta o ID = " + ID_osoba);
-            }
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var user = context.Osobas.Where(x => x.IdOsoba == ID_osoba).First();
-
-            string passwordHash = user.Haslo;
-            byte[] salt = Convert.FromBase64String(user.Salt);
-            string currentHashedPassword = PasswordHelper.HashPassword(salt, request.currentHaslo, int.Parse(configuration["PasswordIterations"]));
-
-            if (passwordHash != currentHashedPassword)
+            return Ok(await Mediator.Send(new UpdateKontoCommand
             {
-                return BadRequest("Niepoprawne hasło.");
-            }
-
-            string hashed = PasswordHelper.HashPassword(salt, request.newHaslo, int.Parse(configuration["PasswordIterations"]));
-
-            user.NumerTelefonu = request.NumerTelefonu;
-            user.Email = request.Email;
-            user.Haslo = hashed;
-
-            context.SaveChanges();
-            return Ok("Pomyślnie zaktuzalizowano dane.");
-        }*/
+                ID_osoba = ID_osoba,
+                request = request
+            }));
+        }
     }
 }

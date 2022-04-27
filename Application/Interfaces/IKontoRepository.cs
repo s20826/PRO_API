@@ -12,5 +12,7 @@ namespace Application.Interfaces
     {
         public Task<GetKontoResponse> GetKonto(int ID_osoba);
         public Task<LoginTokens> Login(LoginRequest request);
+        public Task<string> GetToken(Guid refreshToken);
+        public Task<int> UpdateKontoCredentials(int ID_osoba, KontoUpdateRequest request);
     }
 }

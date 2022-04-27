@@ -95,9 +95,88 @@ namespace Infrastructure.Services
 
             return new LoginTokens()
             {
-                Token = token,
+                Token = new JwtSecurityTokenHandler().WriteToken(token),
                 RefreshToken = refreshToken
             };
+        }
+
+        public async Task<string> GetToken(Guid refreshToken)
+        {
+            if (refreshToken.ToString().Length == 0)
+            {
+                throw new NotFoundException("Nie znaleziono Refresh Token");
+            }
+            var user = context.Osobas.SingleOrDefault(x => x.RefreshToken == refreshToken.ToString());
+            if (user == null)
+            {
+                throw new NotFoundException("Nie znaleziono Refresh Token");
+            }
+
+            if (user.RefreshTokenExp < DateTime.Now)
+            {
+                throw new UserNotAuthorizedException("Refresh Token wygasł");
+            }
+
+            List<Claim> userclaim = new List<Claim>
+            {
+                new Claim("idUser", user.IdOsoba.ToString()),
+                new Claim("login", user.NazwaUzytkownika)
+            };
+
+            if (user.Rola != null)
+            {
+                if (user.Rola.Equals("A"))
+                {
+                    userclaim.Add(new Claim(ClaimTypes.Role, "admin"));
+                }
+                if (user.Rola.Equals("W"))
+                {
+                    userclaim.Add(new Claim(ClaimTypes.Role, "weterynarz"));
+                }
+            }
+            else
+            {
+                userclaim.Add(new Claim(ClaimTypes.Role, "klient"));
+            }
+
+            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["SecretKey"]));
+            SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            JwtSecurityToken token = new JwtSecurityToken(
+                issuer: "http://loclahost:5001",
+                audience: "http://loclahost:5001",
+                claims: userclaim,
+                expires: DateTime.Now.AddMinutes(15),
+                signingCredentials: creds
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        public async Task<int> UpdateKontoCredentials(int ID_osoba, KontoUpdateRequest request)
+        {
+            var user = context.Osobas.Where(x => x.IdOsoba == ID_osoba).First();
+            if(user == null)
+            {
+                throw new NotFoundException();
+            }
+
+            string passwordHash = user.Haslo;
+            byte[] salt = Convert.FromBase64String(user.Salt);
+            string currentHashedPassword = PasswordHelper.HashPassword(salt, request.currentHaslo, int.Parse(configuration["PasswordIterations"]));
+
+            if (passwordHash != currentHashedPassword)
+            {
+                throw new UserNotAuthorizedException("Niepoprawne hasło.");
+            }
+
+            string hashed = PasswordHelper.HashPassword(salt, request.newHaslo, int.Parse(configuration["PasswordIterations"]));
+
+            user.NumerTelefonu = request.NumerTelefonu;
+            user.Email = request.Email;
+            user.Haslo = hashed;
+
+            return await context.SaveChangesAsync();
         }
     }
 }

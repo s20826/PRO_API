@@ -9,7 +9,7 @@ namespace Infrastructure.Helpers
 {
     public abstract class PasswordHelper
     {
-        public static String HashPassword(byte[] salt, String plainPassword, int iterations)
+        public static String HashPassword(byte[] salt, string plainPassword, int iterations)
         {
             string hashedPassword = Convert.ToBase64String(KeyDerivation.Pbkdf2(
                 password: plainPassword,

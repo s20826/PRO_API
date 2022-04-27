@@ -51,7 +51,7 @@ namespace Infrastructure.Services
 
             if (passwordHash != currentHashedPassword)
             {
-                throw new UserNotAuthorizedException("Niepoprawne hasło lub login.");
+                throw new UserNotAuthorizedException("Niepoprawne hasło lub login. ");
             }
 
             List<Claim> userclaim = new List<Claim>

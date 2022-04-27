@@ -1,4 +1,5 @@
 ﻿using System;
+using Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -341,7 +342,7 @@ namespace Infrastructure.Models
 
                 entity.Property(e => e.Haslo)
                     .IsRequired()
-                    .HasMaxLength(64)
+                    .HasMaxLength(100)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Imie)

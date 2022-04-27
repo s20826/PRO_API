@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Application.Commands.Klient;
+using Application.DTO;
+using Application.Queries.Klient;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -19,109 +22,51 @@ namespace PRO_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class KlientController : ControllerBase
+    public class KlientController : ApiControllerBase
     {
-        /*private readonly IConfiguration configuration;
-        private readonly KlinikaContext context;
-        public KlientController(IConfiguration config, KlinikaContext klinikaContext)
+        private readonly IConfiguration configuration;
+        public KlientController(IConfiguration config)
         {
             configuration = config;
-            context = klinikaContext;
         }
 
-        [AllowAnonymous]
+        [Authorize(Roles = "admin")]
         [HttpGet]
-        public IActionResult GetKlientList()
+        public async Task<IActionResult> GetKlientList()
         {
-            var results =
-                from x in context.Osobas
-                join y in context.Klients on x.IdOsoba equals y.IdOsoba into ps
-                from p in ps
-                select new
-                {
-                    ID_osoba = x.IdOsoba,
-                    Imie = x.Imie,
-                    Nazwisko = x.Nazwisko,
-                    Numer_Telefonu = x.NumerTelefonu,
-                    Email = x.Email,
-                    Data_zalozenia_konta = p.DataZalozeniaKonta
-                };
+            return Ok(await Mediator.Send(new GetKlientListQuery
+            {
 
-            return Ok(results);
+            }));
         }
 
         [Authorize(Roles = "admin")]
         [HttpGet("{ID_osoba}")]
-        public IActionResult GetKlientById(int ID_osoba)
+        public async Task<IActionResult> GetKlientById(int ID_osoba)
         {
-            if (context.Klients.Where(x => x.IdOsoba == ID_osoba).Any() != true)
+            return Ok(await Mediator.Send(new GetKlientQuery
             {
-                return BadRequest("Nie ma klienta o ID = " + ID_osoba);
-            } 
-            else
-            {
-                var results =
-                from x in context.Osobas
-                join y in context.Klients on x.IdOsoba equals y.IdOsoba into ps
-                from p in ps
-                where x.IdOsoba == ID_osoba
-                select new
-                {
-                    ID_osoba = ID_osoba,
-                    Imie = x.Imie,
-                    Nazwisko = x.Nazwisko,
-                    Numer_Telefonu = x.NumerTelefonu,
-                    Email = x.Email,
-                    Data_zalozenia_konta = p.DataZalozeniaKonta
-                };
-
-                return Ok(results.First());
-            }
+                ID_osoba = ID_osoba
+            }));
         }
 
 
         [AllowAnonymous]
         [HttpPost]
-        public IActionResult addKlient(KlientPostRequest request)
+        public async Task<IActionResult> AddKlient(KlientCreateRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            byte[] salt = PasswordHelper.GenerateSalt();
-            string hashed = PasswordHelper.HashPassword(salt, request.Haslo, int.Parse(configuration["PasswordIterations"]));
-            string saltBase64 = Convert.ToBase64String(salt);
-
-            SqlConnection connection = new SqlConnection(configuration.GetConnectionString("KlinikaDatabase"));
-            connection.Open();
-            SqlTransaction trans = connection.BeginTransaction();
-
-            var query = "exec DodajKlienta @imie, @nazwisko, @dataUr, @numerTel, @email, @login, @haslo, @salt";
-            SqlCommand command = new SqlCommand(query, connection, trans);
-            command.Parameters.AddWithValue("@imie", request.Imie);
-            command.Parameters.AddWithValue("@nazwisko", request.Nazwisko);
-            command.Parameters.AddWithValue("@dataUr", request.DataUrodzenia);
-            command.Parameters.AddWithValue("@numerTel", request.NumerTelefonu);
-            command.Parameters.AddWithValue("@email", request.Email);
-            command.Parameters.AddWithValue("@login", request.NazwaUzytkownika);
-            command.Parameters.AddWithValue("@haslo", hashed);
-            command.Parameters.AddWithValue("@salt", saltBase64);
-
-            
-            if (command.ExecuteNonQuery() == 2)
+            return Ok(await Mediator.Send(new CreateKlientCommand
             {
-                trans.Commit();
-                return Ok("Dodano klienta " + request.Imie + " " + request.Nazwisko);
-            }
-            else
-            {
-                trans.Rollback();
-                return BadRequest("Error, nie udało się dodać klienta ");
-            }
+                request = request
+            }));
         }
 
-        [Authorize(Roles = "admin")]
+        /*[Authorize(Roles = "admin")]
         [HttpPut("{ID_osoba}")]
         public IActionResult UpdateKlient(int ID_osoba, KlientPostRequest request)      //admin
         {

@@ -1,6 +1,7 @@
 ﻿using Application.DTO;
 using Application.DTO.Responses;
 using Application.Interfaces;
+using Infrastructure.Exceptions;
 using Infrastructure.Helpers;
 using Infrastructure.Models;
 using Microsoft.Extensions.Configuration;
@@ -95,6 +96,23 @@ namespace Infrastructure.Services
                 trans.Rollback();
                 throw new Exception("Error, nie udało się dodać klienta ");
             }
+        }
+
+        public async Task<int> DeleteKlient(int ID_osoba)
+        {
+            var user = context.Osobas.Where(x => x.IdOsoba == ID_osoba).FirstOrDefault();
+            if(user != null)
+            {
+                throw new NotFoundException();
+            }
+
+            user.Haslo = "";
+            user.Salt = "";
+            user.RefreshToken = "";
+            user.Email = "";
+            user.NumerTelefonu = "";
+
+            return await context.SaveChangesAsync();
         }
     }
 }

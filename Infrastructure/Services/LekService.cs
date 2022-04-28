@@ -105,7 +105,7 @@ namespace Infrastructure.Services
 
         public async Task<int> UpdateStanLeku(int ID_stan_leku, StanLekuRequest request)
         {
-            var stanLeku = context.LekWMagazynies.Where(x => x.IdStanLeku == ID_stan_leku).First();
+            var stanLeku = context.LekWMagazynies.Where(x => x.IdStanLeku == ID_stan_leku).FirstOrDefault();
             stanLeku.Ilosc = request.Ilosc;
             stanLeku.DataWaznosci = request.DataWaznosci;
 

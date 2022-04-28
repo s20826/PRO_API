@@ -45,5 +45,11 @@ namespace PRO_API.Controllers
         {
             return Ok(context.Osobas.ToList());
         }
+
+        [HttpGet("random")]
+        public async Task<IActionResult> GetRandomPassword(int count)        //test
+        {
+            return Ok(PasswordHelper.GetRandomPassword(count));
+        }
     }
 }

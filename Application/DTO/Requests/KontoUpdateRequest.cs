@@ -17,6 +17,10 @@ namespace Application.DTO.Request
         public string Email { get; set; }
 
         [Required]
+        [Display(Name = "Data Urodzenia"), DataType(DataType.Date)]
+        public DateTime DataUrodzenia { get; set; }
+
+        [Required]
         [StringLength(30, MinimumLength = 1, ErrorMessage = "Pole wymaga od 8 do 30 znaków")]
         public string currentHaslo { get; set; }
 

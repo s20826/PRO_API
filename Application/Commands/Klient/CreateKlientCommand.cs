@@ -12,7 +12,6 @@ namespace Application.Commands.Klient
 {
     public class CreateKlientCommand : IRequest<int>
     {
-        public int ID_osoba { get; set; }
         public KlientCreateRequest request { get; set; }
     }
 

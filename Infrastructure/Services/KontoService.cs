@@ -174,6 +174,7 @@ namespace Infrastructure.Services
 
             user.NumerTelefonu = request.NumerTelefonu;
             user.Email = request.Email;
+            user.DataUrodzenia = request.DataUrodzenia;
             user.Haslo = hashed;
 
             return await context.SaveChangesAsync();

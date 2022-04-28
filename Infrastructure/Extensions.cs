@@ -16,6 +16,7 @@ namespace Infrastructure
             services.AddScoped<ILekRepository, LekService>();
             services.AddScoped<IKontoRepository, KontoService>();
             services.AddScoped<IKlientRepository, KlientService>();
+            services.AddScoped<IWeterynarzRepository, WeterynarzService>();
 
             return services;
         }

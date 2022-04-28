@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Infrastructure.Helpers
@@ -28,6 +29,17 @@ namespace Infrastructure.Helpers
                 rng.GetBytes(salt);
             }
             return salt;
+        }
+
+        public static string GetRandomPassword(int l)
+        {
+            string valid = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+            StringBuilder password = new StringBuilder();
+            for(int i = 0; i < l; i++)
+            {
+                password.Append(valid.ElementAt(new Random().Next(0,valid.Length)));
+            }
+            return password.ToString();
         }
     }
 }

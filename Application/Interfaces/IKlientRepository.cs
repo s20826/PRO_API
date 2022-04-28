@@ -13,5 +13,7 @@ namespace Application.Interfaces
         public Task<List<GetKlientListResponse>> GetKlientList();
         public Task<GetKlientResponse> GetKlientById(int ID_osoba);
         public Task<int> AddKlient(KlientCreateRequest request);
+        //public Task<int> UpdateKlient(int ID_osoba, KlientPostRequest request);
+        public Task<int> DeleteKlient(int ID_osoba);
     }
 }

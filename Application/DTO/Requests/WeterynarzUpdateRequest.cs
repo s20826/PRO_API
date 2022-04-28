@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Application.DTO
 {
-    public class WeterynarzPutRequest
+    public class WeterynarzUpdateRequest
     {
         [Required]
         [StringLength(50, MinimumLength = 2, ErrorMessage = "Pole wymaga od 2 do 50 znaków")]

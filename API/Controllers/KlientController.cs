@@ -66,6 +66,20 @@ namespace PRO_API.Controllers
             }));
         }
 
+
+        [Authorize(Roles = "admin,klient")]
+        [HttpDelete("{ID_osoba}")]
+        public async Task<IActionResult> DeleteKlient(int ID_osoba)
+        {
+            await Mediator.Send(new DeleteKlientCommand
+            {
+                ID_osoba = ID_osoba
+            });
+
+            return NoContent();
+        }
+
+
         /*[Authorize(Roles = "admin")]
         [HttpPut("{ID_osoba}")]
         public IActionResult UpdateKlient(int ID_osoba, KlientPostRequest request)      //admin
@@ -91,21 +105,6 @@ namespace PRO_API.Controllers
             context.SaveChanges();
 
             return Ok("Pomyślnie zaktuzalizowano dane.");
-        }
-
-        [Authorize(Roles = "admin")]
-        [HttpDelete("{ID_osoba}")]
-        public IActionResult DeleteKlient(int ID_osoba)
-        {
-            if (!context.Klients.Where(x => x.IdOsoba == ID_osoba).Any())
-            {
-                return BadRequest("Nie ma konta o ID = " + ID_osoba);
-            }
-            context.Remove(context.Klients.Where(x => x.IdOsoba == ID_osoba).First());
-            context.Remove(context.Osobas.Where(x => x.IdOsoba == ID_osoba).First());
-            context.SaveChanges();
-
-            return Ok("Pomyślnie usunięto klienta.");
         }*/
     }
 }

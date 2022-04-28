@@ -80,13 +80,11 @@ namespace PRO_API.Controllers
                 return BadRequest("Niepoprawne dane");
             }
 
-            await Mediator.Send(new CreateStanLekuCommand
+            return Ok(await Mediator.Send(new CreateStanLekuCommand
             {
                 ID_lek = id,
                 request = request
-            });
-
-            return NoContent();
+            }));
         }
 
         [HttpPut("magazyn/{ID_stan_leku}")]

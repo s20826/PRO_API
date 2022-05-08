@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Infrastructure.Models;
 using System.Net.Mail;
+using Application.DTO.Responses;
 
 namespace PRO_API.Controllers
 {
@@ -44,6 +45,31 @@ namespace PRO_API.Controllers
         public async Task<IActionResult> GetAccounts()        //test
         {
             return Ok(context.Osobas.ToList());
+        }
+
+        [HttpGet("leki")]
+        public async Task<IActionResult> GetLeki()        //test
+        {
+            var results = (from x in context.Leks
+                        join y in context.LekWMagazynies on x.IdLek equals y.IdLek
+                        select new GetLekResponse()
+                        {
+                            IdStanLeku = (uint)y.IdStanLeku,
+                            Nazwa = x.Nazwa,
+                            JednostkaMiary = x.JednostkaMiary,
+                            Ilosc = (uint)y.Ilosc,
+                            DataWaznosci = y.DataWaznosci,
+                            Choroby = (from i in context.ChorobaLeks
+                                       join j in context.Chorobas on i.IdChoroba equals j.IdChoroba into qs
+                                       from j in qs.DefaultIfEmpty()
+                                       where i.IdLek == x.IdLek
+                                       select new
+                                       {
+                                           j.Nazwa
+                                       }).ToArray()
+                        }).ToList();
+
+            return Ok(results);
         }
 
         [HttpGet("random")]

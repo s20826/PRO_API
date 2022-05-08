@@ -13,5 +13,6 @@ namespace Application.DTO.Responses
         public uint Ilosc { get; set; }
         public string JednostkaMiary { get; set; }
         public DateTime DataWaznosci { get; set; }
+        public object Choroby { get; set; }
     }
 }

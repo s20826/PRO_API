@@ -55,21 +55,27 @@ namespace Infrastructure.Services
 
         public async Task<List<GetLekResponse>> GetLekById(int ID_lek)
         {
-            var results =
-            from x in context.Leks
-            join y in context.LekWMagazynies on x.IdLek equals y.IdLek into ps
-            from p in ps
-            where x.IdLek == ID_lek
-            select new GetLekResponse()
-            {
-                IdStanLeku = (uint)p.IdStanLeku,
-                Nazwa = x.Nazwa,
-                JednostkaMiary = x.JednostkaMiary,
-                Ilosc = (uint)p.Ilosc,
-                DataWaznosci = p.DataWaznosci
-            };
+            var results = (from x in context.Leks
+                           join y in context.LekWMagazynies on x.IdLek equals y.IdLek
+                           where x.IdLek == ID_lek
+                           select new GetLekResponse()
+                           {
+                               IdStanLeku = (uint)y.IdStanLeku,
+                               Nazwa = x.Nazwa,
+                               JednostkaMiary = x.JednostkaMiary,
+                               Ilosc = (uint)y.Ilosc,
+                               DataWaznosci = y.DataWaznosci,
+                               Choroby = (from i in context.ChorobaLeks
+                                          join j in context.Chorobas on i.IdChoroba equals j.IdChoroba into qs
+                                          from j in qs.DefaultIfEmpty()
+                                          where i.IdLek == x.IdLek
+                                          select new
+                                          {
+                                              j.Nazwa
+                                          }).ToArray()
+                           }).ToList();
 
-            return results.ToList();
+            return results;
         }
 
         public async Task<GetStanLekuResponse> GetLekWMagazynieById(int ID_stan_leku)

@@ -23,7 +23,7 @@ namespace Infrastructure.Helpers
 
         public static byte[] GenerateSalt()
         {
-            byte[] salt = new byte[128 / 8];
+            byte[] salt = new byte[256 / 8];
             using (var rng = RandomNumberGenerator.Create())
             {
                 rng.GetBytes(salt);

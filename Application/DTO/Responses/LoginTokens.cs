@@ -11,5 +11,7 @@ namespace Application.DTO.Responses
     {
         public string Token { get; set; }
         public string RefreshToken { get; set; }
+        public string Imie { get; set; }
+        public string Rola { get; set; }
     }
 }

@@ -15,6 +15,7 @@ namespace Infrastructure.Models
         public int IdSzczepionka { get; set; }
         public string Nazwa { get; set; }
         public string Zastosowanie { get; set; }
+        public bool CzyObowiazkowa { get; set; }
 
         public virtual ICollection<Szczepienie> Szczepienies { get; set; }
     }

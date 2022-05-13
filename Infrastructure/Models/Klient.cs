@@ -12,6 +12,7 @@ namespace Infrastructure.Models
             Harmonograms = new HashSet<Harmonogram>();
             KlientZnizkas = new HashSet<KlientZnizka>();
             Pacjents = new HashSet<Pacjent>();
+            Skierowanies = new HashSet<Skierowanie>();
         }
 
         public int IdOsoba { get; set; }
@@ -21,5 +22,6 @@ namespace Infrastructure.Models
         public virtual ICollection<Harmonogram> Harmonograms { get; set; }
         public virtual ICollection<KlientZnizka> KlientZnizkas { get; set; }
         public virtual ICollection<Pacjent> Pacjents { get; set; }
+        public virtual ICollection<Skierowanie> Skierowanies { get; set; }
     }
 }

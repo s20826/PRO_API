@@ -10,9 +10,10 @@ namespace Infrastructure.Models
         public Wizytum()
         {
             LekWizyta = new HashSet<LekWizytum>();
-            Skierowanies = new HashSet<Skierowanie>();
             Szczepienies = new HashSet<Szczepienie>();
+            WizytaChorobas = new HashSet<WizytaChoroba>();
             WizytaUslugas = new HashSet<WizytaUsluga>();
+            Zdjecies = new HashSet<Zdjecie>();
         }
 
         public int IdWizyta { get; set; }
@@ -29,8 +30,9 @@ namespace Infrastructure.Models
         public virtual Znizka IdZnizkaNavigation { get; set; }
         public virtual Receptum Receptum { get; set; }
         public virtual ICollection<LekWizytum> LekWizyta { get; set; }
-        public virtual ICollection<Skierowanie> Skierowanies { get; set; }
         public virtual ICollection<Szczepienie> Szczepienies { get; set; }
+        public virtual ICollection<WizytaChoroba> WizytaChorobas { get; set; }
         public virtual ICollection<WizytaUsluga> WizytaUslugas { get; set; }
+        public virtual ICollection<Zdjecie> Zdjecies { get; set; }
     }
 }

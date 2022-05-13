@@ -13,7 +13,7 @@ namespace Infrastructure.Models
         }
 
         public int IdSpecjalizacja { get; set; }
-        public string NazwaSpecjalizacji { get; set; }
+        public string Nazwa { get; set; }
 
         public virtual ICollection<WeterynarzSpecjalizacja> WeterynarzSpecjalizacjas { get; set; }
     }

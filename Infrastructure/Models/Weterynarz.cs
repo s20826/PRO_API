@@ -17,6 +17,7 @@ namespace Infrastructure.Models
 
         public int IdOsoba { get; set; }
         public decimal Pensja { get; set; }
+        public DateTime DataUrodzenia { get; set; }
         public DateTime DataZatrudnienia { get; set; }
 
         public virtual Osoba IdOsobaNavigation { get; set; }

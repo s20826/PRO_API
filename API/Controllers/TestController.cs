@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using Infrastructure.Models;
 using System.Net.Mail;
 using Application.DTO.Responses;
+using Application.DTO;
+using System.Data.SqlClient;
 
 namespace PRO_API.Controllers
 {
@@ -47,6 +49,16 @@ namespace PRO_API.Controllers
             return Ok(context.Osobas.ToList());
         }
 
+        [HttpPost("login")]
+        public async Task<IActionResult> Login()        //test
+        {
+            return Ok(new
+            {
+                Token = "testToken",
+                RefreshToken = Guid.NewGuid().ToString()
+            });
+        }
+
         [HttpGet("leki")]
         public async Task<IActionResult> GetLeki()        //test
         {
@@ -77,5 +89,6 @@ namespace PRO_API.Controllers
         {
             return Ok(PasswordHelper.GetRandomPassword(count));
         }
+
     }
 }

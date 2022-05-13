@@ -10,7 +10,6 @@ namespace Infrastructure.Models
         public int IdOsoba { get; set; }
         public string Imie { get; set; }
         public string Nazwisko { get; set; }
-        public DateTime DataUrodzenia { get; set; }
         public string NumerTelefonu { get; set; }
         public string Email { get; set; }
         public string NazwaUzytkownika { get; set; }
@@ -20,6 +19,7 @@ namespace Infrastructure.Models
         public DateTime? RefreshTokenExp { get; set; }
         public string Rola { get; set; }
         public DateTime? DataBlokady { get; set; }
+        public int LiczbaProb { get; set; }
 
         public virtual Klient Klient { get; set; }
         public virtual Weterynarz Weterynarz { get; set; }

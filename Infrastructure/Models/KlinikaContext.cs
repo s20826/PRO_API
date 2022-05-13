@@ -1,5 +1,4 @@
 ﻿using System;
-using Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -39,14 +38,18 @@ namespace Infrastructure.Models
         public virtual DbSet<Usluga> Uslugas { get; set; }
         public virtual DbSet<Weterynarz> Weterynarzs { get; set; }
         public virtual DbSet<WeterynarzSpecjalizacja> WeterynarzSpecjalizacjas { get; set; }
+        public virtual DbSet<WizytaChoroba> WizytaChorobas { get; set; }
         public virtual DbSet<WizytaUsluga> WizytaUslugas { get; set; }
         public virtual DbSet<Wizytum> Wizyta { get; set; }
+        public virtual DbSet<Zdjecie> Zdjecies { get; set; }
         public virtual DbSet<Znizka> Znizkas { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("Server=tcp:pjdb-20783-20826.database.windows.net,1433;Initial Catalog=Klinika;Persist Security Info=False;User ID=PJDBmanager;Password=PJmanager36;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             }
         }
 
@@ -133,8 +136,6 @@ namespace Infrastructure.Models
                 entity.ToTable("Harmonogram");
 
                 entity.Property(e => e.IdHarmonogram).HasColumnName("ID_harmonogram");
-
-                entity.Property(e => e.CzyWeekend).HasColumnName("Czy_weekend");
 
                 entity.Property(e => e.DataRozpoczecia)
                     .HasColumnType("datetime")
@@ -332,11 +333,8 @@ namespace Infrastructure.Models
                     .HasColumnType("datetime")
                     .HasColumnName("Data_blokady");
 
-                entity.Property(e => e.DataUrodzenia)
-                    .HasColumnType("date")
-                    .HasColumnName("Data_urodzenia");
-
                 entity.Property(e => e.Email)
+                    .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
@@ -349,6 +347,8 @@ namespace Infrastructure.Models
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.Property(e => e.LiczbaProb).HasColumnName("Liczba_prob");
 
                 entity.Property(e => e.NazwaUzytkownika)
                     .IsRequired()
@@ -481,30 +481,30 @@ namespace Infrastructure.Models
 
             modelBuilder.Entity<Skierowanie>(entity =>
             {
-                entity.HasKey(e => new { e.IdUsluga, e.IdWizyta })
+                entity.HasKey(e => new { e.IdUsluga, e.IdOsoba })
                     .HasName("Skierowanie_pk");
 
                 entity.ToTable("Skierowanie");
 
                 entity.Property(e => e.IdUsluga).HasColumnName("ID_usluga");
 
-                entity.Property(e => e.IdWizyta).HasColumnName("ID_wizyta");
+                entity.Property(e => e.IdOsoba).HasColumnName("ID_osoba");
 
                 entity.Property(e => e.DataWystawienia)
                     .HasColumnType("date")
                     .HasColumnName("Data_wystawienia");
+
+                entity.HasOne(d => d.IdOsobaNavigation)
+                    .WithMany(p => p.Skierowanies)
+                    .HasForeignKey(d => d.IdOsoba)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Skierowanie_Klient");
 
                 entity.HasOne(d => d.IdUslugaNavigation)
                     .WithMany(p => p.Skierowanies)
                     .HasForeignKey(d => d.IdUsluga)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Skierowanie_Usluga");
-
-                entity.HasOne(d => d.IdWizytaNavigation)
-                    .WithMany(p => p.Skierowanies)
-                    .HasForeignKey(d => d.IdWizyta)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Skierowanie_Wizyta");
             });
 
             modelBuilder.Entity<Specjalizacja>(entity =>
@@ -516,11 +516,10 @@ namespace Infrastructure.Models
 
                 entity.Property(e => e.IdSpecjalizacja).HasColumnName("ID_specjalizacja");
 
-                entity.Property(e => e.NazwaSpecjalizacji)
+                entity.Property(e => e.Nazwa)
                     .IsRequired()
                     .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("Nazwa_specjalizacji");
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<Szczepienie>(entity =>
@@ -559,6 +558,8 @@ namespace Infrastructure.Models
                 entity.ToTable("Szczepionka");
 
                 entity.Property(e => e.IdSzczepionka).HasColumnName("ID_szczepionka");
+
+                entity.Property(e => e.CzyObowiazkowa).HasColumnName("Czy_obowiazkowa");
 
                 entity.Property(e => e.Nazwa)
                     .IsRequired()
@@ -608,6 +609,10 @@ namespace Infrastructure.Models
                     .ValueGeneratedNever()
                     .HasColumnName("ID_osoba");
 
+                entity.Property(e => e.DataUrodzenia)
+                    .HasColumnType("date")
+                    .HasColumnName("Data_urodzenia");
+
                 entity.Property(e => e.DataZatrudnienia)
                     .HasColumnType("date")
                     .HasColumnName("Data_zatrudnienia");
@@ -651,6 +656,30 @@ namespace Infrastructure.Models
                     .HasForeignKey(d => d.IdSpecjalizacja)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Weterynarz_specjalizacja_Specjalizacja");
+            });
+
+            modelBuilder.Entity<WizytaChoroba>(entity =>
+            {
+                entity.HasKey(e => new { e.IdWizyta, e.IdChoroba })
+                    .HasName("Wizyta_choroba_pk");
+
+                entity.ToTable("Wizyta_choroba");
+
+                entity.Property(e => e.IdWizyta).HasColumnName("ID_wizyta");
+
+                entity.Property(e => e.IdChoroba).HasColumnName("ID_choroba");
+
+                entity.HasOne(d => d.IdChorobaNavigation)
+                    .WithMany(p => p.WizytaChorobas)
+                    .HasForeignKey(d => d.IdChoroba)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Wizyta_choroba_Choroba");
+
+                entity.HasOne(d => d.IdWizytaNavigation)
+                    .WithMany(p => p.WizytaChorobas)
+                    .HasForeignKey(d => d.IdWizyta)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Wizyta_choroba_Wizyta");
             });
 
             modelBuilder.Entity<WizytaUsluga>(entity =>
@@ -721,6 +750,31 @@ namespace Infrastructure.Models
                     .WithMany(p => p.Wizyta)
                     .HasForeignKey(d => d.IdZnizka)
                     .HasConstraintName("Wizyta_Znizka");
+            });
+
+            modelBuilder.Entity<Zdjecie>(entity =>
+            {
+                entity.HasKey(e => e.IdZdjecie)
+                    .HasName("Zdjecie_pk");
+
+                entity.ToTable("Zdjecie");
+
+                entity.Property(e => e.IdZdjecie)
+                    .ValueGeneratedNever()
+                    .HasColumnName("ID_zdjecie");
+
+                entity.Property(e => e.IdWizyta).HasColumnName("ID_wizyta");
+
+                entity.Property(e => e.Zdjecie1)
+                    .IsRequired()
+                    .HasColumnType("image")
+                    .HasColumnName("Zdjecie");
+
+                entity.HasOne(d => d.IdWizytaNavigation)
+                    .WithMany(p => p.Zdjecies)
+                    .HasForeignKey(d => d.IdWizyta)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Zdjecie_Wizyta");
             });
 
             modelBuilder.Entity<Znizka>(entity =>

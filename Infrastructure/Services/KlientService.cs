@@ -73,11 +73,10 @@ namespace Infrastructure.Services
             await connection.OpenAsync();
             SqlTransaction trans = connection.BeginTransaction();
 
-            var query = "exec DodajKlienta @imie, @nazwisko, @dataUr, @numerTel, @email, @login, @haslo, @salt";
+            var query = "exec DodajKlienta @imie, @nazwisko, @numerTel, @email, @login, @haslo, @salt";
             SqlCommand command = new SqlCommand(query, connection, trans);
             command.Parameters.AddWithValue("@imie", request.Imie);
             command.Parameters.AddWithValue("@nazwisko", request.Nazwisko);
-            command.Parameters.AddWithValue("@dataUr", request.DataUrodzenia);
             command.Parameters.AddWithValue("@numerTel", request.NumerTelefonu);
             command.Parameters.AddWithValue("@email", request.Email);
             command.Parameters.AddWithValue("@login", request.NazwaUzytkownika);
@@ -94,7 +93,7 @@ namespace Infrastructure.Services
             else
             {
                 trans.Rollback();
-                throw new Exception("Error, nie udało się dodać klienta ");
+                throw new Exception("Błąd, nie udało się dodać klienta ");
             }
         }
 

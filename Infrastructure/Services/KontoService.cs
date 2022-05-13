@@ -39,10 +39,10 @@ namespace Infrastructure.Services
 
         public async Task<LoginTokens> Login(LoginRequest request)
         {
-            var user = context.Osobas.Where(x => x.NazwaUzytkownika == request.NazwaUzytkownika).FirstOrDefault();
+            var user = context.Osobas.Where(x => x.NazwaUzytkownika.Equals(request.NazwaUzytkownika)).FirstOrDefault();
             if (user == null)
             {
-                throw new NotFoundException("Niepoprawne hasło lub login.");
+                throw new UserNotAuthorizedException("Niepoprawne hasło lub login.");
             }
 
             string passwordHash = user.Haslo;
@@ -60,25 +60,30 @@ namespace Infrastructure.Services
                 new Claim("login", user.NazwaUzytkownika)
             };
 
+            string userRola = "";
+
             if (user.Rola != null)
             {
                 if (user.Rola.Equals("A"))
                 {
                     userclaim.Add(new Claim(ClaimTypes.Role, "admin"));
+                    userRola = "admin";
                 }
                 if (user.Rola.Equals("W"))
                 {
                     userclaim.Add(new Claim(ClaimTypes.Role, "weterynarz"));
+                    userRola = "weterynarz";
                 }
             }
             else
             {
                 userclaim.Add(new Claim(ClaimTypes.Role, "klient"));
+                userRola = "user";
             }
 
 
             SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["SecretKey"]));
-            SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
 
             JwtSecurityToken token = new JwtSecurityToken(
                 issuer: "https://localhost:5001",
@@ -96,7 +101,9 @@ namespace Infrastructure.Services
             return new LoginTokens()
             {
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
-                RefreshToken = refreshToken
+                RefreshToken = refreshToken,
+                Imie = user.Imie,
+                Rola = userRola
             };
         }
 
@@ -140,7 +147,7 @@ namespace Infrastructure.Services
             }
 
             SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["SecretKey"]));
-            SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
 
             JwtSecurityToken token = new JwtSecurityToken(
                 issuer: "http://loclahost:5001",
@@ -174,7 +181,6 @@ namespace Infrastructure.Services
 
             user.NumerTelefonu = request.NumerTelefonu;
             user.Email = request.Email;
-            user.DataUrodzenia = request.DataUrodzenia;
             user.Haslo = hashed;
 
             return await context.SaveChangesAsync();

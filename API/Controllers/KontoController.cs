@@ -60,12 +60,16 @@ namespace PRO_API.Controllers
             {
                 switch (e)
                 {
-                    case NotFoundException:
-                        return NotFound(e.Message);
                     case UserNotAuthorizedException:
-                        return Unauthorized(e.Message);
+                        return Unauthorized(new
+                        {
+                            message = e.Message
+                        });
                     default:
-                        return BadRequest();
+                        return NotFound(new
+                        {
+                            message = e.Message
+                        });
                 }
             }
         }

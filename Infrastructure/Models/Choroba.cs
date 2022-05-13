@@ -10,11 +10,13 @@ namespace Infrastructure.Models
         public Choroba()
         {
             ChorobaLeks = new HashSet<ChorobaLek>();
+            WizytaChorobas = new HashSet<WizytaChoroba>();
         }
 
         public int IdChoroba { get; set; }
         public string Nazwa { get; set; }
 
         public virtual ICollection<ChorobaLek> ChorobaLeks { get; set; }
+        public virtual ICollection<WizytaChoroba> WizytaChorobas { get; set; }
     }
 }

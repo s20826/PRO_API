@@ -20,9 +20,9 @@ namespace Application.Commands.Konto
     {
         private readonly IKontoRepository repository;
 
-        public LoginCommandHandle(IKontoRepository lekRepository)
+        public LoginCommandHandle(IKontoRepository kontoRepository)
         {
-            repository = lekRepository;
+            repository = kontoRepository;
         }
 
         public async Task<LoginTokens> Handle(LoginCommand req, CancellationToken cancellationToken)

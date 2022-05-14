@@ -65,6 +65,11 @@ namespace Infrastructure.Services
 
         public async Task<int> AddKlient(KlientCreateRequest request)
         {
+            if(context.Osobas.Where(x=> x.NazwaUzytkownika.Equals(request.NazwaUzytkownika)).Any())
+            {
+                throw new Exception("Ta nazwa użytkownika jest już zajęta");
+            }
+
             byte[] salt = PasswordHelper.GenerateSalt();
             string hashed = PasswordHelper.HashPassword(salt, request.Haslo, int.Parse(configuration["PasswordIterations"]));
             string saltBase64 = Convert.ToBase64String(salt);

@@ -60,10 +60,20 @@ namespace PRO_API.Controllers
                 return BadRequest(ModelState);
             }
 
-            return Ok(await Mediator.Send(new CreateKlientCommand
+            try
             {
-                request = request
-            }));
+                return Ok(await Mediator.Send(new CreateKlientCommand
+                {
+                    request = request
+                }));
+            } 
+            catch (Exception e)
+            {
+                return BadRequest(new
+                {
+                    message = e.Message
+                });
+            }
         }
 
 

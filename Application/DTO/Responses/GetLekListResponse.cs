@@ -8,7 +8,7 @@ namespace Application.DTO.Responses
 {
     public class GetLekListResponse
     {
-        public uint IdLek { get; set; }
+        public string IdLek { get; set; }
         public string Nazwa { get; set; }
         public uint Ilosc { get; set; }
         public string JednostkaMiary { get; set; }

@@ -1,6 +1,7 @@
 ﻿using Application.DTO.Request;
 using Application.DTO.Responses;
 using Application.Interfaces;
+using HashidsNet;
 using Infrastructure.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -17,10 +18,12 @@ namespace Infrastructure.Services
     {
         private readonly KlinikaContext context;
         private readonly IConfiguration configuration;
-        public LekService(KlinikaContext klinikaContext, IConfiguration config)
+        private readonly IHashids hashids;
+        public LekService(KlinikaContext klinikaContext, IConfiguration config, IHashids Ihashids)
         {
             context = klinikaContext;
             configuration = config;
+            hashids = Ihashids;
         }
 
         public async Task<List<GetLekListResponse>> GetLekList()
@@ -40,7 +43,7 @@ namespace Infrastructure.Services
             {
                 list.Add(new GetLekListResponse
                 {
-                    IdLek = (uint)int.Parse(reader["ID_lek"].ToString()),
+                    IdLek = hashids.Encode(int.Parse(reader["ID_lek"].ToString())),
                     Nazwa = reader["Nazwa"].ToString(),
                     Ilosc = (uint)int.Parse(reader["Ilosc"].ToString()),
                     JednostkaMiary = reader["Jednostka_Miary"].ToString()

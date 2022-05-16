@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Application.Queries.Pacjent;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -12,54 +14,35 @@ namespace PRO_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PacjentController : ControllerBase
+    public class PacjentController : ApiControllerBase
     {
-        /*private readonly IConfiguration configuration;
-        private readonly KlinikaContext context;
-
-        public PacjentController(IConfiguration config, KlinikaContext klinikaContext)
+        private readonly IConfiguration configuration;
+        public PacjentController(IConfiguration config)
         {
             configuration = config;
-            context = klinikaContext;
         }
 
-        [HttpGet]   //admin
-        public IActionResult GetPacjentList()
+        [Authorize(Roles = "admin,weterynarz")]
+        [HttpGet]       //admin, weterynarz
+        public async Task<IActionResult> GetPacjentList()
         {
-            var results = context.Pacjents;
+            return Ok(await Mediator.Send(new GetPacjentListQuery
+            {
 
-            return Ok(results);
+            }));
         }
 
-        [HttpGet("{ID_osoba}")] //klienta wyświetla swoje zwierzęta wchodząc w zakładkę na swoim koncie
-        public IActionResult GetKlientPacjentList(int ID_osoba)
+        [Authorize]
+        [HttpGet("{ID_osoba}")]     //klienta wyświetla swoje zwierzęta wchodząc w zakładkę na swoim koncie
+        public async Task<IActionResult> GetKlientPacjentList(int ID_osoba)
         {
-            if (context.Klients.Where(x => x.IdOsoba == ID_osoba).Any() != true)
+            return Ok(await Mediator.Send(new GetPacjentKlientListQuery
             {
-                return BadRequest("Nie ma klienta o ID = " + ID_osoba);
-            } 
-            else
-            {
-                var results =
-                from x in context.Pacjents
-                where x.IdOsoba == ID_osoba
-                select new
-                {
-                    ID_pacjent = x.IdPacjent,
-                    Nazwa = x.Nazwa,
-                    Gatunek = x.Gatunek,
-                    Rasa = x.Rasa,
-                    Waga = x.Waga,
-                    Masc = x.Masc,
-                    Data_urodzenia = x.DataUrodzenia,
-                    Plec = x.Plec
-                };
-
-                return Ok(results);
-            }
+                ID_osoba = ID_osoba
+            }));
         }
         
-        [HttpPost]  //weterynarz/admin
+        /*[HttpPost]  //weterynarz/admin
         public IActionResult addPacjent(PacjentRequest request)
         {
             if (!ModelState.IsValid)

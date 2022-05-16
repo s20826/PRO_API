@@ -43,7 +43,7 @@ namespace PRO_API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IHashids>(x => new Hashids(Configuration["HashidsSecret"], 5));
+            services.AddSingleton<IHashids>(x => new Hashids(Configuration["HashidsSecret"], 7));
 
             services.AddAuthentication(opt =>
             {

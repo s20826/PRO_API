@@ -30,6 +30,7 @@ namespace Infrastructure.Services
                 from x in context.Osobas
                 join y in context.Klients on x.IdOsoba equals y.IdOsoba into ps
                 from p in ps
+                orderby x.Nazwisko, x.Imie
                 select new GetKlientListResponse()
                 {
                     IdOsoba = x.IdOsoba,

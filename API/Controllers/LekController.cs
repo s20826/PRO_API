@@ -2,6 +2,7 @@
 using Application.DTO.Request;
 using Application.Queries.Lek;
 using HashidsNet;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,6 +25,7 @@ namespace PRO_API.Controllers
             hashids = ihashids;
         }
 
+        [Authorize(Roles = "admin,weterynarz")]
         [HttpGet]
         public async Task<IActionResult> GetLekList()
         {
@@ -33,6 +35,7 @@ namespace PRO_API.Controllers
             }));
         }
 
+        [Authorize(Roles = "admin,weterynarz")]
         [HttpGet("{ID_lek}")]
         public async Task<IActionResult> GetLekById(string ID_lek)
         {
@@ -49,6 +52,7 @@ namespace PRO_API.Controllers
             }));
         }
 
+        [Authorize(Roles = "admin,weterynarz")]
         [HttpGet("magazyn/{ID_stan_leku}")]
         public async Task<IActionResult> GetLekWMagazynieByIdAsync(string ID_stan_leku)
         {
@@ -65,6 +69,7 @@ namespace PRO_API.Controllers
             }));
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost("magazyn/{ID_lek}")]
         public async Task<IActionResult> AddStanLeku(string ID_lek, StanLekuRequest request)
         {
@@ -87,6 +92,7 @@ namespace PRO_API.Controllers
             }));
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPut("magazyn/{ID_stan_leku}")]
         public async Task<IActionResult> UpdateStanLeku(string ID_stan_leku, StanLekuRequest request)
         {
@@ -111,6 +117,7 @@ namespace PRO_API.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "admin")]
         [HttpDelete("magazyn/{ID_stan_leku}")]
         public async Task<IActionResult> DeleteStanLeku(string ID_stan_leku)
         {

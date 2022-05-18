@@ -11,5 +11,6 @@ namespace Application.Interfaces
     {
         public Task<List<GetPacjentListResponse>> GetPacjentList();
         public Task<List<GetPacjentKlientListResponse>> GetPacjentList(int ID_osoba);
+        public Task<GetPacjentDetails> GetPacjentById(int ID_pacjent);
     }
 }

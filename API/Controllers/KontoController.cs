@@ -30,12 +30,13 @@ namespace PRO_API.Controllers
         }
 
 
-        [HttpGet("{ID_osoba}")]
-        public async Task<IActionResult> GetKonto(int ID_osoba)
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> GetKonto()
         {
             return Ok(await Mediator.Send(new GetKontoQuery
             {
-                ID_osoba = ID_osoba
+                ID_osoba = GetUserId()
             }));
         }
 
@@ -73,6 +74,7 @@ namespace PRO_API.Controllers
                 }
             }
         }
+
 
         [AllowAnonymous]
         [HttpPost("refreshToken")]

@@ -28,6 +28,7 @@ namespace Infrastructure.Services
 
         public async Task<GetKontoResponse> GetKonto(int ID_osoba)
         {
+            
             return context.Osobas.Where(x => x.IdOsoba == ID_osoba).Select(x => new GetKontoResponse()
             {
                 Imie = x.Imie,

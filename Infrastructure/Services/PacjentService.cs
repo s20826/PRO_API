@@ -44,8 +44,7 @@ namespace Infrastructure.Services
             {
                 throw new Exception("Nie ma klienta o ID = " + ID_osoba);
             }
-            else
-            {
+            
                 var results =
                 (from x in context.Pacjents
                 where x.IdOsoba == ID_osoba
@@ -60,7 +59,36 @@ namespace Infrastructure.Services
                 }).ToList();
 
                 return results;
+        }
+
+        public async Task<GetPacjentDetails> GetPacjentById(int ID_pacjent)
+        {
+            if (context.Pacjents.Where(x => x.IdPacjent == ID_pacjent).Any() != true)
+            {
+                throw new Exception("Nie ma pacjenta o ID = " + ID_pacjent);
             }
+
+            var results =
+                (from x in context.Pacjents
+                 join y in context.Osobas on x.IdOsoba equals y.IdOsoba
+                 where x.IdPacjent == ID_pacjent
+                 orderby x.Nazwa
+                 select new GetPacjentDetails()
+                 {
+                     Nazwa = x.Nazwa,
+                     Gatunek = x.Gatunek,
+                     Rasa = x.Rasa,
+                     Masc = x.Masc,
+                     Plec = x.Plec,
+                     DataUrodzenia = x.DataUrodzenia,
+                     Waga = x.Waga,
+                     Agresywne = x.Agresywne,
+                     Wlasciciel = y.Imie + " " + y.Nazwisko,
+                     Wizyty = new PacjentWizytaResponse[0]
+                     
+                 }).First();
+
+            return results;
         }
     }
 }

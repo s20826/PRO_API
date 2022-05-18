@@ -27,30 +27,19 @@ namespace PRO_API.Controllers
         }
 
         [HttpGet("hashid/{id}")]
-        public async Task<IActionResult> GetHashedID(int id)        //test
+        public async Task<IActionResult> GetHashedID(int id)
         {
             return Ok(hashids.Encode(id));
         }
 
-        [HttpGet("password")]
-        public async Task<IActionResult> GetHashedPassword()        //test
-        {
-            var salt = PasswordHelper.GenerateSalt();
-            var myPassword = PasswordHelper.HashPassword(salt, "SecretPassword123", 20000);
-            return Ok(new {
-                PasswordHelper = myPassword,
-                Length = myPassword.Length
-            });
-        }
-
         [HttpGet("accounts")]
-        public async Task<IActionResult> GetAccounts()        //test
+        public async Task<IActionResult> GetAccounts()
         {
             return Ok(context.Osobas.ToList());
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login()        //test
+        public async Task<IActionResult> Login()
         {
             return Ok(new
             {
@@ -59,33 +48,8 @@ namespace PRO_API.Controllers
             });
         }
 
-        [HttpGet("leki")]
-        public async Task<IActionResult> GetLeki()        //test
-        {
-            var results = (from x in context.Leks
-                        join y in context.LekWMagazynies on x.IdLek equals y.IdLek
-                        select new GetLekResponse()
-                        {
-                            IdStanLeku = (uint)y.IdStanLeku,
-                            Nazwa = x.Nazwa,
-                            JednostkaMiary = x.JednostkaMiary,
-                            Ilosc = (uint)y.Ilosc,
-                            DataWaznosci = y.DataWaznosci,
-                            Choroby = (from i in context.ChorobaLeks
-                                       join j in context.Chorobas on i.IdChoroba equals j.IdChoroba into qs
-                                       from j in qs.DefaultIfEmpty()
-                                       where i.IdLek == x.IdLek
-                                       select new
-                                       {
-                                           j.Nazwa
-                                       }).ToArray()
-                        }).ToList();
-
-            return Ok(results);
-        }
-
-        [HttpGet("random")]
-        public async Task<IActionResult> GetRandomPassword(int count)        //test
+        [HttpGet("randomPassword")]
+        public async Task<IActionResult> GetRandomPassword(int count)
         {
             return Ok(PasswordHelper.GetRandomPassword(count));
         }

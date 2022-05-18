@@ -23,7 +23,7 @@ namespace PRO_API.Controllers
         }
 
         [Authorize(Roles = "admin,weterynarz")]
-        [HttpGet]       //admin, weterynarz
+        [HttpGet]
         public async Task<IActionResult> GetPacjentList()
         {
             return Ok(await Mediator.Send(new GetPacjentListQuery
@@ -33,7 +33,7 @@ namespace PRO_API.Controllers
         }
 
         [Authorize]
-        [HttpGet("{ID_osoba}")]     //klienta wyświetla swoje zwierzęta wchodząc w zakładkę na swoim koncie
+        [HttpGet("{ID_osoba}")]
         public async Task<IActionResult> GetKlientPacjentList(int ID_osoba)
         {
             return Ok(await Mediator.Send(new GetPacjentKlientListQuery
@@ -41,7 +41,14 @@ namespace PRO_API.Controllers
                 ID_osoba = ID_osoba
             }));
         }
-        
+
+        [Authorize]
+        [HttpGet("details/{ID_pacjent}")]
+        public async Task<IActionResult> GetPacjentById(int ID_pacjent)
+        {
+            return Ok("Do zaimplementowania");
+        }
+
         /*[HttpPost]  //weterynarz/admin
         public IActionResult addPacjent(PacjentRequest request)
         {

@@ -63,7 +63,7 @@ namespace Infrastructure.Services
                            where x.IdLek == ID_lek
                            select new GetLekResponse()
                            {
-                               IdStanLeku = (uint)y.IdStanLeku,
+                               IdStanLeku = hashids.Encode(y.IdStanLeku),
                                Nazwa = x.Nazwa,
                                JednostkaMiary = x.JednostkaMiary,
                                Ilosc = (uint)y.Ilosc,
@@ -90,7 +90,7 @@ namespace Infrastructure.Services
             where p.IdStanLeku == ID_stan_leku
             select new GetStanLekuResponse()
             {
-                IdStanLeku = (uint)p.IdStanLeku,
+                IdStanLeku = hashids.Encode(p.IdStanLeku),
                 Nazwa = x.Nazwa,
                 JednostkaMiary = x.JednostkaMiary,
                 Ilosc = (uint)p.Ilosc,

@@ -1,6 +1,7 @@
 ﻿using Application.DTO.Request;
 using Application.DTO.Responses;
 using Application.Interfaces;
+using Application.Models;
 using HashidsNet;
 using Infrastructure.Models;
 using Microsoft.AspNetCore.Mvc;

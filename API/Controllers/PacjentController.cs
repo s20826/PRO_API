@@ -16,10 +16,9 @@ namespace PRO_API.Controllers
     [ApiController]
     public class PacjentController : ApiControllerBase
     {
-        private readonly IConfiguration configuration;
-        public PacjentController(IConfiguration config)
+        public PacjentController()
         {
-            configuration = config;
+            
         }
 
         [Authorize(Roles = "admin,weterynarz")]
@@ -36,17 +35,34 @@ namespace PRO_API.Controllers
         [HttpGet("{ID_osoba}")]
         public async Task<IActionResult> GetKlientPacjentList(int ID_osoba)
         {
-            return Ok(await Mediator.Send(new GetPacjentKlientListQuery
+            try
             {
-                ID_osoba = ID_osoba
-            }));
+                return Ok(await Mediator.Send(new GetPacjentKlientListQuery
+                {
+                    ID_osoba = ID_osoba
+                }));
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
 
         [Authorize]
         [HttpGet("details/{ID_pacjent}")]
         public async Task<IActionResult> GetPacjentById(int ID_pacjent)
         {
-            return Ok("Do zaimplementowania");
+            try
+            {
+                return Ok(await Mediator.Send(new PacjentDetailsQuery
+                {
+                    ID_pacjent = ID_pacjent
+                }));
+            } 
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
 
         /*[HttpPost]  //weterynarz/admin

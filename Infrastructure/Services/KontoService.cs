@@ -1,7 +1,8 @@
 ﻿using Application.DTO.Request;
 using Application.DTO.Responses;
+using Application.Exceptions;
 using Application.Interfaces;
-using Infrastructure.Exceptions;
+using Application.Exceptions;
 using Infrastructure.Helpers;
 using Infrastructure.Models;
 using Microsoft.Extensions.Configuration;
@@ -161,7 +162,7 @@ namespace Infrastructure.Services
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public async Task<int> UpdateKontoCredentials(int ID_osoba, KontoUpdateRequest request)
+        public async void UpdateKontoCredentials(int ID_osoba, KontoUpdateRequest request)
         {
             var user = context.Osobas.Where(x => x.IdOsoba == ID_osoba).First();
             if(user == null)
@@ -184,7 +185,12 @@ namespace Infrastructure.Services
             user.Email = request.Email;
             user.Haslo = hashed;
 
-            return await context.SaveChangesAsync();
+            await context.SaveChangesAsync();
+        }
+
+        Task<int> IKontoRepository.UpdateKontoCredentials(int ID_osoba, KontoUpdateRequest request)
+        {
+            throw new NotImplementedException();
         }
     }
 }

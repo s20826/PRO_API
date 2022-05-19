@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Application.Interfaces;
+using Application.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -6,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Infrastructure.Models
 {
-    public partial class KlinikaContext : DbContext
+    public partial class KlinikaContext : DbContext, IKlinikaContext
     {
         public KlinikaContext()
         {
@@ -44,12 +48,16 @@ namespace Infrastructure.Models
         public virtual DbSet<Zdjecie> Zdjecies { get; set; }
         public virtual DbSet<Znizka> Znizkas { get; set; }
 
+        public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+        {
+            var result = await base.SaveChangesAsync(cancellationToken);
+            return result;
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=tcp:pjdb-20783-20826.database.windows.net,1433;Initial Catalog=Klinika;Persist Security Info=False;User ID=PJDBmanager;Password=PJmanager36;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             }
         }
 

@@ -1,7 +1,7 @@
 ﻿using Application.DTO;
 using Application.DTO.Responses;
 using Application.Interfaces;
-using Infrastructure.Exceptions;
+using Application.Exceptions;
 using Infrastructure.Helpers;
 using Infrastructure.Models;
 using Microsoft.Extensions.Configuration;

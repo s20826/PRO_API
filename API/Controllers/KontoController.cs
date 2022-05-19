@@ -1,7 +1,7 @@
 ﻿using Application.Commands.Konto;
 using Application.DTO.Request;
 using Application.Queries.Konto;
-using Infrastructure.Exceptions;
+using Application.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Mvc;

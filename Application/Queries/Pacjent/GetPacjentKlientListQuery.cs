@@ -17,16 +17,34 @@ namespace Application.Queries.Pacjent
 
     public class GetPacjentKlientListQueryHandle : IRequestHandler<GetPacjentKlientListQuery, List<GetPacjentKlientListResponse>>
     {
-        private readonly IPacjentRepository repository;
+        private readonly IKlinikaContext context;
 
-        public GetPacjentKlientListQueryHandle(IPacjentRepository lekRepository)
+        public GetPacjentKlientListQueryHandle(IKlinikaContext klinikaContext)
         {
-            repository = lekRepository;
+            context = klinikaContext;
         }
 
         public async Task<List<GetPacjentKlientListResponse>> Handle(GetPacjentKlientListQuery req, CancellationToken cancellationToken)
         {
-            return await repository.GetPacjentList(req.ID_osoba);
+            if (context.Klients.Where(x => x.IdOsoba == req.ID_osoba).Any() != true)
+            {
+                throw new Exception("Nie ma klienta o ID = " + req.ID_osoba);
+            }
+
+            var results =
+            (from x in context.Pacjents
+             where x.IdOsoba == req.ID_osoba
+             orderby x.Nazwa
+             select new GetPacjentKlientListResponse()
+             {
+                 IdPacjent = x.IdPacjent,
+                 Nazwa = x.Nazwa,
+                 Gatunek = x.Gatunek,
+                 Rasa = x.Rasa,
+                 Masc = x.Masc
+             }).ToList();
+
+            return results;
         }
     }
 }

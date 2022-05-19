@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Infrastructure.Models;
 using Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -17,7 +18,11 @@ namespace Infrastructure
             services.AddScoped<IKontoRepository, KontoService>();
             services.AddScoped<IKlientRepository, KlientService>();
             services.AddScoped<IWeterynarzRepository, WeterynarzService>();
-            services.AddScoped<IPacjentRepository, PacjentService>();
+            
+            services.AddScoped<ITokenRepository, TokenService>();
+            services.AddScoped<IPasswordRepository, PasswordService>();
+
+            services.AddScoped<IKlinikaContext, KlinikaContext>();
 
             return services;
         }

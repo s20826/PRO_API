@@ -12,21 +12,25 @@ namespace Application.Commands.Lek
 {
     public class DeleteStanLekuCommand : IRequest<int>
     {
-        public int ID_stan_leku { get; set; }
+        public string ID_stan_leku { get; set; }
     }
 
     public class DeleteStanLekuCommandHandle : IRequestHandler<DeleteStanLekuCommand, int>
     {
-        private readonly ILekRepository repository;
-
-        public DeleteStanLekuCommandHandle(ILekRepository lekRepository)
+        private readonly IKlinikaContext context;
+        private readonly IHash hash;
+        public DeleteStanLekuCommandHandle(IKlinikaContext klinikaContext, IHash _hash)
         {
-            repository = lekRepository;
+            context = klinikaContext;
+            hash = _hash;
         }
 
         public async Task<int> Handle(DeleteStanLekuCommand req, CancellationToken cancellationToken)
         {
-            return await repository.DeleteStanLeku(req.ID_stan_leku);
+            int id = hash.Decode(req.ID_stan_leku);
+
+            context.LekWMagazynies.Remove(context.LekWMagazynies.Where(x => x.IdStanLeku == id).First());
+            return await context.SaveChangesAsync(cancellationToken);
         }
     }
 }

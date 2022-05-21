@@ -17,9 +17,16 @@ namespace Infrastructure.Services
         {
             configuration = config;
         }
+
         public async Task<string> GetHashed(byte[] salt, string plainPassword)
         {
             return PasswordHelper.HashPassword(salt, plainPassword, int.Parse(configuration["PasswordIterations"]));
+        }
+
+        public async Task<(byte[], string)> GetHashed(string plainPassword)
+        {
+            var salt = PasswordHelper.GenerateSalt();
+            return (salt, PasswordHelper.HashPassword(salt, plainPassword, int.Parse(configuration["PasswordIterations"])));
         }
     }
 }

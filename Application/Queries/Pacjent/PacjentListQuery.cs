@@ -10,12 +10,12 @@ using System.Threading.Tasks;
 
 namespace Application.Queries.Pacjent
 {
-    public class GetPacjentListQuery : IRequest<List<GetPacjentListResponse>>
+    public class PacjentListQuery : IRequest<List<GetPacjentListResponse>>
     {
 
     }
 
-    public class GetPacjentListQueryHandle : IRequestHandler<GetPacjentListQuery, List<GetPacjentListResponse>>
+    public class GetPacjentListQueryHandle : IRequestHandler<PacjentListQuery, List<GetPacjentListResponse>>
     {
         private readonly IKlinikaContext context;
 
@@ -24,7 +24,7 @@ namespace Application.Queries.Pacjent
             context = klinikaContext;
         }
 
-        public async Task<List<GetPacjentListResponse>> Handle(GetPacjentListQuery req, CancellationToken cancellationToken)
+        public async Task<List<GetPacjentListResponse>> Handle(PacjentListQuery req, CancellationToken cancellationToken)
         {
             return (from x in context.Pacjents
                     join y in context.Osobas on x.IdOsoba equals y.IdOsoba

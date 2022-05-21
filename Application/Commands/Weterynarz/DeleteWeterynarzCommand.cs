@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using Application.Exceptions;
+using Application.Interfaces;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -11,21 +12,36 @@ namespace Application.Commands.Weterynarz
 {
     public class DeleteWeterynarzCommand : IRequest<int>
     {
-        public int ID_osoba { get; set; }
+        public string ID_osoba { get; set; }
     }
 
     public class DeleteWeterynarzCommandHandle : IRequestHandler<DeleteWeterynarzCommand, int>
     {
-        private readonly IWeterynarzRepository repository;
-
-        public DeleteWeterynarzCommandHandle(IWeterynarzRepository lekRepository)
+        private readonly IKlinikaContext context;
+        private readonly IHash hash;
+        public DeleteWeterynarzCommandHandle(IKlinikaContext klinikaContext, IHash _hash)
         {
-            repository = lekRepository;
+            context = klinikaContext;
+            hash = _hash;
         }
 
         public async Task<int> Handle(DeleteWeterynarzCommand req, CancellationToken cancellationToken)
         {
-            return await repository.DeleteWeterynarz(req.ID_osoba);
+            int id = hash.Decode(req.ID_osoba);
+
+            var weterynarz = context.Osobas.Where(x => x.IdOsoba == id).FirstOrDefault();
+            if (weterynarz != null)
+            {
+                throw new NotFoundException();
+            }
+
+            weterynarz.Haslo = "";
+            weterynarz.Salt = "";
+            weterynarz.RefreshToken = "";
+            weterynarz.Email = "";
+            weterynarz.NumerTelefonu = "";
+
+            return await context.SaveChangesAsync(cancellationToken);
         }
     }
 }

@@ -18,31 +18,35 @@ namespace PRO_API.Controllers
     [ApiController]
     public class WeterynarzController : ApiControllerBase
     {
-        private readonly IConfiguration configuration;
-
-        public WeterynarzController(IConfiguration config)
+        public WeterynarzController()
         {
-            configuration = config;
+            
         }
 
+
+        [Authorize(Roles = "admin")]
         [HttpGet]
         public async Task<IActionResult> GetWeterynarzList()
         {
-            return Ok(await Mediator.Send(new GetWeterynarzListQuery
+            return Ok(await Mediator.Send(new WeterynarzListQuery
             {
                 
             }));
         }
 
+
+        [Authorize(Roles = "admin")]
         [HttpGet("{ID_osoba}")]
-        public async Task<IActionResult> GetWeterynarzById(int ID_osoba)
+        public async Task<IActionResult> GetWeterynarzById(string ID_osoba)
         {
-            return Ok(await Mediator.Send(new GetWeterynarzQuery
+            return Ok(await Mediator.Send(new WeterynarzQuery
             {
                 ID_osoba = ID_osoba
             }));
         }
 
+
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<IActionResult> AddWeterynarz(WeterynarzCreateRequest request)
         {
@@ -50,17 +54,26 @@ namespace PRO_API.Controllers
             {
                 return BadRequest("Niepoprawne dane");
             }
-
-            return Ok(await Mediator.Send(new CreateWeterynarzCommand
+            try
             {
-                request = request
-            }));
+                return Ok(await Mediator.Send(new CreateWeterynarzCommand
+                {
+                    request = request
+                }));
+            }
+            catch (Exception e)
+            {
+                return NotFound(new
+                {
+                    message = e.Message
+                });
+            }
         }
 
 
         [Authorize(Roles = "admin")]
         [HttpPut("{ID_osoba}")]
-        public async Task<IActionResult> UpdateWeterynarzZatrudnienie(int ID_osoba, WeterynarzUpdateRequest request)
+        public async Task<IActionResult> UpdateWeterynarzZatrudnienie(string ID_osoba, WeterynarzUpdateRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -80,15 +93,23 @@ namespace PRO_API.Controllers
             }
         }
 
+
         [Authorize(Roles = "admin")]
         [HttpDelete("{ID_osoba}")]
-        public async Task<IActionResult> DeleteWeterynarz(int ID_osoba)
+        public async Task<IActionResult> DeleteWeterynarz(string ID_osoba)
         {
-            await Mediator.Send(new DeleteWeterynarzCommand
+            try
             {
-                ID_osoba = ID_osoba
-            });
-
+                await Mediator.Send(new DeleteWeterynarzCommand
+                {
+                    ID_osoba = ID_osoba
+                });
+            }
+            catch(Exception e)
+            {
+                return NotFound();
+            }
+            
             return NoContent();
         }
 

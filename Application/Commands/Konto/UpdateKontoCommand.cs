@@ -1,4 +1,5 @@
 ﻿using Application.DTO.Request;
+using Application.Exceptions;
 using Application.Interfaces;
 using MediatR;
 using System;
@@ -18,16 +19,40 @@ namespace Application.Commands.Konto
 
     public class UpdateKontoCommandHandle : IRequestHandler<UpdateKontoCommand, int>
     {
-        private readonly IKontoRepository repository;
-
-        public UpdateKontoCommandHandle(IKontoRepository lekRepository)
+        private readonly IKlinikaContext context;
+        private readonly ITokenRepository tokenRepository;
+        private readonly IPasswordRepository passwordRepository;
+        public UpdateKontoCommandHandle(IKlinikaContext klinikaContext, ITokenRepository token, IPasswordRepository password)
         {
-            repository = lekRepository;
+            context = klinikaContext;
+            tokenRepository = token;
+            passwordRepository = password;
         }
 
         public async Task<int> Handle(UpdateKontoCommand req, CancellationToken cancellationToken)
         {
-            return await repository.UpdateKontoCredentials(req.ID_osoba, req.request);
+            var user = context.Osobas.Where(x => x.IdOsoba == req.ID_osoba).FirstOrDefault();
+            if (user == null)
+            {
+                throw new NotFoundException();
+            }
+
+            string passwordHash = user.Haslo;
+            byte[] salt = Convert.FromBase64String(user.Salt);
+            string currentHashedPassword = await passwordRepository.GetHashed(salt, req.request.currentHaslo);
+
+            if (passwordHash != currentHashedPassword)
+            {
+                throw new Exception("Niepoprawne hasło.");
+            }
+
+            string hashedPassword = await passwordRepository.GetHashed(salt, req.request.newHaslo);
+
+            user.NumerTelefonu = req.request.NumerTelefonu;
+            user.Email = req.request.Email;
+            user.Haslo = hashedPassword;
+
+            return await context.SaveChangesAsync(cancellationToken);
         }
     }
 }

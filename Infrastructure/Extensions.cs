@@ -14,13 +14,9 @@ namespace Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
-            services.AddScoped<ILekRepository, LekService>();
-            services.AddScoped<IKontoRepository, KontoService>();
-            services.AddScoped<IKlientRepository, KlientService>();
-            services.AddScoped<IWeterynarzRepository, WeterynarzService>();
-            
             services.AddScoped<ITokenRepository, TokenService>();
             services.AddScoped<IPasswordRepository, PasswordService>();
+            services.AddScoped<IHash, HashService>();
 
             services.AddScoped<IKlinikaContext, KlinikaContext>();
 

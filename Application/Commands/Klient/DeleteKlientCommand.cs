@@ -1,4 +1,5 @@
 ﻿using Application.DTO;
+using Application.Exceptions;
 using Application.Interfaces;
 using MediatR;
 using System;
@@ -12,21 +13,36 @@ namespace Application.Commands.Klient
 {
     public class DeleteKlientCommand : IRequest<int>
     {
-        public int ID_osoba { get; set; }
+        public string ID_osoba { get; set; }
     }
 
     public class DeleteKlientCommandHandle : IRequestHandler<DeleteKlientCommand, int>
     {
-        private readonly IKlientRepository repository;
-
-        public DeleteKlientCommandHandle(IKlientRepository lekRepository)
+        private readonly IKlinikaContext context;
+        private readonly IHash hash;
+        public DeleteKlientCommandHandle(IKlinikaContext klinikaContext, IHash _hash)
         {
-            repository = lekRepository;
+            context = klinikaContext;
+            hash = _hash;
         }
 
         public async Task<int> Handle(DeleteKlientCommand req, CancellationToken cancellationToken)
         {
-            return await repository.DeleteKlient(req.ID_osoba);
+            int id = hash.Decode(req.ID_osoba);
+
+            var user = context.Osobas.Where(x => x.IdOsoba == id).FirstOrDefault();
+            if (user != null)
+            {
+                throw new NotFoundException();
+            }
+
+            user.Haslo = "";
+            user.Salt = "";
+            user.RefreshToken = "";
+            user.Email = "";
+            user.NumerTelefonu = "";
+
+            return await context.SaveChangesAsync(cancellationToken);
         }
     }
 }

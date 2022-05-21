@@ -9,5 +9,6 @@ namespace Application.Interfaces
     public interface IPasswordRepository
     {
         public Task<string> GetHashed(byte[] salt, string plainPassword);
+        public Task<(byte[], string)> GetHashed(string plainPassword);
     }
 }

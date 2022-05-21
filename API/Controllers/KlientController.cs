@@ -30,24 +30,33 @@ namespace PRO_API.Controllers
             configuration = config;
         }
 
+
         [Authorize(Roles = "admin")]
         [HttpGet]
         public async Task<IActionResult> GetKlientList()
         {
-            return Ok(await Mediator.Send(new GetKlientListQuery
+            return Ok(await Mediator.Send(new KlientListQuery
             {
 
             }));
         }
 
+
         [Authorize(Roles = "admin")]
         [HttpGet("{ID_osoba}")]
-        public async Task<IActionResult> GetKlientById(int ID_osoba)
+        public async Task<IActionResult> GetKlientById(string ID_osoba)
         {
-            return Ok(await Mediator.Send(new GetKlientQuery
+            try
             {
-                ID_osoba = ID_osoba
-            }));
+                return Ok(await Mediator.Send(new KlientQuery
+                {
+                    ID_osoba = ID_osoba
+                }));
+            }
+            catch (Exception e)
+            {
+                return NotFound();
+            }
         }
 
 
@@ -79,13 +88,20 @@ namespace PRO_API.Controllers
 
         [Authorize(Roles = "admin,klient")]
         [HttpDelete("{ID_osoba}")]
-        public async Task<IActionResult> DeleteKlient(int ID_osoba)
+        public async Task<IActionResult> DeleteKlient(string ID_osoba)
         {
-            await Mediator.Send(new DeleteKlientCommand
+            try
             {
-                ID_osoba = ID_osoba
-            });
-
+                await Mediator.Send(new DeleteKlientCommand
+                {
+                    ID_osoba = ID_osoba
+                });
+            }
+            catch (Exception e)
+            {
+                return NotFound();
+            }
+            
             return NoContent();
         }
 

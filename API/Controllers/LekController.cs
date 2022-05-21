@@ -29,7 +29,7 @@ namespace PRO_API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetLekList()
         {
-            return Ok(await Mediator.Send(new GetLekListQuery
+            return Ok(await Mediator.Send(new LekListQuery
             {
 
             }));
@@ -39,80 +39,79 @@ namespace PRO_API.Controllers
         [HttpGet("{ID_lek}")]
         public async Task<IActionResult> GetLekById(string ID_lek)
         {
-            var idArray = hashids.Decode(ID_lek);
-            if (idArray.Length == 0)
+            try
+            {
+                return Ok(await Mediator.Send(new LekQuery
+                {
+                    ID_lek = ID_lek
+                }));
+            }
+            catch (Exception e)
             {
                 return NotFound();
             }
-            int id = idArray[0];
-
-            return Ok(await Mediator.Send(new GetLekQuery
-            {
-                ID_lek = id
-            }));
         }
 
         [Authorize(Roles = "admin,weterynarz")]
         [HttpGet("magazyn/{ID_stan_leku}")]
         public async Task<IActionResult> GetLekWMagazynieByIdAsync(string ID_stan_leku)
         {
-            var idArray = hashids.Decode(ID_stan_leku);
-            if (idArray.Length == 0)
+            try
+            {
+                return Ok(await Mediator.Send(new StanLekuQuery
+                {
+                    ID_stan_leku = ID_stan_leku
+                }));
+            }
+            catch (Exception e)
             {
                 return NotFound();
             }
-            int id = idArray[0];
-
-            return Ok(await Mediator.Send(new GetStanLekuQuery
-            {
-                ID_stan_leku = id
-            }));
         }
 
         [Authorize(Roles = "admin")]
         [HttpPost("magazyn/{ID_lek}")]
         public async Task<IActionResult> AddStanLeku(string ID_lek, StanLekuRequest request)
         {
-            var idArray = hashids.Decode(ID_lek);
-            if (idArray.Length == 0)
-            {
-                return NotFound();
-            }
-            int id = idArray[0];
-
             if (!ModelState.IsValid)
             {
                 return BadRequest("Niepoprawne dane");
             }
 
-            return Ok(await Mediator.Send(new CreateStanLekuCommand
+            try
             {
-                ID_lek = id,
-                request = request
-            }));
+                return Ok(await Mediator.Send(new CreateStanLekuCommand
+                {
+                    ID_lek = ID_lek,
+                    request = request
+                }));
+            }
+            catch (Exception e)
+            {
+                return NotFound();
+            }
         }
 
         [Authorize(Roles = "admin")]
         [HttpPut("magazyn/{ID_stan_leku}")]
         public async Task<IActionResult> UpdateStanLeku(string ID_stan_leku, StanLekuRequest request)
         {
-            var idArray = hashids.Decode(ID_stan_leku);
-            if (idArray.Length == 0)
-            {
-                return NotFound();
-            }
-            int id = idArray[0];
-
             if (!ModelState.IsValid)
             {
                 return BadRequest("Niepoprawne dane");
             }
 
-            await Mediator.Send(new UpdateStanLekuCommand
+            try { 
+                await Mediator.Send(new UpdateStanLekuCommand
+                {
+                    ID_stan_leku = ID_stan_leku,
+                    request = request
+                });
+            }
+            catch (Exception e)
             {
-                ID_stan_leku = id,
-                request = request
-            });
+                return NotFound();
+            }
 
             return NoContent();
         }
@@ -121,23 +120,18 @@ namespace PRO_API.Controllers
         [HttpDelete("magazyn/{ID_stan_leku}")]
         public async Task<IActionResult> DeleteStanLeku(string ID_stan_leku)
         {
-            var idArray = hashids.Decode(ID_stan_leku);
-            if (idArray.Length == 0)
+            try
+            {
+                await Mediator.Send(new DeleteStanLekuCommand
+                {
+                    ID_stan_leku = ID_stan_leku
+                });
+            }
+            catch (Exception e)
             {
                 return NotFound();
             }
-            int id = idArray[0];
-
-            if (!ModelState.IsValid)
-            {
-                return BadRequest("Niepoprawne dane");
-            }
-
-            await Mediator.Send(new DeleteStanLekuCommand
-            {
-                ID_stan_leku = id
-            });
-
+            
             return NoContent();
         }
     }

@@ -8,7 +8,6 @@ namespace Application.DTO.Responses
 {
     public class GetKlientResponse
     {
-        public int IdOsoba { get; set; }
         public string Imie { get; set; }
         public string Nazwisko { get; set; }
         public string NumerTelefonu { get; set; }

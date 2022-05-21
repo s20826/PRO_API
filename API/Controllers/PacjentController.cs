@@ -25,7 +25,7 @@ namespace PRO_API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetPacjentList()
         {
-            return Ok(await Mediator.Send(new GetPacjentListQuery
+            return Ok(await Mediator.Send(new PacjentListQuery
             {
 
             }));
@@ -37,7 +37,7 @@ namespace PRO_API.Controllers
         {
             try
             {
-                return Ok(await Mediator.Send(new GetPacjentKlientListQuery
+                return Ok(await Mediator.Send(new PacjentKlientListQuery
                 {
                     ID_osoba = ID_osoba
                 }));

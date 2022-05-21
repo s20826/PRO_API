@@ -10,12 +10,12 @@ using System.Threading.Tasks;
 
 namespace Application.Queries.Pacjent
 {
-    public class GetPacjentKlientListQuery : IRequest<List<GetPacjentKlientListResponse>>
+    public class PacjentKlientListQuery : IRequest<List<GetPacjentKlientListResponse>>
     {
         public int ID_osoba { get; set; }
     }
 
-    public class GetPacjentKlientListQueryHandle : IRequestHandler<GetPacjentKlientListQuery, List<GetPacjentKlientListResponse>>
+    public class GetPacjentKlientListQueryHandle : IRequestHandler<PacjentKlientListQuery, List<GetPacjentKlientListResponse>>
     {
         private readonly IKlinikaContext context;
 
@@ -24,7 +24,7 @@ namespace Application.Queries.Pacjent
             context = klinikaContext;
         }
 
-        public async Task<List<GetPacjentKlientListResponse>> Handle(GetPacjentKlientListQuery req, CancellationToken cancellationToken)
+        public async Task<List<GetPacjentKlientListResponse>> Handle(PacjentKlientListQuery req, CancellationToken cancellationToken)
         {
             if (context.Klients.Where(x => x.IdOsoba == req.ID_osoba).Any() != true)
             {

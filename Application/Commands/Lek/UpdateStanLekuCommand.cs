@@ -12,22 +12,29 @@ namespace Application.Commands.Lek
 {
     public class UpdateStanLekuCommand : IRequest<int>
     {
-        public int ID_stan_leku { get; set; }
+        public string ID_stan_leku { get; set; }
         public StanLekuRequest request { get; set; }
     }
 
     public class UpdateStanLekuCommandHandle : IRequestHandler<UpdateStanLekuCommand, int>
     {
-        private readonly ILekRepository repository;
-
-        public UpdateStanLekuCommandHandle(ILekRepository lekRepository)
+        private readonly IKlinikaContext context;
+        private readonly IHash hash;
+        public UpdateStanLekuCommandHandle(IKlinikaContext klinikaContext, IHash _hash)
         {
-            repository = lekRepository;
+            context = klinikaContext;
+            hash = _hash;
         }
 
         public async Task<int> Handle(UpdateStanLekuCommand req, CancellationToken cancellationToken)
         {
-            return await repository.UpdateStanLeku(req.ID_stan_leku, req.request);
+            int id = hash.Decode(req.ID_stan_leku);
+
+            var stanLeku = context.LekWMagazynies.Where(x => x.IdStanLeku == id).FirstOrDefault();
+            stanLeku.Ilosc = req.request.Ilosc;
+            stanLeku.DataWaznosci = req.request.DataWaznosci;
+
+            return await context.SaveChangesAsync(cancellationToken);
         }
     }
 }

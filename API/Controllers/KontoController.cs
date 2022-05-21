@@ -23,10 +23,9 @@ namespace PRO_API.Controllers
     [ApiController]
     public class KontoController : ApiControllerBase
     {
-        private readonly IConfiguration configuration;
-        public KontoController(IConfiguration config)
+        public KontoController()
         {
-            configuration = config;
+
         }
 
 
@@ -34,7 +33,7 @@ namespace PRO_API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetKonto()
         {
-            return Ok(await Mediator.Send(new GetKontoQuery
+            return Ok(await Mediator.Send(new KontoQuery
             {
                 ID_osoba = GetUserId()
             }));
@@ -56,7 +55,7 @@ namespace PRO_API.Controllers
                 {
                     request = request
                 }));
-            } 
+            }
             catch (Exception e)
             {
                 switch (e)
@@ -86,21 +85,31 @@ namespace PRO_API.Controllers
             }));
         }
 
-        
+
         [Authorize]
         [HttpPut("{ID_osoba}")]
-        public async Task<IActionResult> UpdateKontoCredentials(int ID_osoba, KontoUpdateRequest request)
+        public async Task<IActionResult> UpdateKontoCredentials(KontoUpdateRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            return Ok(await Mediator.Send(new UpdateKontoCommand
+            try
             {
-                ID_osoba = ID_osoba,
-                request = request
-            }));
+                return Ok(await Mediator.Send(new UpdateKontoCommand
+                {
+                    ID_osoba = GetUserId(),
+                    request = request
+                }));
+            }
+            catch (Exception e)
+            {
+                return NotFound(new
+                {
+                    message = e.Message
+                });
+            }
         }
     }
 }

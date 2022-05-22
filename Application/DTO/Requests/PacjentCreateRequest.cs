@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 
 #nullable disable
 
-namespace Application.Models
+namespace Application.DTO.Request
 {
-    public partial class PacjentRequest
+    public partial class PacjentCreateRequest
     {
         [Required]
         public int IdOsoba { get; set; }
@@ -36,7 +36,7 @@ namespace Application.Models
 
         [Required]
         [Range(0,999)]
-        public int Waga { get; set; }
+        public decimal Waga { get; set; }
 
         [Required]
         public bool Agresywne { get; set; }

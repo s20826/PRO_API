@@ -28,18 +28,18 @@ namespace Application.Queries.Klient
         public async Task<List<GetKlientListResponse>> Handle(KlientListQuery req, CancellationToken cancellationToken)
         {
             var results =
-                (from x in context.Osobas
-                join y in context.Klients on x.IdOsoba equals y.IdOsoba into ps
+                (from x in context.Klients
+                join y in context.Osobas on x.IdOsoba equals y.IdOsoba into ps
                 from p in ps
-                orderby x.Nazwisko, x.Imie
+                where p.Rola == null
+                orderby p.Nazwisko, p.Imie
                 select new GetKlientListResponse()
                 {
                     IdOsoba = hash.Encode(x.IdOsoba),
-                    Imie = x.Imie,
-                    Nazwisko = x.Nazwisko,
-                    NumerTelefonu = x.NumerTelefonu,
-                    Email = x.Email,
-                    DataZalozeniaKonta = p.DataZalozeniaKonta
+                    Imie = p.Imie,
+                    Nazwisko = p.Nazwisko,
+                    NumerTelefonu = p.NumerTelefonu,
+                    Email = p.Email
                 }).ToList();
 
             return results;

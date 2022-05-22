@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace PRO_API.Controllers
@@ -16,18 +17,59 @@ namespace PRO_API.Controllers
 
         protected ISender Mediator => _mediator ??= HttpContext.RequestServices.GetRequiredService<ISender>();
 
-        protected int GetUserId()
+        protected string GetUserId()
         {
             var rolesClaims = this.User.Claims.Where(x => x.Type == "idUser").ToArray();
             if (rolesClaims.ToList().Any())
             {
-                return int.Parse(rolesClaims[0].Value);
-            }
-            else
-            {
-                return 0;
+                return rolesClaims[0].Value;
             }
 
+            return "";
+        }
+
+        private string GetUserRole()
+        {
+            var rolesClaims = this.User.Claims.Where(x => x.Type == ClaimTypes.Role).ToArray();
+            if (rolesClaims.ToList().Any())
+            {
+                return rolesClaims[0].Value;
+            }
+
+            return "";
+        }
+
+        protected bool isAdmin()
+        {
+            var role = GetUserRole();
+            if (role.Equals("admin"))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        protected bool isWeterynarz()
+        {
+            var role = GetUserRole();
+            if (role.Equals("weterynarz"))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        protected bool isKlient()
+        {
+            var role = GetUserRole();
+            if (role.Equals("klient"))
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

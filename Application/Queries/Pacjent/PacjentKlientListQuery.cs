@@ -12,32 +12,35 @@ namespace Application.Queries.Pacjent
 {
     public class PacjentKlientListQuery : IRequest<List<GetPacjentKlientListResponse>>
     {
-        public int ID_osoba { get; set; }
+        public string ID_osoba { get; set; }
     }
 
-    public class GetPacjentKlientListQueryHandle : IRequestHandler<PacjentKlientListQuery, List<GetPacjentKlientListResponse>>
+    public class PacjentKlientListQueryHandle : IRequestHandler<PacjentKlientListQuery, List<GetPacjentKlientListResponse>>
     {
         private readonly IKlinikaContext context;
-
-        public GetPacjentKlientListQueryHandle(IKlinikaContext klinikaContext)
+        private readonly IHash hash;
+        public PacjentKlientListQueryHandle(IKlinikaContext klinikaContext, IHash _hash)
         {
             context = klinikaContext;
+            hash = _hash;
         }
 
         public async Task<List<GetPacjentKlientListResponse>> Handle(PacjentKlientListQuery req, CancellationToken cancellationToken)
         {
-            if (context.Klients.Where(x => x.IdOsoba == req.ID_osoba).Any() != true)
+            int id = hash.Decode(req.ID_osoba);
+
+            if (context.Klients.Where(x => x.IdOsoba == id).Any() != true)
             {
                 throw new Exception("Nie ma klienta o ID = " + req.ID_osoba);
             }
 
             var results =
             (from x in context.Pacjents
-             where x.IdOsoba == req.ID_osoba
+             where x.IdOsoba == id
              orderby x.Nazwa
              select new GetPacjentKlientListResponse()
              {
-                 IdPacjent = x.IdPacjent,
+                 IdPacjent = hash.Encode(x.IdPacjent),
                  Nazwa = x.Nazwa,
                  Gatunek = x.Gatunek,
                  Rasa = x.Rasa,

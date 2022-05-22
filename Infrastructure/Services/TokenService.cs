@@ -29,7 +29,7 @@ namespace Infrastructure.Services
                 issuer: "https://localhost:5001",
                 audience: "https://localhost:5001",
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(15),
+                expires: DateTime.Now.AddMinutes(90),
                 signingCredentials: creds
             );
 

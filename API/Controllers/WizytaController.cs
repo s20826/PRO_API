@@ -1,9 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace PRO_API.Controllers
 {
@@ -11,16 +6,12 @@ namespace PRO_API.Controllers
     [ApiController]
     public class WizytaController : ControllerBase
     {
-        /*private readonly IConfiguration configuration;
-        private readonly KlinikaContext context;
-
-        public WizytaController(IConfiguration config, KlinikaContext klinikaContext)
+        public WizytaController()
         {
-            configuration = config;
-            context = klinikaContext;
+
         }
 
-        [HttpGet]   //admin
+        /*[HttpGet]   //admin
         public IActionResult GetWizytaList()
         {
             var results = context.Wizyta;

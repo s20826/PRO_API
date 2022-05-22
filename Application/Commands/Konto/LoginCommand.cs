@@ -23,11 +23,13 @@ namespace Application.Commands.Konto
         private readonly IKlinikaContext context;
         private readonly ITokenRepository tokenRepository;
         private readonly IPasswordRepository passwordRepository;
-        public LoginCommandHandle(IKlinikaContext klinikaContext, ITokenRepository token, IPasswordRepository password)
+        private readonly IHash hash;
+        public LoginCommandHandle(IKlinikaContext klinikaContext, ITokenRepository token, IPasswordRepository password, IHash _hash)
         {
             context = klinikaContext;
             tokenRepository = token;
             passwordRepository = password;
+            hash = _hash;
         }
 
         public async Task<LoginTokens> Handle(LoginCommand req, CancellationToken cancellationToken)
@@ -49,7 +51,7 @@ namespace Application.Commands.Konto
 
             List<Claim> userclaim = new List<Claim>
             {
-                new Claim("idUser", user.IdOsoba.ToString()),
+                new Claim("idUser", hash.Encode(user.IdOsoba)),
                 new Claim("login", user.NazwaUzytkownika)
             };
 

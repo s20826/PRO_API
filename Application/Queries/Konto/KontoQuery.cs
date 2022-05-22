@@ -12,21 +12,24 @@ namespace Application.Queries.Konto
 {
     public class KontoQuery : IRequest<GetKontoResponse>
     {
-        public int ID_osoba { get; set; }
+        public string ID_osoba { get; set; }
     }
 
     public class GetKontoQueryHandle : IRequestHandler<KontoQuery, GetKontoResponse>
     {
         private readonly IKlinikaContext context;
-
-        public GetKontoQueryHandle(IKlinikaContext klinikaContext)
+        private readonly IHash hash;
+        public GetKontoQueryHandle(IKlinikaContext klinikaContext, IHash _hash)
         {
             context = klinikaContext;
+            hash = _hash;
         }
 
         public async Task<GetKontoResponse> Handle(KontoQuery req, CancellationToken cancellationToken)
         {
-            return context.Osobas.Where(x => x.IdOsoba == req.ID_osoba).Select(x => new GetKontoResponse()
+            int id = hash.Decode(req.ID_osoba);
+
+            return context.Osobas.Where(x => x.IdOsoba == id).Select(x => new GetKontoResponse()
             {
                 Imie = x.Imie,
                 Nazwisko = x.Nazwisko,

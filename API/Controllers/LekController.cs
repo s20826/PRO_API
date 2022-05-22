@@ -1,28 +1,18 @@
 ﻿using Application.Commands.Lek;
 using Application.DTO.Request;
 using Application.Queries.Lek;
-using HashidsNet;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace PRO_API.Controllers
 {
     public class LekController : ApiControllerBase
     {
-        private readonly IConfiguration configuration;
-        private readonly IHashids hashids;
-        public LekController(IConfiguration config, IHashids ihashids)
+        public LekController()
         {
-            configuration = config;
-            hashids = ihashids;
+            
         }
 
         [Authorize(Roles = "admin,weterynarz")]

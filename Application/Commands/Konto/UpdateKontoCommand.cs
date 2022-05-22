@@ -13,7 +13,7 @@ namespace Application.Commands.Konto
 {
     public class UpdateKontoCommand : IRequest<int>
     {
-        public int ID_osoba { get; set; }
+        public string ID_osoba { get; set; }
         public KontoUpdateRequest request { get; set; }
     }
 
@@ -22,16 +22,20 @@ namespace Application.Commands.Konto
         private readonly IKlinikaContext context;
         private readonly ITokenRepository tokenRepository;
         private readonly IPasswordRepository passwordRepository;
-        public UpdateKontoCommandHandle(IKlinikaContext klinikaContext, ITokenRepository token, IPasswordRepository password)
+        private readonly IHash hash;
+        public UpdateKontoCommandHandle(IKlinikaContext klinikaContext, ITokenRepository token, IPasswordRepository password, IHash _hash)
         {
             context = klinikaContext;
             tokenRepository = token;
             passwordRepository = password;
+            hash = _hash;
         }
 
         public async Task<int> Handle(UpdateKontoCommand req, CancellationToken cancellationToken)
         {
-            var user = context.Osobas.Where(x => x.IdOsoba == req.ID_osoba).FirstOrDefault();
+            int id = hash.Decode(req.ID_osoba);
+
+            var user = context.Osobas.Where(x => x.IdOsoba == id).FirstOrDefault();
             if (user == null)
             {
                 throw new NotFoundException();

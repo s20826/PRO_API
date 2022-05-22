@@ -18,10 +18,11 @@ namespace Application.Queries.Pacjent
     public class GetPacjentListQueryHandle : IRequestHandler<PacjentListQuery, List<GetPacjentListResponse>>
     {
         private readonly IKlinikaContext context;
-
-        public GetPacjentListQueryHandle(IKlinikaContext klinikaContext)
+        private readonly IHash hash;
+        public GetPacjentListQueryHandle(IKlinikaContext klinikaContext, IHash _hash)
         {
             context = klinikaContext;
+            hash = _hash;
         }
 
         public async Task<List<GetPacjentListResponse>> Handle(PacjentListQuery req, CancellationToken cancellationToken)
@@ -31,8 +32,8 @@ namespace Application.Queries.Pacjent
                     orderby x.Nazwa
                     select new GetPacjentListResponse()
                     {
-                        IdOsoba = x.IdOsoba,
-                        IdPacjent = x.IdPacjent,
+                        IdOsoba = hash.Encode(x.IdOsoba),
+                        IdPacjent = hash.Encode(x.IdPacjent),
                         Nazwa = x.Nazwa,
                         Gatunek = x.Gatunek,
                         Rasa = x.Rasa,

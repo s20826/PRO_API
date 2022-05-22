@@ -53,6 +53,5 @@ namespace PRO_API.Controllers
         {
             return Ok(PasswordHelper.GetRandomPassword(count));
         }
-
     }
 }

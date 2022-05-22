@@ -1,13 +1,10 @@
-﻿using Application.Queries.Pacjent;
+﻿using Application.Commands.Pacjenci;
+using Application.Commands.Pacjents;
+using Application.DTO.Request;
+using Application.Queries.Pacjent;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace PRO_API.Controllers
@@ -33,8 +30,12 @@ namespace PRO_API.Controllers
 
         [Authorize]
         [HttpGet("{ID_osoba}")]
-        public async Task<IActionResult> GetKlientPacjentList(int ID_osoba)
+        public async Task<IActionResult> GetKlientPacjentList(string ID_osoba)
         {
+            if(isKlient() && !ID_osoba.Equals(GetUserId()))
+            {
+                return Unauthorized();
+            }
             try
             {
                 return Ok(await Mediator.Send(new PacjentKlientListQuery
@@ -50,7 +51,7 @@ namespace PRO_API.Controllers
 
         [Authorize]
         [HttpGet("details/{ID_pacjent}")]
-        public async Task<IActionResult> GetPacjentById(int ID_pacjent)
+        public async Task<IActionResult> GetPacjentById(string ID_pacjent)
         {
             try
             {
@@ -65,65 +66,70 @@ namespace PRO_API.Controllers
             }
         }
 
-        /*[HttpPost]  //weterynarz/admin
-        public IActionResult addPacjent(PacjentRequest request)
+        [Authorize(Roles = "admin,weterynarz")]
+        [HttpPost]
+        public async Task<IActionResult> AddPacjent(PacjentCreateRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest("Niepoprawne dane");
             }
 
-            context.Pacjents.Add(new Pacjent
+            try
             {
-                IdOsoba = request.IdOsoba,
-                Nazwa = request.Nazwa,
-                Gatunek = request.Gatunek,
-                Rasa = request.Rasa,
-                Waga = request.Waga,
-                Masc = request.Masc,
-                DataUrodzenia = request.DataUrodzenia,
-                Plec = request.Plec,
-                Agresywne = request.Agresywne
-            });
-
-            context.SaveChanges();
-
-            return Ok("Dodano pacjenta " + request.Nazwa);
-        }
-        
-        [HttpPut("{ID_Pacjent}")]   //weterynarz/admin
-        public IActionResult UpdateKlient(int ID_Pacjent, PacjentRequest request)
-        {
-            if (!context.Pacjents.Where(x => x.IdPacjent == ID_Pacjent).Any())
-            {
-                return BadRequest("Nie ma pacjenta o ID = " + ID_Pacjent);
+                return Ok(await Mediator.Send(new CreatePacjentCommand
+                {
+                    request = request
+                }));
             }
-            var pacjent = context.Pacjents.Where(x => x.IdPacjent == ID_Pacjent).First();
-            pacjent.Nazwa = request.Nazwa;
-            pacjent.Gatunek = request.Gatunek;
-            pacjent.Rasa = request.Rasa;
-            pacjent.Waga = request.Waga;
-            pacjent.Masc = request.Masc;
-            pacjent.DataUrodzenia = request.DataUrodzenia;
-            pacjent.Plec = request.Plec;
-            pacjent.Agresywne = request.Agresywne;
-
-            context.SaveChanges();
-
-            return Ok("Pomyślnie zaktuzalizowano dane.");
+            catch (Exception e)
+            {
+                return NotFound();
+            }
         }
 
-        [HttpDelete("{ID_Pacjent}")]    //weterynarz/admin
-        public IActionResult DeleteKlient(int ID_Pacjent)
+        [Authorize(Roles = "admin,weterynarz")]
+        [HttpPut("{ID_Pacjent}")]
+        public async Task<IActionResult> UpdateKlient(string ID_Pacjent, PacjentCreateRequest request)
         {
-            if (!context.Pacjents.Where(x => x.IdPacjent == ID_Pacjent).Any())
+            if (!ModelState.IsValid)
             {
-                return BadRequest("Nie ma konta o ID = " + ID_Pacjent);
+                return BadRequest("Niepoprawne dane");
             }
-            context.Remove(context.Pacjents.Where(x => x.IdPacjent == ID_Pacjent).First());
-            context.SaveChanges();
 
-            return Ok("Pomyślnie usunięto pacjenta.");
-        }*/
+            try
+            {
+                await Mediator.Send(new UpdatePacjentCommand
+                {
+                    request = request,
+                    ID_pacjent = ID_Pacjent
+                });
+            }
+            catch (Exception e)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpDelete("{ID_Pacjent}")]
+        public async Task<IActionResult> DeleteKlient(string ID_Pacjent)
+        {
+            try
+            {
+                await Mediator.Send(new DeletePacjentCommand
+                {
+                    ID_Pacjent = ID_Pacjent
+                });
+            }
+            catch (Exception e)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
+        }
     }
 }

@@ -1,65 +1,83 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Application.Queries.Wizyta;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Threading.Tasks;
 
 namespace PRO_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class WizytaController : ControllerBase
+    public class WizytaController : ApiControllerBase
     {
         public WizytaController()
         {
 
         }
 
-        /*[HttpGet]   //admin
-        public IActionResult GetWizytaList()
+        [Authorize(Roles = "admin,weterynarz")]
+        [HttpGet]
+        public async Task<IActionResult> GetWizytaList()
         {
-            var results = context.Wizyta;
-            return Ok(results);
+            return Ok(await Mediator.Send(new WizytaListQuery
+            {
+
+            }));
         }
 
-        [HttpGet("{ID_wizyta}")]   //admin
-        public IActionResult GetWizytaById(int ID_wizyta)
+        [Authorize]
+        [HttpGet("moje_wizyty")]
+        public async Task<IActionResult> GetWizytaKlient()
         {
-            if (context.Wizyta.Where(x => x.IdWizyta == ID_wizyta).Any() != true)
+            try
             {
-                return BadRequest("Nie ma wizyty o ID = " + ID_wizyta);
+                if (isKlient())
+                {
+                    return Ok(await Mediator.Send(new WizytaKlientQuery
+                    {
+                        ID_klient = GetUserId()
+                    }));
+                }
+                return Ok(await Mediator.Send(new WizytaWeterynarzQuery
+                {
+                    ID_weterynarz = GetUserId()
+                }));
             }
-            var result = context.Wizyta.Where(x => x.IdWizyta == ID_wizyta).FirstOrDefault();
-            return Ok(result);
+            catch (Exception e)
+            {
+                return NotFound();
+            }
         }
 
-        [HttpGet("/weterynarz/{ID_osoba}")]   //weterynarz
-        public IActionResult GetWizytaListByWeterynarz(int ID_osoba)
+        [Authorize(Roles = "admin,weterynarz")]
+        [HttpGet("{ID_osoba}")]
+        public async Task<IActionResult> GetWizytaKlient(string ID_osoba)
         {
-            if (context.Wizyta.Where(x => x.IdOsoba == ID_osoba).Any() != true)
+            try
             {
-                return BadRequest("Nie masz przypisanych wizyt.");
+                return Ok(await Mediator.Send(new WizytaKlientQuery
+                {
+                    ID_klient = ID_osoba
+                }));
             }
-            var result = context.Wizyta.Where(x => x.IdOsoba == ID_osoba);
-            return Ok(result);
+            catch (Exception e)
+            {
+                return NotFound();
+            }
         }
 
-        [HttpGet("/pacjent/{ID_pacjent}")]   //wizyty danego pacjenta
-        public IActionResult GetPacjentWizytaList(int ID_pacjent)
+        /*[Authorize(Roles = "klient,weterynarz")]
+        [HttpPost]
+        public async Task<IActionResult> AddWizyta()    //klient albo weterynarz umówia wizytę dla klienta (telefonicznie albo na miejscu)
         {
-            if (context.Wizyta.Where(x => x.IdPacjent == ID_pacjent).Any() != true)
+            try
             {
-                return BadRequest("Nie ma pacjenta o ID = " + ID_pacjent);
+                return Ok();
             }
-            var result = context.Wizyta.Where(x => x.IdPacjent == ID_pacjent);
-            return Ok(result);
-        }
-
-        [HttpGet("/klient/{ID_osoba}")]   //wizyty danego klienta
-        public IActionResult GetKlientWizytaList(int ID_osoba)
-        {
-            var results = context.Wizyta.Where(z => z.IdPacjentNavigation.IdOsoba == ID_osoba);
-            if (!results.Any())
+            catch (Exception e)
             {
-                return BadRequest("Nie masz zapisanych pacjentów");
+                return NotFound();
             }
-            return Ok(results);
         }*/
     }
 }

@@ -53,5 +53,22 @@ namespace PRO_API.Controllers
         {
             return Ok(PasswordHelper.GetRandomPassword(count));
         }
+
+        [HttpGet("sdfsdfsdfd")]
+        public async Task<IActionResult> dfsdfsdfsd(int id)
+        {
+            for(int i = 0; i < 5; i++)
+            {
+                context.GodzinyPracies.Add(new Application.Models.GodzinyPracy
+                {
+                    DzienTygodnia = i,
+                    GodzinaRozpoczecia = new TimeSpan(9, 0, 0),
+                    GodzinaZakonczenia = new TimeSpan(17,0,0),
+                    IdOsoba = id
+                });
+            }
+
+            return Ok(context.SaveChanges());
+        }
     }
 }

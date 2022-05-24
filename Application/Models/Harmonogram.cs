@@ -18,7 +18,6 @@ namespace Application.Models
         public int? IdPacjent { get; set; }
         public DateTime DataRozpoczecia { get; set; }
         public DateTime DataZakonczenia { get; set; }
-        public bool CzyWeekend { get; set; }
 
         public virtual Pacjent IdPacjentNavigation { get; set; }
         public virtual Klient KlientIdOsobaNavigation { get; set; }

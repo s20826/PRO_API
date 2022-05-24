@@ -113,11 +113,7 @@ namespace Infrastructure.Models
 
                 entity.Property(e => e.IdGodzinyPracy).HasColumnName("ID_godziny_pracy");
 
-                entity.Property(e => e.DzienTygodnia)
-                    .IsRequired()
-                    .HasMaxLength(20)
-                    .IsUnicode(false)
-                    .HasColumnName("Dzien_tygodnia");
+                entity.Property(e => e.DzienTygodnia).HasColumnName("Dzien_tygodnia");
 
                 entity.Property(e => e.GodzinaRozpoczecia)
                     .HasColumnType("time(0)")
@@ -128,12 +124,6 @@ namespace Infrastructure.Models
                     .HasColumnName("Godzina_zakonczenia");
 
                 entity.Property(e => e.IdOsoba).HasColumnName("ID_osoba");
-
-                entity.HasOne(d => d.IdOsobaNavigation)
-                    .WithMany(p => p.GodzinyPracies)
-                    .HasForeignKey(d => d.IdOsoba)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Table_35_Weterynarz");
             });
 
             modelBuilder.Entity<Harmonogram>(entity =>
@@ -528,6 +518,10 @@ namespace Infrastructure.Models
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.Property(e => e.Opis)
+                    .HasMaxLength(300)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<Szczepienie>(entity =>
@@ -648,22 +642,6 @@ namespace Infrastructure.Models
                 entity.Property(e => e.DataUzyskania)
                     .HasColumnType("date")
                     .HasColumnName("Data_uzyskania");
-
-                entity.Property(e => e.Opis)
-                    .HasMaxLength(300)
-                    .IsUnicode(false);
-
-                entity.HasOne(d => d.IdOsobaNavigation)
-                    .WithMany(p => p.WeterynarzSpecjalizacjas)
-                    .HasForeignKey(d => d.IdOsoba)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Weterynarz_specjalizacja_Weterynarz");
-
-                entity.HasOne(d => d.IdSpecjalizacjaNavigation)
-                    .WithMany(p => p.WeterynarzSpecjalizacjas)
-                    .HasForeignKey(d => d.IdSpecjalizacja)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Weterynarz_specjalizacja_Specjalizacja");
             });
 
             modelBuilder.Entity<WizytaChoroba>(entity =>

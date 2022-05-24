@@ -41,6 +41,8 @@ namespace Application.Commands.Weterynarz
             weterynarz.Email = "";
             weterynarz.NumerTelefonu = "";
 
+            context.GodzinyPracies.RemoveRange(context.GodzinyPracies.Where(x => x.IdOsoba == id).ToList());
+
             return await context.SaveChangesAsync(cancellationToken);
         }
     }

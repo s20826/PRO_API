@@ -30,15 +30,17 @@ namespace Application.Commands.GodzinyPracy
         {
             int id = hash.Decode(req.ID_osoba);
             var i = 0;
-            var list = context.GodzinyPracies.Where(x => x.IdOsoba == id).ToList();
-            if (list.Any())
-            {
-                throw new Exception("Ten pracownik ma już ustawione godziny pracy.");
-            }
+            //var list = context.GodzinyPracies.Where(x => x.IdOsoba == id).ToList();
+
             foreach (GodzinyPracyRequest request in req.requestList)
             {
                 var dzien = (DniTygodnia)Enum.Parse(typeof(DniTygodnia), request.DzienTygodnia, true);
                 i = (int)dzien;
+                if(context.GodzinyPracies.Where(x => x.DzienTygodnia == i && x.IdOsoba == id).Any())
+                {
+                    throw new Exception();
+                }
+
                 context.GodzinyPracies.Add(new Models.GodzinyPracy
                 {
                     IdOsoba = id,

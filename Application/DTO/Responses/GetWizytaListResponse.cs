@@ -16,5 +16,7 @@ namespace Application.DTO.Responses
         public string Klient { get; set; }
         public string IdWeterynarz { get; set; }
         public string Weterynarz { get; set; }
+        public string IdPacjent { get; set; }
+        public string Pacjent { get; set; }
     }
 }

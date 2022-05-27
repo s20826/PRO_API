@@ -28,19 +28,32 @@ namespace PRO_API.Controllers
             }));
         }
 
-        [Authorize]
-        [HttpGet("{ID_osoba}")]
+        [Authorize(Roles = "admin,weterynarz")]
+        [HttpGet("klient/{ID_osoba}")]
         public async Task<IActionResult> GetKlientPacjentList(string ID_osoba)
         {
-            if(isKlient() && !ID_osoba.Equals(GetUserId()))
-            {
-                return Unauthorized();
-            }
             try
             {
                 return Ok(await Mediator.Send(new PacjentKlientListQuery
                 {
                     ID_osoba = ID_osoba
+                }));
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
+        }
+
+        [Authorize(Roles = "klient")]
+        [HttpGet("klient")]
+        public async Task<IActionResult> GetKlientPacjentList()
+        {
+            try
+            {
+                return Ok(await Mediator.Send(new PacjentKlientListQuery
+                {
+                    ID_osoba = GetUserId()
                 }));
             }
             catch (Exception e)
@@ -90,7 +103,7 @@ namespace PRO_API.Controllers
 
         [Authorize(Roles = "admin,weterynarz")]
         [HttpPut("{ID_Pacjent}")]
-        public async Task<IActionResult> UpdateKlient(string ID_Pacjent, PacjentCreateRequest request)
+        public async Task<IActionResult> UpdatePacjent(string ID_Pacjent, PacjentCreateRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -115,7 +128,7 @@ namespace PRO_API.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpDelete("{ID_Pacjent}")]
-        public async Task<IActionResult> DeleteKlient(string ID_Pacjent)
+        public async Task<IActionResult> DeletePacjent(string ID_Pacjent)
         {
             try
             {

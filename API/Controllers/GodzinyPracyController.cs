@@ -37,8 +37,8 @@ namespace PRO_API.Controllers
         }
 
         [Authorize(Roles = "admin")]
-        [HttpPost("{ID_osoba}")]
-        public async Task<IActionResult> AddGodzinyPracy(string ID_osoba, List<GodzinyPracyRequest> requests)
+        [HttpPost("list/{ID_osoba}")]
+        public async Task<IActionResult> AddGodzinyPracyList(string ID_osoba, List<GodzinyPracyRequest> requests)
         {
             try
             {
@@ -46,6 +46,41 @@ namespace PRO_API.Controllers
                 {
                     ID_osoba = ID_osoba,
                     requestList = requests
+                }));
+            }
+            catch (Exception e)
+            {
+                return NotFound();
+            }
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPost("default/{ID_osoba}")]
+        public async Task<IActionResult> AddGodzinyPracyList(string ID_osoba)
+        {
+            try
+            {
+                return Ok(await Mediator.Send(new CreateDefaultGodzinyPracyCommand
+                {
+                    ID_osoba = ID_osoba
+                }));
+            }
+            catch (Exception e)
+            {
+                return NotFound();
+            }
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPost("{ID_osoba}")]
+        public async Task<IActionResult> AddGodzinyPracy(string ID_osoba, GodzinyPracyRequest request)
+        {
+            try
+            {
+                return Ok(await Mediator.Send(new CreateGodzinyPracyCommand
+                {
+                    ID_osoba = ID_osoba,
+                    requestList = new List<GodzinyPracyRequest>() { request }
                 }));
             }
             catch (Exception e)
@@ -70,6 +105,26 @@ namespace PRO_API.Controllers
             {
                 return NotFound();
             }
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpDelete("{ID_osoba}")]
+        public async Task<IActionResult> DeleteGodzinyPracy(string ID_osoba, string dzien)
+        {
+            try
+            {
+                await Mediator.Send(new DeleteGodzinyPracyCommand
+                {
+                    ID_osoba = ID_osoba,
+                    request = dzien
+                });
+            }
+            catch (Exception e)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
         }
     }
 }

@@ -32,6 +32,8 @@ namespace Application.Queries.Wizyta
                  join y in context.Harmonograms on x.IdHarmonogram equals y.IdHarmonogram
                  join k in context.Osobas on y.KlientIdOsoba equals k.IdOsoba
                  join w in context.Osobas on y.WeterynarzIdOsoba equals w.IdOsoba
+                 join p in context.Pacjents on y.IdPacjent equals p.IdPacjent
+                 orderby y.DataRozpoczecia
                  select new GetWizytaListResponse()
                  {
                      IdWizyta = hash.Encode(x.IdWizyta),
@@ -41,7 +43,9 @@ namespace Application.Queries.Wizyta
                      Data = y.DataRozpoczecia,
                      CzyOplacona = x.CzyOplacona,
                      Weterynarz = w.Imie + " " + w.Nazwisko,
-                     Klient = k.Imie + " " + k.Nazwisko
+                     Klient = k.Imie + " " + k.Nazwisko,
+                     IdPacjent = y.IdPacjent != null ? hash.Encode((int)y.IdPacjent) : "",
+                     Pacjent = p.Nazwa
                  }).ToList();
 
             return results;

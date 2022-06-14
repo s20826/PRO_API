@@ -1,4 +1,5 @@
-﻿using Application.Queries.Wizyta;
+﻿using Application.Commands.Wizyta;
+using Application.Queries.Wizyta;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -66,18 +67,32 @@ namespace PRO_API.Controllers
             }
         }
 
-        /*[Authorize(Roles = "klient,weterynarz")]
+        [Authorize(Roles = "klient,weterynarz")]
         [HttpPost]
-        public async Task<IActionResult> AddWizyta()    //klient albo weterynarz umówia wizytę dla klienta (telefonicznie albo na miejscu)
+        public async Task<IActionResult> AddWizyta(string ID_Harmonogram, string ID_Pacjent, string Notatka)    //klient albo weterynarz umówia wizytę dla klienta (telefonicznie albo na miejscu)
         {
             try
             {
-                return Ok();
+                if (isKlient())
+                {
+                    return Ok(await Mediator.Send(new CreateWizytaCommand
+                    {
+                        ID_klient = GetUserId(),
+                        ID_pacjent = ID_Pacjent,
+                        ID_Harmonogram = ID_Harmonogram,
+                        Notatka = Notatka
+                    }));
+                }
+                throw new NotImplementedException();
+                /*return Ok(await Mediator.Send(new CreateWizytaCommand
+                {
+
+                }));*/
             }
             catch (Exception e)
             {
                 return NotFound();
             }
-        }*/
+        }
     }
 }

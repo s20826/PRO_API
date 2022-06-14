@@ -37,13 +37,13 @@ namespace PRO_API.Controllers
             }
         }
 
-        /*[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         [HttpGet("{ID_osoba}")]
         public async Task<IActionResult> GetKlinikaHarmonogram(string ID_osoba, DateTime startDate, DateTime endDate)
         {
             try
             {
-                return Ok(await Mediator.Send(new
+                return Ok(await Mediator.Send(new HarmonogramAdminQuery
                 {
                     ID_osoba = ID_osoba,
                     StartDate = startDate,
@@ -54,6 +54,6 @@ namespace PRO_API.Controllers
             {
                 return NotFound();
             }
-        }*/
+        }
     }
 }

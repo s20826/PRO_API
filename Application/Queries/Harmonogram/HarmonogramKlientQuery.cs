@@ -30,7 +30,7 @@ namespace Application.Queries.Harmonogram
             var results =
                 (from x in context.Harmonograms
                  join w in context.Osobas on x.WeterynarzIdOsoba equals w.IdOsoba
-                 where x.DataRozpoczecia.Date == req.Date
+                 where x.DataRozpoczecia.Date == req.Date && x.KlientIdOsoba == null
                  select new GetHarmonogramKlientResponse()
                  {
                      IdHarmonogram = hash.Encode(x.IdHarmonogram),

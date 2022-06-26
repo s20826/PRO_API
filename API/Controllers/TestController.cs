@@ -70,5 +70,11 @@ namespace PRO_API.Controllers
 
             return Ok(context.SaveChanges());
         }
+
+        [HttpPost("abc")]
+        public async Task<IActionResult> Post(int param)
+        {
+            return Ok(0);
+        }
     }
 }

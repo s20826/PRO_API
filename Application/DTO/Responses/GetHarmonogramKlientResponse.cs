@@ -12,5 +12,6 @@ namespace Application.DTO.Responses
         public string IdWeterynarz { get; set; }
         public string Weterynarz { get; set; }
         public DateTime Data { get; set; }
+        public string Dzien { get; set; }
     }
 }

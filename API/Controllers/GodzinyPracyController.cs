@@ -1,11 +1,10 @@
-﻿using Application.Commands.GodzinyPracy;
-using Application.DTO.Requests;
-using Application.Queries.GodzinyPracy;
+﻿using Application.DTO.Requests;
+using Application.GodzinaPracy.Commands;
+using Application.GodzinaPracy.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace PRO_API.Controllers
@@ -116,7 +115,7 @@ namespace PRO_API.Controllers
                 await Mediator.Send(new DeleteGodzinyPracyCommand
                 {
                     ID_osoba = ID_osoba,
-                    request = dzien
+                    dzien = dzien
                 });
             }
             catch (Exception e)

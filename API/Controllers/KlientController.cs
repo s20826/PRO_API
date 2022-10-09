@@ -1,6 +1,6 @@
-﻿using Application.Commands.Klient;
-using Application.DTO;
-using Application.Queries.Klient;
+﻿using Application.DTO;
+using Application.Klienci.Commands;
+using Application.Klienci.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -91,33 +91,5 @@ namespace PRO_API.Controllers
             
             return NoContent();
         }
-
-
-        /*[Authorize(Roles = "admin")]
-        [HttpPut("{ID_osoba}")]
-        public IActionResult UpdateKlient(int ID_osoba, KlientPostRequest request)      //admin
-        {
-            if (!context.Klients.Where(x => x.IdOsoba == ID_osoba).Any())
-            {
-                return BadRequest("Nie ma konta o ID = " + ID_osoba);
-            }
-
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var konto = context.Osobas.Where(x => x.IdOsoba == ID_osoba).First();
-            konto.Imie = request.Imie;
-            konto.Nazwisko = request.Nazwisko;
-            konto.NumerTelefonu = request.NumerTelefonu;
-            konto.Email = request.Email;
-            konto.NazwaUzytkownika = request.NazwaUzytkownika;
-            konto.Haslo = request.Haslo;
-
-            context.SaveChanges();
-
-            return Ok("Pomyślnie zaktuzalizowano dane.");
-        }*/
     }
 }

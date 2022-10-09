@@ -1,0 +1,22 @@
+﻿using Application.Commands.Lek;
+using FluentValidation;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Application.Leki.Commands
+{
+    public class UpdateStanLekuCommandValidator : AbstractValidator<UpdateStanLekuCommand>
+    {
+        public UpdateStanLekuCommandValidator()
+        {
+            RuleFor(x => x.ID_stan_leku).NotEmpty();
+
+            RuleFor(x => x.request.Ilosc).NotEmpty().GreaterThan(0).LessThanOrEqualTo(9999);
+
+            RuleFor(x => x.request.DataWaznosci).NotEmpty().GreaterThan(DateTime.Now);
+        }
+    }
+}

@@ -1,7 +1,7 @@
-﻿using Application.Commands.Konto;
-using Application.DTO.Request;
-using Application.Queries.Konto;
+﻿using Application.DTO.Request;
 using Application.Exceptions;
+using Application.Konto.Commands;
+using Application.Konto.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;

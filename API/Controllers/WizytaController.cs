@@ -1,5 +1,5 @@
-﻿using Application.Commands.Wizyta;
-using Application.Queries.Wizyta;
+﻿using Application.Wizyty.Commands;
+using Application.Wizyty.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -84,10 +84,6 @@ namespace PRO_API.Controllers
                     }));
                 }
                 throw new NotImplementedException();
-                /*return Ok(await Mediator.Send(new CreateWizytaCommand
-                {
-
-                }));*/
             }
             catch (Exception e)
             {

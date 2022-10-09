@@ -4,10 +4,8 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Services
 {
@@ -29,7 +27,7 @@ namespace Infrastructure.Services
                 issuer: "https://localhost:5001",
                 audience: "https://localhost:5001",
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(90),
+                expires: DateTime.Now.AddMinutes(180),
                 signingCredentials: creds
             );
 

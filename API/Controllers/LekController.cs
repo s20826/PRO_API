@@ -1,6 +1,7 @@
 ﻿using Application.Commands.Lek;
 using Application.DTO.Request;
-using Application.Queries.Lek;
+using Application.Leki.Commands;
+using Application.Leki.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;

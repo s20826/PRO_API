@@ -1,15 +1,14 @@
 ﻿using Application.DTO.Request;
 using Application.DTO.Responses;
 using Application.Interfaces;
-using Application.Exceptions;
 using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Common.Exceptions;
 
 namespace Application.Konto.Commands
 {

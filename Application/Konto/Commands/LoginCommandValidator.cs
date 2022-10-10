@@ -13,7 +13,7 @@ namespace Application.Konto.Commands
         {
             RuleFor(x => x.request.NazwaUzytkownika).MinimumLength(2).MaximumLength(30);
 
-            RuleFor(x => x.request.Haslo).MinimumLength(8).MaximumLength(30);
+            RuleFor(x => x.request.Haslo).MinimumLength(2).MaximumLength(30);
         }
     }
 }

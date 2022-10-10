@@ -1,5 +1,6 @@
-﻿using Application.DTO.Request;
-using Application.Exceptions;
+﻿using Application.Common.Exceptions;
+using Application.DTO.Request;
+using Application.DTO.Requests;
 using Application.Konto.Commands;
 using Application.Konto.Queries;
 using Microsoft.AspNetCore.Authorization;
@@ -78,6 +79,27 @@ namespace PRO_API.Controllers
             try
             {
                 return Ok(await Mediator.Send(new UpdateKontoCommand
+                {
+                    ID_osoba = GetUserId(),
+                    request = request
+                }));
+            }
+            catch (Exception e)
+            {
+                return NotFound(new
+                {
+                    message = e.Message
+                });
+            }
+        }
+
+        [Authorize]
+        [HttpPut("password/{ID_osoba}")]
+        public async Task<IActionResult> ChangeKontoPassword(KontoChangePasswordRequest request)
+        {
+            try
+            {
+                return Ok(await Mediator.Send(new ChangePasswordCommand
                 {
                     ID_osoba = GetUserId(),
                     request = request

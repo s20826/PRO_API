@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Exceptions
+namespace Application.Common.Exceptions
 {
     public class UserNotAuthorizedException : Exception
     {

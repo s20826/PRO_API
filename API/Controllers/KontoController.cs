@@ -34,11 +34,6 @@ namespace PRO_API.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginRequest request)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             try
             {
                 return Ok(await Mediator.Send(new LoginCommand
@@ -80,11 +75,6 @@ namespace PRO_API.Controllers
         [HttpPut("{ID_osoba}")]
         public async Task<IActionResult> UpdateKontoCredentials(KontoUpdateRequest request)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             try
             {
                 return Ok(await Mediator.Send(new UpdateKontoCommand

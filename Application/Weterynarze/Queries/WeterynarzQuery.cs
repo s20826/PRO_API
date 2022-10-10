@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Queries.Weterynarz
+namespace Application.Weterynarze.Queries
 {
     public class WeterynarzQuery : IRequest<GetWeterynarzResponse>
     {

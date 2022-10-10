@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Queries.Pacjent
+namespace Application.Pacjenci.Queries
 {
     public class PacjentKlientListQuery : IRequest<List<GetPacjentKlientListResponse>>
     {

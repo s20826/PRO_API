@@ -64,11 +64,6 @@ namespace PRO_API.Controllers
         [HttpPost("magazyn/{ID_lek}")]
         public async Task<IActionResult> AddStanLeku(string ID_lek, StanLekuRequest request)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest("Niepoprawne dane");
-            }
-
             try
             {
                 return Ok(await Mediator.Send(new CreateStanLekuCommand
@@ -87,11 +82,6 @@ namespace PRO_API.Controllers
         [HttpPut("magazyn/{ID_stan_leku}")]
         public async Task<IActionResult> UpdateStanLeku(string ID_stan_leku, StanLekuRequest request)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest("Niepoprawne dane");
-            }
-
             try { 
                 await Mediator.Send(new UpdateStanLekuCommand
                 {

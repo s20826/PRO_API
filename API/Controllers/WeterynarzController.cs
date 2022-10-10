@@ -1,6 +1,6 @@
-﻿using Application.Commands.Weterynarz;
-using Application.DTO;
-using Application.Queries.Weterynarz;
+﻿using Application.DTO;
+using Application.Weterynarze.Commands;
+using Application.Weterynarze.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -44,10 +44,6 @@ namespace PRO_API.Controllers
         [HttpPost]
         public async Task<IActionResult> AddWeterynarz(WeterynarzCreateRequest request)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest("Niepoprawne dane");
-            }
             try
             {
                 return Ok(await Mediator.Send(new CreateWeterynarzCommand
@@ -69,10 +65,6 @@ namespace PRO_API.Controllers
         [HttpPut("{ID_osoba}")]
         public async Task<IActionResult> UpdateWeterynarzZatrudnienie(string ID_osoba, WeterynarzUpdateRequest request)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
             try
             {
                 return Ok(await Mediator.Send(new UpdateWeterynarzCommand

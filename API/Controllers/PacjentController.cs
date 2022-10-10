@@ -1,7 +1,6 @@
-﻿using Application.Commands.Pacjenci;
-using Application.Commands.Pacjents;
-using Application.DTO.Request;
-using Application.Queries.Pacjent;
+﻿using Application.DTO.Request;
+using Application.Pacjenci.Commands;
+using Application.Pacjenci.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -83,11 +82,6 @@ namespace PRO_API.Controllers
         [HttpPost]
         public async Task<IActionResult> AddPacjent(PacjentCreateRequest request)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest("Niepoprawne dane");
-            }
-
             try
             {
                 return Ok(await Mediator.Send(new CreatePacjentCommand
@@ -105,11 +99,6 @@ namespace PRO_API.Controllers
         [HttpPut("{ID_Pacjent}")]
         public async Task<IActionResult> UpdatePacjent(string ID_Pacjent, PacjentCreateRequest request)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest("Niepoprawne dane");
-            }
-
             try
             {
                 await Mediator.Send(new UpdatePacjentCommand

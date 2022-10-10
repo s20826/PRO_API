@@ -1,15 +1,12 @@
 ﻿using Application.DTO;
-using Application.DTO.Request;
 using Application.Interfaces;
 using MediatR;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Commands.Weterynarz
+namespace Application.Weterynarze.Commands
 {
     public class UpdateWeterynarzCommand : IRequest<int>
     {

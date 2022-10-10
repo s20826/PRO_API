@@ -1,5 +1,6 @@
 using Application;
 using Application.Interfaces;
+using FluentValidation;
 using HashidsNet;
 using Infrastructure;
 using Infrastructure.Models;
@@ -71,8 +72,9 @@ namespace PRO_API
             services.AddControllers().AddNewtonsoftJson(Configuration => Configuration.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddInfrastructure()
                 .AddApplication();
-            services.AddMediatR(typeof(Startup).Assembly);
-
+            //services.AddMediatR(typeof(Startup).Assembly);
+            
+            
 
             services.AddSwaggerGen(c =>
             {

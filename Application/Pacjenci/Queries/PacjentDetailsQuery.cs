@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Queries.Pacjent
+namespace Application.Pacjenci.Queries
 {
     public class PacjentDetailsQuery : IRequest<GetPacjentDetailsResponse>
     {
@@ -31,7 +31,7 @@ namespace Application.Queries.Pacjent
             {
                 throw new Exception("Nie ma pacjenta o ID = " + req.ID_pacjent);
             }
-            
+
             var results =
                 (from x in context.Pacjents
                  join y in context.Osobas on x.IdOsoba equals y.IdOsoba

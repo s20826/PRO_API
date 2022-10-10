@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Commands.Weterynarz
+namespace Application.Weterynarze.Commands
 {
     public class CreateWeterynarzCommand : IRequest<int>
     {

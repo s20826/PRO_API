@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Commands.Pacjenci
+namespace Application.Pacjenci.Commands
 {
     public class DeletePacjentCommand : IRequest<int>
     {

@@ -51,11 +51,6 @@ namespace PRO_API.Controllers
         [HttpPost]
         public async Task<IActionResult> AddKlient(KlientCreateRequest request)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             try
             {
                 return Ok(await Mediator.Send(new CreateKlientCommand

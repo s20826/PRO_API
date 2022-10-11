@@ -33,11 +33,11 @@ namespace Application.Klienci.Commands
         {
             if (!req.request.Haslo.Equals(req.request.Haslo2))
             {
-                throw new Exception("Niepoprawne hasło");
+                throw new Exception("Incorrect password");
             }
             if (context.Osobas.Where(x => x.NazwaUzytkownika.Equals(req.request.NazwaUzytkownika)).Any())
             {
-                throw new Exception("Ta nazwa użytkownika jest już zajęta");
+                throw new Exception("Not unique");
             }
 
             var result = await passwordRepository.GetHashed(req.request.Haslo);
@@ -69,7 +69,7 @@ namespace Application.Klienci.Commands
             else
             {
                 trans.Rollback();
-                throw new Exception("Błąd, nie udało się dodać klienta ");
+                throw new Exception("Error");
             }
         }
     }

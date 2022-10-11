@@ -41,6 +41,12 @@ namespace Application.Common.Behaviours
                 _logger.LogWarning("Long Running Request: {Name} ({ElapsedMilliseconds} milliseconds) {@Request}",
                     requestName, elapsedMilliseconds, request);
             }
+            else if (elapsedMilliseconds > 2000)
+            {
+                var requestName = typeof(TRequest).Name;
+                _logger.LogWarning("Very Long Running Request: {Name} ({ElapsedMilliseconds} milliseconds) {@Request}",
+                    requestName, elapsedMilliseconds, request);
+            }
 
             return response;
         }

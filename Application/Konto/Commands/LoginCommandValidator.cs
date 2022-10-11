@@ -1,9 +1,4 @@
 ﻿using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Konto.Commands
 {
@@ -11,9 +6,11 @@ namespace Application.Konto.Commands
     {
         public LoginCommandValidator()
         {
-            RuleFor(x => x.request.NazwaUzytkownika).MinimumLength(2).MaximumLength(30);
+            RuleFor(x => x.request.NazwaUzytkownika).MinimumLength(2).WithMessage("To pole wymaga od 2 do 30 znaków");
+            RuleFor(x => x.request.NazwaUzytkownika).MaximumLength(30).WithMessage("To pole wymaga od 2 do 30 znaków");
 
-            RuleFor(x => x.request.Haslo).MinimumLength(2).MaximumLength(30);
+            RuleFor(x => x.request.Haslo).MinimumLength(2).WithMessage("To pole wymaga od 2 do 30 znaków");
+            RuleFor(x => x.request.Haslo).MaximumLength(30).WithMessage("To pole wymaga od 2 do 30 znaków");
         }
     }
 }

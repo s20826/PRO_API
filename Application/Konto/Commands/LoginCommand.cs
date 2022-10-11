@@ -36,7 +36,7 @@ namespace Application.Konto.Commands
             var user = context.Osobas.Where(x => x.NazwaUzytkownika.Equals(req.request.NazwaUzytkownika)).FirstOrDefault();
             if (user == null)
             {
-                throw new UserNotAuthorizedException("Niepoprawne hasło lub login.");
+                throw new UserNotAuthorizedException("Incorrect");
             }
 
             string passwordHash = user.Haslo;
@@ -45,7 +45,7 @@ namespace Application.Konto.Commands
 
             if (passwordHash != currentHashedPassword)
             {
-                throw new UserNotAuthorizedException("Niepoprawne hasło lub login. ");
+                throw new UserNotAuthorizedException("Incorrect");
             }
 
             List<Claim> userclaim = new List<Claim>

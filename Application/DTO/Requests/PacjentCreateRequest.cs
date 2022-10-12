@@ -25,5 +25,7 @@ namespace Application.DTO.Request
         public decimal Waga { get; set; }
 
         public bool Agresywne { get; set; }
+
+        public bool Ubezplodnienie { get; set; }
     }
 }

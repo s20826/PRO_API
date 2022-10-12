@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace Application.Models
+namespace Domain.Models
 {
     public partial class Szczepienie
     {

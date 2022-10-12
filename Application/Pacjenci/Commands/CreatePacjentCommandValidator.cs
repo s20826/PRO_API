@@ -13,6 +13,8 @@ namespace Application.Pacjenci.Commands
         {
             RuleFor(x => x.request.Agresywne).NotEmpty();
 
+            RuleFor(x => x.request.Ubezplodnienie).NotEmpty();
+
             RuleFor(x => x.request.DataUrodzenia).NotEmpty().LessThanOrEqualTo(DateTime.Now);
 
             RuleFor(x => x.request.Gatunek).NotEmpty().MinimumLength(2).MaximumLength(50);

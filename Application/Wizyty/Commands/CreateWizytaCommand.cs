@@ -1,5 +1,5 @@
 ﻿using Application.Interfaces;
-using Application.Models;
+using Domain.Models;
 using Domain.Enums;
 using MediatR;
 using System;

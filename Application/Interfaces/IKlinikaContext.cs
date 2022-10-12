@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Interfaces;
-using Application.Models;
+using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 

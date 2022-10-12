@@ -1,6 +1,6 @@
 ﻿using Application.DTO.Request;
 using Application.Interfaces;
-using Application.Models;
+using Domain.Models;
 using MediatR;
 using System;
 using System.Collections.Generic;

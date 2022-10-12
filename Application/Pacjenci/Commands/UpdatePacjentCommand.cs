@@ -43,6 +43,7 @@ namespace Application.Pacjenci.Commands
             pacjent.DataUrodzenia = req.request.DataUrodzenia;
             pacjent.Waga = req.request.Waga;
             pacjent.Agresywne = req.request.Agresywne;
+            pacjent.Ubezplodnienie = req.request.Ubezplodnienie;
 
             return await context.SaveChangesAsync(cancellationToken);
         }

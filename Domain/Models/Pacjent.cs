@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace Application.Models
+namespace Domain.Models
 {
     public partial class Pacjent
     {
@@ -22,6 +22,7 @@ namespace Application.Models
         public DateTime DataUrodzenia { get; set; }
         public decimal Waga { get; set; }
         public bool Agresywne { get; set; }
+        public bool Ubezplodnienie { get; set; }
 
         public virtual Klient IdOsobaNavigation { get; set; }
         public virtual ICollection<Harmonogram> Harmonograms { get; set; }

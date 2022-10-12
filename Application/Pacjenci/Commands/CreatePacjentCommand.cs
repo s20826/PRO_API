@@ -1,6 +1,6 @@
 ﻿using Application.DTO.Request;
 using Application.Interfaces;
-using Application.Models;
+using Domain.Models;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -36,7 +36,8 @@ namespace Application.Pacjenci.Commands
                 Masc = req.request.Masc,
                 DataUrodzenia = req.request.DataUrodzenia,
                 Plec = req.request.Plec,
-                Agresywne = req.request.Agresywne
+                Agresywne = req.request.Agresywne,
+                Ubezplodnienie = req.request.Ubezplodnienie
             });
 
             return await context.SaveChangesAsync(cancellationToken);

@@ -59,7 +59,7 @@ namespace PRO_API.Controllers
         {
             for(int i = 0; i < 5; i++)
             {
-                context.GodzinyPracies.Add(new Application.Models.GodzinyPracy
+                context.GodzinyPracies.Add(new Domain.Models.GodzinyPracy
                 {
                     DzienTygodnia = i,
                     GodzinaRozpoczecia = new TimeSpan(9, 0, 0),

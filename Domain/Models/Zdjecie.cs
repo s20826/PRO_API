@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace Application.Models
+namespace Domain.Models
 {
-    public partial class WizytaUsluga
+    public partial class Zdjecie
     {
+        public int IdZdjecie { get; set; }
         public int IdWizyta { get; set; }
-        public int IdUsluga { get; set; }
+        public byte[] Zdjecie1 { get; set; }
 
-        public virtual Usluga IdUslugaNavigation { get; set; }
         public virtual Wizytum IdWizytaNavigation { get; set; }
     }
 }

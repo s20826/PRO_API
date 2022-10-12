@@ -8,7 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Domain.Enums;
 using Domain;
-using Application.Models;
+using Domain.Models;
 
 namespace Application.GodzinaPracy.Commands
 {

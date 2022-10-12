@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
 using Application.Interfaces;
-using Application.Models;
+using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -47,12 +45,6 @@ namespace Infrastructure.Models
         public virtual DbSet<Wizytum> Wizyta { get; set; }
         public virtual DbSet<Zdjecie> Zdjecies { get; set; }
         public virtual DbSet<Znizka> Znizkas { get; set; }
-
-        public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
-        {
-            var result = await base.SaveChangesAsync(cancellationToken);
-            return result;
-        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

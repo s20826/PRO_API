@@ -61,7 +61,7 @@ namespace PRO_API.Controllers
                     ID_klient = ID_osoba
                 }));
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return NotFound();
             }
@@ -75,7 +75,7 @@ namespace PRO_API.Controllers
             {
                 if (isKlient())
                 {
-                    return Ok(await Mediator.Send(new CreateWizytaCommand
+                    return Ok(await Mediator.Send(new UmowWizyteKlientCommand
                     {
                         ID_klient = GetUserId(),
                         ID_pacjent = ID_Pacjent,
@@ -85,7 +85,7 @@ namespace PRO_API.Controllers
                 }
                 throw new NotImplementedException();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return NotFound();
             }

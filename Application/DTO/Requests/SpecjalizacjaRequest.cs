@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-
-#nullable disable
+﻿#nullable disable
 
 namespace Application.DTO.Request
 {
-    public partial class SpecjalizacjaRequest
+    public class SpecjalizacjaRequest
     {
-        public string NazwaSpecjalizacji { get; set; }
+        public string Nazwa { get; set; }
+        public string Opis { get; set; }
     }
 }

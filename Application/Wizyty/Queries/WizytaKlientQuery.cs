@@ -1,10 +1,8 @@
 ﻿using Application.DTO.Responses;
 using Application.Interfaces;
 using MediatR;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -31,23 +29,23 @@ namespace Application.Wizyty.Queries
 
             var results =
                 (from x in context.Wizyta
-                 join y in context.Harmonograms on x.IdHarmonogram equals y.IdHarmonogram
-                 join k in context.Osobas on y.KlientIdOsoba equals k.IdOsoba
+                 join y in context.Harmonograms on x.IdWizyta equals y.IdWizyta
+                 join k in context.Osobas on x.IdOsoba equals k.IdOsoba
                  join w in context.Osobas on y.WeterynarzIdOsoba equals w.IdOsoba
-                 join p in context.Pacjents on y.IdPacjent equals p.IdPacjent
+                 join p in context.Pacjents on x.IdPacjent equals p.IdPacjent
                  where k.IdOsoba == id
                  orderby y.DataRozpoczecia descending
                  select new GetWizytaListResponse()
                  {
                      IdWizyta = hash.Encode(x.IdWizyta),
-                     IdKlient = y.KlientIdOsoba != null ? hash.Encode((int)y.KlientIdOsoba) : "",
+                     IdKlient = req.ID_klient,
                      IdWeterynarz = hash.Encode(y.WeterynarzIdOsoba),
                      Status = x.Status,
                      Data = y.DataRozpoczecia,
                      CzyOplacona = x.CzyOplacona,
                      Weterynarz = w.Imie + " " + w.Nazwisko,
                      Klient = k.Imie + " " + k.Nazwisko,
-                     IdPacjent = y.IdPacjent != null ? hash.Encode((int)y.IdPacjent) : "",
+                     IdPacjent = hash.Encode(p.IdPacjent),
                      Pacjent = p.Nazwa
                  }).ToList();
 

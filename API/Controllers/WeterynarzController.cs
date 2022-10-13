@@ -73,7 +73,7 @@ namespace PRO_API.Controllers
                     request = request
                 }));
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return NotFound();
             }
@@ -91,7 +91,7 @@ namespace PRO_API.Controllers
                     ID_osoba = ID_osoba
                 });
             }
-            catch(Exception e)
+            catch(Exception)
             {
                 return NotFound();
             }

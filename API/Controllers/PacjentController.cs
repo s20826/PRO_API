@@ -38,9 +38,9 @@ namespace PRO_API.Controllers
                     ID_osoba = ID_osoba
                 }));
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                return NotFound(e.Message);
+                return NotFound();
             }
         }
 
@@ -55,9 +55,9 @@ namespace PRO_API.Controllers
                     ID_osoba = GetUserId()
                 }));
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                return NotFound(e.Message);
+                return NotFound();
             }
         }
 
@@ -72,9 +72,9 @@ namespace PRO_API.Controllers
                     ID_pacjent = ID_pacjent
                 }));
             } 
-            catch (Exception e)
+            catch (Exception)
             {
-                return NotFound(e.Message);
+                return NotFound();
             }
         }
 
@@ -89,9 +89,9 @@ namespace PRO_API.Controllers
                     request = request
                 }));
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                return NotFound();
+                return BadRequest();
             }
         }
 
@@ -107,9 +107,9 @@ namespace PRO_API.Controllers
                     ID_pacjent = ID_Pacjent
                 });
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                return NotFound();
+                return BadRequest();
             }
 
             return NoContent();
@@ -126,7 +126,7 @@ namespace PRO_API.Controllers
                     ID_Pacjent = ID_Pacjent
                 });
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return NotFound();
             }

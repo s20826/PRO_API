@@ -1,121 +1,97 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+﻿using Application.DTO.Request;
+using Application.Specjalizacje.Commands;
+using Application.Specjalizacje.Queries;
+using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace PRO_API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class SpecjalizacjaController : ControllerBase
+    public class SpecjalizacjaController : ApiControllerBase
     {
-        /*private readonly IConfiguration configuration;
-        private readonly KlinikaContext context;
 
-        public SpecjalizacjaController(IConfiguration config, KlinikaContext klinikaContext)
+        public SpecjalizacjaController()
         {
-            configuration = config;
-            context = klinikaContext;
+
         }
 
         [HttpGet]
-        public IActionResult GetSpecjalizacjaList()
+        public async Task<IActionResult> GetSpecjalizacjaList()
         {
-            var results =
-                from x in context.Specjalizacjas
-                select new
-                {
-                    ID_specjalizacja = x.IdSpecjalizacja,
-                    Nazwa = x.NazwaSpecjalizacji
-                };
+            return Ok(await Mediator.Send(new SpecjalizacjaListQuery
+            {
 
-            return Ok(results);
+            }));
         }
 
-        [HttpGet("details/{id}")]
-        public IActionResult GetSpecjalizacjaById(int id)
+        [HttpGet("details/{ID_specjalizacja}")]
+        public async Task<IActionResult> GetSpecjalizacjaById(string ID_specjalizacja)
         {
-            if (context.Znizkas.Where(x => x.IdZnizka == id).Any() != true)
+            try 
             {
-                return BadRequest("Nie ma specjalizacji o ID = " + id);
-            } 
-            else
-            {
-                var results =
-                from x in context.Specjalizacjas
-                select new
+                return Ok(await Mediator.Send(new SpecjalizacjaDetailsQuery
                 {
-                    ID_specjalizacja = x.IdSpecjalizacja,
-                    Nazwa = x.NazwaSpecjalizacji
-                };
-
-                return Ok(results.First());
+                    ID_specjalizacja = ID_specjalizacja
+                }));
+            }
+            catch (Exception)
+            {
+                return NotFound();
             }
         }
 
 
         [HttpPost]
-        public IActionResult addSpecjalizacja(SpecjalizacjaRequest request)
+        public async Task<IActionResult> AddSpecjalizacja(SpecjalizacjaRequest request)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest("Niepoprawne dane");
+                return Ok(await Mediator.Send(new CreateSpecjalizacjaCommand
+                {
+                    request = request
+                }));
             }
-
-            context.Specjalizacjas.Add(new Specjalizacja
+            catch (Exception)
             {
-                NazwaSpecjalizacji = request.NazwaSpecjalizacji
-            });
-
-            context.SaveChanges();
-
-            return Ok("Dodano specjalizację: " + request.NazwaSpecjalizacji);
+                return BadRequest();
+            }
         }
 
 
-        [HttpPut("{id}")]
-        public IActionResult updateSpecjalizacja(int id, SpecjalizacjaRequest request)
+        [HttpPut("{ID_specjalizacja}")]
+        public async Task<IActionResult> UpdateSpecjalizacja(string ID_specjalizacja, SpecjalizacjaRequest request)
         {
-            if (!context.Specjalizacjas.Where(x => x.IdSpecjalizacja == id).Any())
+            try
             {
-                return BadRequest("Nie ma specjalizacji o ID = " + id);
+                return Ok(await Mediator.Send(new UpdateSpecjalizacjaCommand
+                {
+                    ID_specjalizacja = ID_specjalizacja,
+                    request = request
+                }));
             }
-
-            if (!ModelState.IsValid)
+            catch (Exception)
             {
-                return BadRequest("Niepoprawne dane");
+                return BadRequest();
             }
-
-            var specjalizacja = context.Specjalizacjas.Where(x => x.IdSpecjalizacja == id).First();
-            specjalizacja.NazwaSpecjalizacji = request.NazwaSpecjalizacji;
-
-            context.SaveChanges();
-
-            return Ok("Pomyślnie zaktuzalizowano dane.");
         }
 
 
-        [HttpDelete("{id}")]
-        public IActionResult deleteSpecjalizacja(int id)
+        [HttpDelete("{ID_specjalizacja}")]
+        public async Task<IActionResult> DeleteSpecjalizacja(string ID_specjalizacja)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest("Niepoprawne dane");
+                await Mediator.Send(new DeleteSpecjalizacjaCommand
+                {
+                    ID_specjalizacja = ID_specjalizacja
+                });
             }
-            if (!context.Specjalizacjas.Where(x => x.IdSpecjalizacja == id).Any())
+            catch (Exception)
             {
-                return BadRequest("Nie ma specjalizacji o ID = " + id);
+                return NotFound();
             }
 
-            context.Remove(context.Specjalizacjas.Where(x => x.IdSpecjalizacja == id).First());
-            context.SaveChanges();
-
-            return Ok("Pomyślnie usunięto specjalizację.");
-        }*/
+            return NoContent();
+        }
     }
 }

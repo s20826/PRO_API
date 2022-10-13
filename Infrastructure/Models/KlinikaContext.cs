@@ -50,6 +50,7 @@ namespace Infrastructure.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
+
             }
         }
 
@@ -135,21 +136,14 @@ namespace Infrastructure.Models
                     .HasColumnType("datetime")
                     .HasColumnName("Data_zakonczenia");
 
-                entity.Property(e => e.IdPacjent).HasColumnName("ID_pacjent");
-
-                entity.Property(e => e.KlientIdOsoba).HasColumnName("Klient_ID_osoba");
+                entity.Property(e => e.IdWizyta).HasColumnName("ID_wizyta");
 
                 entity.Property(e => e.WeterynarzIdOsoba).HasColumnName("Weterynarz_ID_osoba");
 
-                entity.HasOne(d => d.IdPacjentNavigation)
+                entity.HasOne(d => d.IdWizytaNavigation)
                     .WithMany(p => p.Harmonograms)
-                    .HasForeignKey(d => d.IdPacjent)
-                    .HasConstraintName("Harmonogram_Pacjent");
-
-                entity.HasOne(d => d.KlientIdOsobaNavigation)
-                    .WithMany(p => p.Harmonograms)
-                    .HasForeignKey(d => d.KlientIdOsoba)
-                    .HasConstraintName("Harmonogram_Klient");
+                    .HasForeignKey(d => d.IdWizyta)
+                    .HasConstraintName("Harmonogram_Wizyta");
 
                 entity.HasOne(d => d.WeterynarzIdOsobaNavigation)
                     .WithMany(p => p.Harmonograms)
@@ -294,7 +288,6 @@ namespace Infrastructure.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.Opis)
-                    .IsRequired()
                     .HasMaxLength(300)
                     .IsUnicode(false);
 
@@ -699,7 +692,9 @@ namespace Infrastructure.Models
 
                 entity.Property(e => e.CzyOplacona).HasColumnName("Czy_oplacona");
 
-                entity.Property(e => e.IdHarmonogram).HasColumnName("ID_harmonogram");
+                entity.Property(e => e.IdOsoba).HasColumnName("ID_osoba");
+
+                entity.Property(e => e.IdPacjent).HasColumnName("ID_pacjent");
 
                 entity.Property(e => e.IdZnizka).HasColumnName("ID_znizka");
 
@@ -718,11 +713,15 @@ namespace Infrastructure.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.HasOne(d => d.IdHarmonogramNavigation)
+                entity.HasOne(d => d.IdOsobaNavigation)
                     .WithMany(p => p.Wizyta)
-                    .HasForeignKey(d => d.IdHarmonogram)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Wizyta_Harmonogram");
+                    .HasForeignKey(d => d.IdOsoba)
+                    .HasConstraintName("Wizyta_Klient");
+
+                entity.HasOne(d => d.IdPacjentNavigation)
+                    .WithMany(p => p.Wizyta)
+                    .HasForeignKey(d => d.IdPacjent)
+                    .HasConstraintName("Wizyta_Pacjent");
 
                 entity.HasOne(d => d.IdZnizkaNavigation)
                     .WithMany(p => p.Wizyta)

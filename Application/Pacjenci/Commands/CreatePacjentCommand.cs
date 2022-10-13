@@ -26,7 +26,7 @@ namespace Application.Pacjenci.Commands
 
         public async Task<int> Handle(CreatePacjentCommand req, CancellationToken cancellationToken)
         {
-            context.Pacjents.Add(new Pacjent
+            await context.Pacjents.AddAsync(new Pacjent
             {
                 IdOsoba = req.request.IdOsoba,
                 Nazwa = req.request.Nazwa,

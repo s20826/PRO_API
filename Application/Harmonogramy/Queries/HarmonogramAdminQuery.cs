@@ -4,7 +4,6 @@ using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -33,9 +32,8 @@ namespace Application.Harmonogramy.Queries
 
             var results =
                 (from x in context.Harmonograms
-                 join k in context.Osobas on x.KlientIdOsoba equals k.IdOsoba
+                 join z in context.Wizyta on x.IdWizyta equals z.IdWizyta into wizyta from t in wizyta.DefaultIfEmpty()
                  join w in context.Osobas on x.WeterynarzIdOsoba equals w.IdOsoba
-                 join p in context.Pacjents on x.IdPacjent equals p.IdPacjent
                  where x.DataRozpoczecia.Date >= req.StartDate && x.DataZakonczenia.Date <= req.EndDate && x.WeterynarzIdOsoba == id
                  select new GetHarmonogramAdminResponse()
                  {
@@ -43,11 +41,11 @@ namespace Application.Harmonogramy.Queries
                      IdWeterynarz = hash.Encode(x.WeterynarzIdOsoba),
                      Weterynarz = w.Imie + " " + w.Nazwisko,
                      Data = x.DataRozpoczecia,
-                     IdKlient = x.KlientIdOsoba != null ? hash.Encode((int)x.KlientIdOsoba) : null,
-                     Klient = k.Imie + " " + k.Nazwisko,
-                     IdPacjent = x.IdPacjent != null ? hash.Encode((int)x.IdPacjent) : null,
-                     Pacjent = p.Nazwa,
-                     CzyZajete = x.KlientIdOsoba != null
+                     IdKlient = t.IdOsoba != null ? hash.Encode((int)t.IdOsoba) : null,
+                     Klient = t.IdOsoba != null ? context.Osobas.Where(k => k.IdOsoba == t.IdOsoba).Select(k => k.Imie + " " + k.Nazwisko).First() : null,
+                     IdPacjent = t.IdPacjent != null ? hash.Encode((int)t.IdPacjent): null,
+                     Pacjent = t.IdPacjent != null ? context.Pacjents.Where(p => p.IdPacjent == t.IdPacjent).Select(p => p.Nazwa).First() : null,
+                     CzyZajete = x.IdWizyta != null
                  }).ToList();
 
             return results;

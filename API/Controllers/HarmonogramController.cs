@@ -29,7 +29,7 @@ namespace PRO_API.Controllers
                     Date = date
                 }));
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return NotFound();
             }
@@ -48,7 +48,7 @@ namespace PRO_API.Controllers
                     EndDate = endDate
                 }));
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return NotFound();
             }

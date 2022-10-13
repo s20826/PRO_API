@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Application.Wizyty.Commands
 {
-    public class CreateWizytaCommandValidator : AbstractValidator<CreateWizytaCommand>
+    public class UmowWizyteKlientCommandValidator : AbstractValidator<UmowWizyteKlientCommand>
     {
-        public CreateWizytaCommandValidator()
+        public UmowWizyteKlientCommandValidator()
         {
             RuleFor(x => x.ID_Harmonogram).NotEmpty();
 

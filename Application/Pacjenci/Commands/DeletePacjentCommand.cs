@@ -28,11 +28,7 @@ namespace Application.Pacjenci.Commands
         {
             int id = hash.Decode(req.ID_Pacjent);
 
-            var pacjent = context.Pacjents.Where(x => x.IdPacjent == id).FirstOrDefault();
-            if (pacjent is null)
-            {
-                throw new Exception();
-            }
+            var pacjent = context.Pacjents.Where(x => x.IdPacjent == id).First();
 
             context.Pacjents.Remove(pacjent);
             return await context.SaveChangesAsync(cancellationToken);

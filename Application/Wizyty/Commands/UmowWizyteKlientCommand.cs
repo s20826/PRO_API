@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Application.Wizyty.Commands
 {
-    public class CreateWizytaCommand : IRequest<int>
+    public class UmowWizyteKlientCommand : IRequest<int>
     {
         public string ID_klient { get; set; }
         public string ID_pacjent { get; set; }
@@ -19,34 +19,36 @@ namespace Application.Wizyty.Commands
         public string Notatka { get; set; }
     }
 
-    public class HarmonogramAdminQueryHandle : IRequestHandler<CreateWizytaCommand, int>
+    public class UmowWizyteKlientCommandHandle : IRequestHandler<UmowWizyteKlientCommand, int>
     {
         private readonly IKlinikaContext context;
         private readonly IHash hash;
-        public HarmonogramAdminQueryHandle(IKlinikaContext klinikaContext, IHash _hash)
+        public UmowWizyteKlientCommandHandle(IKlinikaContext klinikaContext, IHash _hash)
         {
             context = klinikaContext;
             hash = _hash;
         }
 
-        public async Task<int> Handle(CreateWizytaCommand req, CancellationToken cancellationToken)
+        public async Task<int> Handle(UmowWizyteKlientCommand req, CancellationToken cancellationToken)
         {
             (int id1, int id2) = hash.Decode(req.ID_klient, req.ID_pacjent);
             int id_harmonogram = hash.Decode(req.ID_Harmonogram);
 
-            var harmonogram = context.Harmonograms.Where(x => x.IdHarmonogram == id_harmonogram).FirstOrDefault();
-            harmonogram.KlientIdOsoba = id1;
-            harmonogram.IdPacjent = id2;
-
-            context.Wizyta.Add(new Wizytum
+            var result = await context.Wizyta.AddAsync(new Wizytum
             {
-                IdHarmonogram = id_harmonogram,
+                IdOsoba = id1,
+                IdPacjent = id2,
                 Opis = "",
                 NotatkaKlient = req.Notatka,
                 Status = WizytaStatus.Zaplanowana.ToString(),
                 Cena = 0,
                 CzyOplacona = false
             });
+
+            await context.SaveChangesAsync(cancellationToken);
+
+            var harmonogram = context.Harmonograms.Where(x => x.IdHarmonogram == id_harmonogram).FirstOrDefault();
+            harmonogram.IdWizyta = result.Entity.IdWizyta;
 
             return await context.SaveChangesAsync(cancellationToken);
         }

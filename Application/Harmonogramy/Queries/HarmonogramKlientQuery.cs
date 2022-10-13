@@ -1,11 +1,9 @@
 ﻿using Application.DTO.Responses;
 using Application.Interfaces;
-using Domain.Enums;
 using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -34,7 +32,7 @@ namespace Application.Harmonogramy.Queries
             var results =
                 (from x in context.Harmonograms
                  join w in context.Osobas on x.WeterynarzIdOsoba equals w.IdOsoba
-                 where x.DataRozpoczecia.Date == req.Date && x.KlientIdOsoba == null
+                 where x.DataRozpoczecia.Date == req.Date && x.IdWizyta == null
                  select new GetHarmonogramKlientResponse()
                  {
                      IdHarmonogram = hash.Encode(x.IdHarmonogram),

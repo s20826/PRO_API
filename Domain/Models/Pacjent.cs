@@ -9,7 +9,7 @@ namespace Domain.Models
     {
         public Pacjent()
         {
-            Harmonograms = new HashSet<Harmonogram>();
+            Wizyta = new HashSet<Wizytum>();
         }
 
         public int IdPacjent { get; set; }
@@ -25,6 +25,6 @@ namespace Domain.Models
         public bool Ubezplodnienie { get; set; }
 
         public virtual Klient IdOsobaNavigation { get; set; }
-        public virtual ICollection<Harmonogram> Harmonograms { get; set; }
+        public virtual ICollection<Wizytum> Wizyta { get; set; }
     }
 }

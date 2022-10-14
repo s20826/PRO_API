@@ -9,6 +9,8 @@ namespace Domain.Models
     {
         public int IdOsoba { get; set; }
         public int IdSpecjalizacja { get; set; }
-        public DateTime? DataUzyskania { get; set; }
+
+        public virtual Weterynarz IdOsobaNavigation { get; set; }
+        public virtual Specjalizacja IdSpecjalizacjaNavigation { get; set; }
     }
 }

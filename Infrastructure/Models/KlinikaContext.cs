@@ -624,9 +624,17 @@ namespace Infrastructure.Models
 
                 entity.Property(e => e.IdSpecjalizacja).HasColumnName("ID_specjalizacja");
 
-                entity.Property(e => e.DataUzyskania)
-                    .HasColumnType("date")
-                    .HasColumnName("Data_uzyskania");
+                entity.HasOne(d => d.IdOsobaNavigation)
+                    .WithMany(p => p.WeterynarzSpecjalizacjas)
+                    .HasForeignKey(d => d.IdOsoba)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Weterynarz_specjalizacja_Weterynarz");
+
+                entity.HasOne(d => d.IdSpecjalizacjaNavigation)
+                    .WithMany(p => p.WeterynarzSpecjalizacjas)
+                    .HasForeignKey(d => d.IdSpecjalizacja)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Weterynarz_specjalizacja_Specjalizacja");
             });
 
             modelBuilder.Entity<WizytaChoroba>(entity =>

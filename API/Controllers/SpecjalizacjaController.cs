@@ -1,6 +1,7 @@
 ﻿using Application.DTO.Request;
 using Application.Specjalizacje.Commands;
 using Application.Specjalizacje.Queries;
+using Application.WeterynarzSpecjalizacje.Commands;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -40,7 +41,6 @@ namespace PRO_API.Controllers
             }
         }
 
-
         [HttpPost]
         public async Task<IActionResult> AddSpecjalizacja(SpecjalizacjaRequest request)
         {
@@ -56,7 +56,6 @@ namespace PRO_API.Controllers
                 return BadRequest();
             }
         }
-
 
         [HttpPut("{ID_specjalizacja}")]
         public async Task<IActionResult> UpdateSpecjalizacja(string ID_specjalizacja, SpecjalizacjaRequest request)
@@ -74,7 +73,6 @@ namespace PRO_API.Controllers
                 return BadRequest();
             }
         }
-
 
         [HttpDelete("{ID_specjalizacja}")]
         public async Task<IActionResult> DeleteSpecjalizacja(string ID_specjalizacja)

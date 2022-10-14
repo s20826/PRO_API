@@ -25,6 +25,8 @@ namespace Application.Specjalizacje.Commands
         {
             int id = hash.Decode(req.ID_specjalizacja);
 
+            context.WeterynarzSpecjalizacjas.RemoveRange(context.WeterynarzSpecjalizacjas.Where(x => x.IdSpecjalizacja == id));
+
             var specjalizacja = context.Specjalizacjas.Where(x => x.IdSpecjalizacja == id).First();
             context.Specjalizacjas.Remove(specjalizacja);
 

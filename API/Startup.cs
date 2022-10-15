@@ -1,5 +1,6 @@
 using Application;
 using Application.Interfaces;
+using Domain;
 using FluentValidation;
 using HashidsNet;
 using Infrastructure;
@@ -71,7 +72,8 @@ namespace PRO_API
 
             services.AddControllers().AddNewtonsoftJson(Configuration => Configuration.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddInfrastructure()
-                .AddApplication();
+                .AddApplication()
+                .AddDomain();
             //services.AddMediatR(typeof(Startup).Assembly);
             
             

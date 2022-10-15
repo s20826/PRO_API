@@ -40,9 +40,8 @@ namespace Application.Klienci.Commands
                 throw new Exception("Not unique");
             }
 
-            var result = await passwordRepository.GetHashed(req.request.Haslo);
-            byte[] salt = result.Item1;
-            string hashedPassword = result.Item2;
+            byte[] salt = passwordRepository.GenerateSalt();
+            string hashedPassword = await passwordRepository.HashPassword(salt, req.request.Haslo, int.Parse(configuration["PasswordIterations"]));
             string saltBase64 = Convert.ToBase64String(salt);
 
             SqlConnection connection = new SqlConnection(configuration.GetConnectionString("KlinikaDatabase"));

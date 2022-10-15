@@ -39,9 +39,9 @@ namespace Application.Weterynarze.Commands
             {
                 throw new Exception("Ta nazwa użytkownika jest już zajęta");
             }
-            var result = await passwordRepository.GetHashed(req.request.Haslo);
-            byte[] salt = result.Item1;
-            string hashedPassword = result.Item2;
+
+            byte[] salt = passwordRepository.GenerateSalt();
+            var hashedPassword = await passwordRepository.HashPassword(salt, req.request.Haslo, int.Parse(configuration["PasswordIterations"]));
             string saltBase64 = Convert.ToBase64String(salt);
 
             var query = "exec DodajWeterynarza @imie, @nazwisko, @dataUr, @numerTel, @email, @login, @haslo, @pensja, @dataZatrudnienia, @salt";

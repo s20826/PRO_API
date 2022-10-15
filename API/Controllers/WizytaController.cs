@@ -1,4 +1,5 @@
-﻿using Application.Wizyty.Commands;
+﻿using Application.Common.Exceptions;
+using Application.Wizyty.Commands;
 using Application.Wizyty.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -44,7 +45,7 @@ namespace PRO_API.Controllers
                     ID_weterynarz = GetUserId()
                 }));
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return NotFound();
             }
@@ -67,9 +68,9 @@ namespace PRO_API.Controllers
             }
         }
 
-        [Authorize(Roles = "klient,weterynarz")]
+        [Authorize]
         [HttpPost]
-        public async Task<IActionResult> AddWizyta(string ID_Harmonogram, string ID_Pacjent, string Notatka)    //klient albo weterynarz umówia wizytę dla klienta (telefonicznie albo na miejscu)
+        public async Task<IActionResult> AddWizyta(string ID_Harmonogram, string ID_Pacjent, string Notatka)    //klient albo weterynarz lub admin umówia wizytę dla klienta (telefonicznie albo na miejscu)
         {
             try
             {
@@ -83,11 +84,62 @@ namespace PRO_API.Controllers
                         Notatka = Notatka
                     }));
                 }
+
+                return Ok(await Mediator.Send(new UmowWizyteKlientCommand
+                {
+                    //ID_klient = ID_klient,        //dodać do definicji metody
+                    ID_pacjent = ID_Pacjent,
+                    ID_Harmonogram = ID_Harmonogram,
+                    Notatka = Notatka
+                }));
+            }
+            catch (ConstraintException e)
+            {
+                return BadRequest(new
+                {
+                    message = e.Message,
+                    value = e.ConstraintValue
+                });
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
+
+        [Authorize]
+        [HttpDelete("{ID_wizyta}")]
+        public async Task<IActionResult> DeleteWizyta(string ID_wizyta)    //klient albo weterynarz lub admin aunuluje wizytę dla klienta (telefonicznie albo na miejscu)
+        {
+            try
+            {
+                return Ok(await Mediator.Send(new DeleteWizytaKlientCommand
+                {
+                    ID_wizyta = ID_wizyta
+                }));
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpDelete("admin/{ID_wizyta}")]
+        public async Task<IActionResult> DeleteWizytaByKlinika(string ID_wizyta)    //admin anuluje wizytę, status wizyty ustawiony jako anulowany przez klinike
+        {
+            try
+            {
+                /*return Ok(await Mediator.Send(new DeleteWizytaKlientCommand
+                {
+                    ID_wizyta = ID_wizyta
+                }));*/
+
                 throw new NotImplementedException();
             }
             catch (Exception)
             {
-                return NotFound();
+                return BadRequest();
             }
         }
     }

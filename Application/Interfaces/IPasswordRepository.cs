@@ -8,7 +8,8 @@ namespace Application.Interfaces
 {
     public interface IPasswordRepository
     {
-        public Task<string> GetHashed(byte[] salt, string plainPassword);
-        public Task<(byte[], string)> GetHashed(string plainPassword);
+        public Task<string> HashPassword(byte[] salt, string plainPassword, int iterations);
+        public byte[] GenerateSalt();
+        public string GetRandomPassword(int l);
     }
 }

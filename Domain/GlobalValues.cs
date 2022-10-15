@@ -11,5 +11,7 @@ namespace Domain
         public static int DNI_PRACY = 5;
         public static TimeSpan GODZINA_ROZPOCZECIA_PRACY = new TimeSpan(9, 0, 0);
         public static TimeSpan GODZINA_ZAKONCZENIA_PRACY = new TimeSpan(17, 0, 0);
+        public static int MAX_UMOWIONYCH_WIZYT = 3;
+        public static int GODZINY_DO_ANULOWANIA_WIZYTY_BEZ_KONSEKWENCJI = 4;
     }
 }

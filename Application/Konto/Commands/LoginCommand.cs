@@ -9,6 +9,7 @@ using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
+using Microsoft.Extensions.Configuration;
 
 namespace Application.Konto.Commands
 {
@@ -22,12 +23,14 @@ namespace Application.Konto.Commands
         private readonly IKlinikaContext context;
         private readonly ITokenRepository tokenRepository;
         private readonly IPasswordRepository passwordRepository;
+        private readonly IConfiguration configuration;
         private readonly IHash hash;
-        public LoginCommandHandle(IKlinikaContext klinikaContext, ITokenRepository token, IPasswordRepository password, IHash _hash)
+        public LoginCommandHandle(IKlinikaContext klinikaContext, ITokenRepository token, IPasswordRepository password, IConfiguration config, IHash _hash)
         {
             context = klinikaContext;
             tokenRepository = token;
             passwordRepository = password;
+            configuration = config;
             hash = _hash;
         }
 
@@ -41,7 +44,7 @@ namespace Application.Konto.Commands
 
             string passwordHash = user.Haslo;
             byte[] salt = Convert.FromBase64String(user.Salt);
-            string currentHashedPassword = await passwordRepository.GetHashed(salt, req.request.Haslo);
+            string currentHashedPassword = await passwordRepository.HashPassword(salt, req.request.Haslo, int.Parse(configuration["PasswordIterations"]));
 
             if (passwordHash != currentHashedPassword)
             {

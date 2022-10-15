@@ -2,11 +2,6 @@
 using Infrastructure.Models;
 using Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure
 {
@@ -17,6 +12,7 @@ namespace Infrastructure
             services.AddScoped<ITokenRepository, TokenService>();
             services.AddScoped<IPasswordRepository, PasswordService>();
             services.AddScoped<IHash, HashService>();
+            services.AddScoped<IWizytaRepository, WizytaService>();
 
             services.AddScoped<IKlinikaContext, KlinikaContext>();
 

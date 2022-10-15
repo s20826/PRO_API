@@ -40,7 +40,7 @@ namespace Application.Wizyty.Queries
                  {
                      IdWizyta = hash.Encode(x.IdWizyta),
                      IdKlient = hash.Encode(k.IdOsoba),
-                     IdWeterynarz = hash.Encode(y.WeterynarzIdOsoba),
+                     IdWeterynarz = req.ID_weterynarz,
                      Status = x.Status,
                      Data = y.DataRozpoczecia,
                      CzyOplacona = x.CzyOplacona,

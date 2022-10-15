@@ -5,6 +5,9 @@ using MediatR;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System;
+using Application.Common.Exceptions;
+using Domain;
 
 namespace Application.Wizyty.Commands
 {
@@ -20,16 +23,23 @@ namespace Application.Wizyty.Commands
     {
         private readonly IKlinikaContext context;
         private readonly IHash hash;
-        public UmowWizyteKlientCommandHandle(IKlinikaContext klinikaContext, IHash _hash)
+        private readonly IWizytaRepository wizytaRepository;
+        public UmowWizyteKlientCommandHandle(IKlinikaContext klinikaContext, IHash _hash, IWizytaRepository _wizytaRepository)
         {
             context = klinikaContext;
             hash = _hash;
+            wizytaRepository = _wizytaRepository;
         }
 
         public async Task<int> Handle(UmowWizyteKlientCommand req, CancellationToken cancellationToken)
         {
             (int id1, int id2) = hash.Decode(req.ID_klient, req.ID_pacjent);
             int id_harmonogram = hash.Decode(req.ID_Harmonogram);
+
+            if (!wizytaRepository.IsWizytaAbleToCreate(context.Wizyta.Where(x => x.IdOsoba == id1).ToList()))
+            {
+                throw new ConstraintException("To many wizytas made", GlobalValues.MAX_UMOWIONYCH_WIZYT);
+            }
 
             var result = await context.Wizyta.AddAsync(new Wizytum
             {

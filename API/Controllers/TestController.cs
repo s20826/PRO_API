@@ -1,16 +1,10 @@
 ﻿using HashidsNet;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Infrastructure.Helpers;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Infrastructure.Models;
-using System.Net.Mail;
-using Application.DTO.Responses;
-using Application.DTO;
-using System.Data.SqlClient;
 
 namespace PRO_API.Controllers
 {
@@ -48,11 +42,11 @@ namespace PRO_API.Controllers
             });
         }
 
-        [HttpGet("randomPassword")]
+        /*[HttpGet("randomPassword")]
         public async Task<IActionResult> GetRandomPassword(int count)
         {
-            return Ok(PasswordHelper.GetRandomPassword(count));
-        }
+            return Ok(.GetRandomPassword(count));
+        }*/
 
         [HttpGet("sdfsdfsdfd")]
         public async Task<IActionResult> dfsdfsdfsd(int id)

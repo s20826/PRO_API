@@ -2,6 +2,7 @@
 using Application.DTO.Requests;
 using Application.Interfaces;
 using MediatR;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Linq;
 using System.Threading;
@@ -19,11 +20,13 @@ namespace Application.Konto.Commands
     {
         private readonly IKlinikaContext context;
         private readonly IPasswordRepository passwordRepository;
+        private readonly IConfiguration configuration;
         private readonly IHash hash;
-        public ChangePasswordCommandHandle(IKlinikaContext klinikaContext, IPasswordRepository password, IHash _hash)
+        public ChangePasswordCommandHandle(IKlinikaContext klinikaContext, IPasswordRepository password, IConfiguration config, IHash _hash)
         {
             context = klinikaContext;
             passwordRepository = password;
+            configuration = config;
             hash = _hash;
         }
 
@@ -39,14 +42,14 @@ namespace Application.Konto.Commands
 
             string passwordHash = user.Haslo;
             byte[] salt = Convert.FromBase64String(user.Salt);
-            string currentHashedPassword = await passwordRepository.GetHashed(salt, req.request.CurrentHaslo);
+            string currentHashedPassword = await passwordRepository.HashPassword(salt, req.request.CurrentHaslo, int.Parse(configuration["PasswordIterations"]));
 
             if (passwordHash != currentHashedPassword)
             {
                 throw new Exception("Niepoprawne hasło.");
             }
 
-            string hashedPassword = await passwordRepository.GetHashed(salt, req.request.NewHaslo);
+            string hashedPassword = await passwordRepository.HashPassword(salt, req.request.NewHaslo, int.Parse(configuration["PasswordIterations"]));
             user.Haslo = hashedPassword;
 
             return await context.SaveChangesAsync(cancellationToken);

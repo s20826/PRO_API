@@ -25,31 +25,22 @@ namespace Application.Konto.Commands
         private readonly IPasswordRepository passwordRepository;
         private readonly IConfiguration configuration;
         private readonly IHash hash;
-        public LoginCommandHandle(IKlinikaContext klinikaContext, ITokenRepository token, IPasswordRepository password, IConfiguration config, IHash _hash)
+        private readonly ILoginRepository loginRepository;
+        public LoginCommandHandle(IKlinikaContext klinikaContext, ITokenRepository token, IPasswordRepository password, IConfiguration config, IHash _hash, ILoginRepository login)
         {
             context = klinikaContext;
             tokenRepository = token;
             passwordRepository = password;
             configuration = config;
             hash = _hash;
+            loginRepository = login;
         }
 
         public async Task<LoginTokens> Handle(LoginCommand req, CancellationToken cancellationToken)
         {
             var user = context.Osobas.Where(x => x.NazwaUzytkownika.Equals(req.request.NazwaUzytkownika)).FirstOrDefault();
-            if (user == null)
-            {
-                throw new UserNotAuthorizedException("Incorrect");
-            }
 
-            string passwordHash = user.Haslo;
-            byte[] salt = Convert.FromBase64String(user.Salt);
-            string currentHashedPassword = await passwordRepository.HashPassword(salt, req.request.Haslo, int.Parse(configuration["PasswordIterations"]));
-
-            if (passwordHash != currentHashedPassword)
-            {
-                throw new UserNotAuthorizedException("Incorrect");
-            }
+            loginRepository.CheckCredentails(user, passwordRepository, req.request.Haslo, int.Parse(configuration["PasswordIterations"]));
 
             List<Claim> userclaim = new List<Claim>
             {

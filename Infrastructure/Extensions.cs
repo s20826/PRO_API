@@ -13,6 +13,7 @@ namespace Infrastructure
             services.AddScoped<IPasswordRepository, PasswordService>();
             services.AddScoped<IHash, HashService>();
             services.AddScoped<IWizytaRepository, WizytaService>();
+            services.AddScoped<ILoginRepository, LoginService>();
 
             services.AddScoped<IKlinikaContext, KlinikaContext>();
 

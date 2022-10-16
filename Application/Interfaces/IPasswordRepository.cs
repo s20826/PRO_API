@@ -8,7 +8,7 @@ namespace Application.Interfaces
 {
     public interface IPasswordRepository
     {
-        public Task<string> HashPassword(byte[] salt, string plainPassword, int iterations);
+        public string HashPassword(byte[] salt, string plainPassword, int iterations);
         public byte[] GenerateSalt();
         public string GetRandomPassword(int l);
     }

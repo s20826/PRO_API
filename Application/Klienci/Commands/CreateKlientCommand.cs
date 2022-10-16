@@ -41,7 +41,7 @@ namespace Application.Klienci.Commands
             }
 
             byte[] salt = passwordRepository.GenerateSalt();
-            string hashedPassword = await passwordRepository.HashPassword(salt, req.request.Haslo, int.Parse(configuration["PasswordIterations"]));
+            string hashedPassword = passwordRepository.HashPassword(salt, req.request.Haslo, int.Parse(configuration["PasswordIterations"]));
             string saltBase64 = Convert.ToBase64String(salt);
 
             SqlConnection connection = new SqlConnection(configuration.GetConnectionString("KlinikaDatabase"));

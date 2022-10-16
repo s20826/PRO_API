@@ -32,7 +32,7 @@ namespace Application.Wizyty.Queries
                  join y in context.Harmonograms on x.IdWizyta equals y.IdWizyta
                  join k in context.Osobas on x.IdOsoba equals k.IdOsoba
                  join w in context.Osobas on y.WeterynarzIdOsoba equals w.IdOsoba
-                 join p in context.Pacjents on x.IdPacjent equals p.IdPacjent
+                 join d in context.Pacjents on x.IdPacjent equals d.IdPacjent into pacjent from p in pacjent.DefaultIfEmpty()
                  orderby y.DataRozpoczecia
                  select new GetWizytaListResponse()
                  {
@@ -44,8 +44,8 @@ namespace Application.Wizyty.Queries
                      CzyOplacona = x.CzyOplacona,
                      Weterynarz = w.Imie + " " + w.Nazwisko,
                      Klient = k.Imie + " " + k.Nazwisko,
-                     IdPacjent = x.IdPacjent != null ? hash.Encode((int)x.IdPacjent) : "",
-                     Pacjent = p.Nazwa
+                     IdPacjent = x.IdPacjent != null ? hash.Encode(p.IdPacjent) : null,
+                     Pacjent = x.IdPacjent != null ? p.Nazwa : null
                  }).ToList();
 
             return results;

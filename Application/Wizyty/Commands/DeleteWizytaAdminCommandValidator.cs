@@ -2,9 +2,9 @@
 
 namespace Application.Wizyty.Commands
 {
-    public class DeleteWizytaKlientCommandValidator : AbstractValidator<DeleteWizytaKlientCommand>
+    public class DeleteWizytaAdminCommandValidator : AbstractValidator<DeleteWizytaAdminCommand>
     {
-        public DeleteWizytaKlientCommandValidator()
+        public DeleteWizytaAdminCommandValidator()
         {
             RuleFor(x => x.ID_wizyta).NotEmpty();
         }

@@ -26,17 +26,13 @@ namespace Application.Klienci.Commands
         {
             int id = hash.Decode(req.ID_osoba);
 
-            var user = context.Osobas.Where(x => x.IdOsoba == id).FirstOrDefault();
-            if (user != null)
-            {
-                throw new NotFoundException();
-            }
-
-            user.Haslo = "";
-            user.Salt = "";
-            user.RefreshToken = "";
-            user.Email = "";
-            user.NumerTelefonu = "";
+            var osoba = context.Osobas.Where(x => x.IdOsoba == id).FirstOrDefault();
+            osoba.NazwaUzytkownika = "";
+            osoba.Haslo = "";
+            osoba.Salt = "";
+            osoba.RefreshToken = "";
+            osoba.Email = "";
+            osoba.NumerTelefonu = "";
 
             return await context.SaveChangesAsync(cancellationToken);
         }

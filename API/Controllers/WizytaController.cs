@@ -69,6 +69,25 @@ namespace PRO_API.Controllers
         }
 
         [Authorize]
+        [HttpGet("details/{ID_wizyta}")]
+        public async Task<IActionResult> GetWizytaDetails(string ID_wizyta)
+        {
+            try
+            {
+                /*return Ok(await Mediator.Send(new WizytaKlientQuery
+                {
+                    ID_klient = ID_osoba
+                }));*/
+
+                throw new NotImplementedException();
+            }
+            catch (Exception)
+            {
+                return NotFound();
+            }
+        }
+
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> AddWizyta(string ID_Harmonogram, string ID_Pacjent, string Notatka)    //klient albo weterynarz lub admin umówia wizytę dla klienta (telefonicznie albo na miejscu)
         {
@@ -101,9 +120,9 @@ namespace PRO_API.Controllers
                     value = e.ConstraintValue
                 });
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return BadRequest();
+                return BadRequest(new { massage = e.Message});
             }
         }
 
@@ -130,12 +149,10 @@ namespace PRO_API.Controllers
         {
             try
             {
-                /*return Ok(await Mediator.Send(new DeleteWizytaKlientCommand
+                return Ok(await Mediator.Send(new DeleteWizytaAdminCommand
                 {
                     ID_wizyta = ID_wizyta
-                }));*/
-
-                throw new NotImplementedException();
+                }));
             }
             catch (Exception)
             {

@@ -1,5 +1,4 @@
-﻿using Application.Common.Exceptions;
-using Application.DTO.Requests;
+﻿using Application.DTO.Requests;
 using Application.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Configuration;
@@ -22,12 +21,14 @@ namespace Application.Konto.Commands
         private readonly IPasswordRepository passwordRepository;
         private readonly IConfiguration configuration;
         private readonly IHash hash;
-        public ChangePasswordCommandHandle(IKlinikaContext klinikaContext, IPasswordRepository password, IConfiguration config, IHash _hash)
+        private readonly ILoginRepository loginRepository;
+        public ChangePasswordCommandHandle(IKlinikaContext klinikaContext, IPasswordRepository password, IConfiguration config, IHash _hash, ILoginRepository login)
         {
             context = klinikaContext;
             passwordRepository = password;
             configuration = config;
             hash = _hash;
+            loginRepository = login;
         }
 
         public async Task<int> Handle(ChangePasswordCommand req, CancellationToken cancellationToken)
@@ -35,21 +36,9 @@ namespace Application.Konto.Commands
             int id = hash.Decode(req.ID_osoba);
 
             var user = context.Osobas.Where(x => x.IdOsoba == id).FirstOrDefault();
-            if (user == null)
-            {
-                throw new NotFoundException();
-            }
+            loginRepository.CheckCredentails(user, passwordRepository, req.request.CurrentHaslo, int.Parse(configuration["PasswordIterations"]));
 
-            string passwordHash = user.Haslo;
-            byte[] salt = Convert.FromBase64String(user.Salt);
-            string currentHashedPassword = await passwordRepository.HashPassword(salt, req.request.CurrentHaslo, int.Parse(configuration["PasswordIterations"]));
-
-            if (passwordHash != currentHashedPassword)
-            {
-                throw new Exception("Niepoprawne hasło.");
-            }
-
-            string hashedPassword = await passwordRepository.HashPassword(salt, req.request.NewHaslo, int.Parse(configuration["PasswordIterations"]));
+            string hashedPassword = passwordRepository.HashPassword(Convert.FromBase64String(user.Salt), req.request.NewHaslo, int.Parse(configuration["PasswordIterations"]));
             user.Haslo = hashedPassword;
 
             return await context.SaveChangesAsync(cancellationToken);

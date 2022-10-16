@@ -33,18 +33,18 @@ namespace Application.Wizyty.Commands
 
         public async Task<int> Handle(UmowWizyteKlientCommand req, CancellationToken cancellationToken)
         {
-            (int id1, int id2) = hash.Decode(req.ID_klient, req.ID_pacjent);
+            int id1 = hash.Decode(req.ID_klient);
             int id_harmonogram = hash.Decode(req.ID_Harmonogram);
 
             if (!wizytaRepository.IsWizytaAbleToCreate(context.Wizyta.Where(x => x.IdOsoba == id1).ToList()))
             {
-                throw new ConstraintException("To many wizytas made", GlobalValues.MAX_UMOWIONYCH_WIZYT);
+                //throw new ConstraintException("To many wizytas made", GlobalValues.MAX_UMOWIONYCH_WIZYT);
             }
 
             var result = await context.Wizyta.AddAsync(new Wizytum
             {
                 IdOsoba = id1,
-                IdPacjent = id2,
+                IdPacjent = req.ID_pacjent != "0" ? hash.Decode(req.ID_pacjent) : null,
                 Opis = "",
                 NotatkaKlient = req.Notatka,
                 Status = WizytaStatus.Zaplanowana.ToString(),

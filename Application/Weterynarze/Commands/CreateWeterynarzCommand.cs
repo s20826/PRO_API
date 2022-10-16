@@ -41,7 +41,7 @@ namespace Application.Weterynarze.Commands
             }
 
             byte[] salt = passwordRepository.GenerateSalt();
-            var hashedPassword = await passwordRepository.HashPassword(salt, req.request.Haslo, int.Parse(configuration["PasswordIterations"]));
+            var hashedPassword = passwordRepository.HashPassword(salt, req.request.Haslo, int.Parse(configuration["PasswordIterations"]));
             string saltBase64 = Convert.ToBase64String(salt);
 
             var query = "exec DodajWeterynarza @imie, @nazwisko, @dataUr, @numerTel, @email, @login, @haslo, @pensja, @dataZatrudnienia, @salt";

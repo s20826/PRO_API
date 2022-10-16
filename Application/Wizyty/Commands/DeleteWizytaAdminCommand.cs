@@ -2,32 +2,30 @@
 using Domain.Enums;
 using MediatR;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Application.Wizyty.Commands
 {
-    public class DeleteWizytaKlientCommand : IRequest<int>
+    public class DeleteWizytaAdminCommand : IRequest<int>
     {
         public string ID_wizyta { get; set; }
     }
 
-    public class DeleteWizytaKlientCommandHandle : IRequestHandler<DeleteWizytaKlientCommand, int>
+    public class DeleteWizytaAdminCommandHandle : IRequestHandler<DeleteWizytaAdminCommand, int>
     {
         private readonly IKlinikaContext context;
         private readonly IHash hash;
         private readonly IWizytaRepository wizytaRepository;
-        public DeleteWizytaKlientCommandHandle(IKlinikaContext klinikaContext, IHash _hash, IWizytaRepository _wizytaRepository)
+        public DeleteWizytaAdminCommandHandle(IKlinikaContext klinikaContext, IHash _hash, IWizytaRepository _wizytaRepository)
         {
             context = klinikaContext;
             hash = _hash;
             wizytaRepository = _wizytaRepository;
         }
 
-        public async Task<int> Handle(DeleteWizytaKlientCommand req, CancellationToken cancellationToken)
+        public async Task<int> Handle(DeleteWizytaAdminCommand req, CancellationToken cancellationToken)
         {
             int id = hash.Decode(req.ID_wizyta);
 
@@ -39,12 +37,8 @@ namespace Application.Wizyty.Commands
                 throw new Exception();
             }
 
-            if (!wizytaRepository.IsWizytaAbleToCancel(harmonogram.DataRozpoczecia)){
-                //naliczenie kary lub wysłanie powiadomienia
-            }
-
             harmonogram.IdWizyta = null;
-            wizyta.Status = WizytaStatus.AnulowanaKlient.ToString();
+            wizyta.Status = WizytaStatus.AnulowanaKlinika.ToString();
 
             return await context.SaveChangesAsync(cancellationToken);
         }

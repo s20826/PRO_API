@@ -10,7 +10,7 @@ namespace Infrastructure.Services
 {
     public class PasswordService : IPasswordRepository
     {
-        public async Task<string> HashPassword(byte[] salt, string plainPassword, int iterations)
+        public string HashPassword(byte[] salt, string plainPassword, int iterations)
         {
             string hashedPassword = Convert.ToBase64String(KeyDerivation.Pbkdf2(
                 password: plainPassword,

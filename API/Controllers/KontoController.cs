@@ -73,7 +73,7 @@ namespace PRO_API.Controllers
 
 
         [Authorize]
-        [HttpPut("{ID_osoba}")]
+        [HttpPut]
         public async Task<IActionResult> UpdateKontoCredentials(KontoUpdateRequest request)
         {
             try
@@ -94,7 +94,7 @@ namespace PRO_API.Controllers
         }
 
         [Authorize]
-        [HttpPut("password/{ID_osoba}")]
+        [HttpPut("password")]
         public async Task<IActionResult> ChangeKontoPassword(KontoChangePasswordRequest request)
         {
             try

@@ -18,7 +18,7 @@ namespace PRO_API.Controllers
         }
 
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,weterynarz")]
         [HttpGet]
         public async Task<IActionResult> GetKlientList()
         {

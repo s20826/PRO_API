@@ -19,16 +19,18 @@ namespace Application.Pacjenci.Commands
     public class CreatePacjentCommandHandle : IRequestHandler<CreatePacjentCommand, int>
     {
         private readonly IKlinikaContext context;
-        public CreatePacjentCommandHandle(IKlinikaContext klinikaContext)
+        private readonly IHash hash;
+        public CreatePacjentCommandHandle(IKlinikaContext klinikaContext, IHash ihash)
         {
             context = klinikaContext;
+            hash = ihash;
         }
 
         public async Task<int> Handle(CreatePacjentCommand req, CancellationToken cancellationToken)
         {
             await context.Pacjents.AddAsync(new Pacjent
             {
-                IdOsoba = req.request.IdOsoba,
+                IdOsoba = hash.Decode(req.request.IdOsoba),
                 Nazwa = req.request.Nazwa,
                 Gatunek = req.request.Gatunek,
                 Rasa = req.request.Rasa,

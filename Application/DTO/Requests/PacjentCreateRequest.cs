@@ -8,7 +8,7 @@ namespace Application.DTO.Request
 {
     public partial class PacjentCreateRequest
     {
-        public int IdOsoba { get; set; }
+        public string IdOsoba { get; set; }
 
         public string Nazwa { get; set; }
 

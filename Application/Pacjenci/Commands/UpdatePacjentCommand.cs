@@ -34,7 +34,7 @@ namespace Application.Pacjenci.Commands
                 throw new Exception();
             }
 
-            pacjent.IdOsoba = req.request.IdOsoba;
+            pacjent.IdOsoba = hash.Decode(req.request.IdOsoba);
             pacjent.Nazwa = req.request.Nazwa;
             pacjent.Gatunek = req.request.Gatunek;
             pacjent.Rasa = req.request.Rasa;

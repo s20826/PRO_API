@@ -29,28 +29,28 @@ namespace Application.Wizyty.Queries
         {
             int id = hash.Decode(req.ID_weterynarz);
 
-            var results =
-                (from x in context.Wizyta
-                 join y in context.Harmonograms on x.IdWizyta equals y.IdHarmonogram
-                 join k in context.Osobas on x.IdOsoba equals k.IdOsoba
-                 join w in context.Osobas on y.WeterynarzIdOsoba equals w.IdOsoba
-                 join p in context.Pacjents on x.IdPacjent equals p.IdPacjent
-                 where w.IdOsoba == id
-                 select new GetWizytaListResponse()
-                 {
-                     IdWizyta = hash.Encode(x.IdWizyta),
-                     IdKlient = hash.Encode(k.IdOsoba),
-                     IdWeterynarz = req.ID_weterynarz,
-                     Status = x.Status,
-                     Data = y.DataRozpoczecia,
-                     CzyOplacona = x.CzyOplacona,
-                     Weterynarz = w.Imie + " " + w.Nazwisko,
-                     Klient = k.Imie + " " + k.Nazwisko,
-                     IdPacjent = hash.Encode(p.IdPacjent),
-                     Pacjent = p.Nazwa
-                 }).ToList();
-
-            return results;
+            return (from x in context.Wizyta
+                    join d in context.Harmonograms on x.IdWizyta equals d.IdWizyta into harmonogram
+                    from y in harmonogram.DefaultIfEmpty()
+                    join k in context.Osobas on x.IdOsoba equals k.IdOsoba
+                    join d in context.Pacjents on x.IdPacjent equals d.IdPacjent into pacjent
+                    from p in pacjent.DefaultIfEmpty()
+                    where y.WeterynarzIdOsoba == id
+                    group x by new { x.IdWizyta, x.IdOsoba, x.IdPacjent, x.Status, x.CzyOplacona, p.Nazwa, y.WeterynarzIdOsoba, k.Imie, k.Nazwisko }
+                    into g
+                    select new GetWizytaListResponse()
+                    {
+                        IdWizyta = hash.Encode(g.Key.IdWizyta),
+                        IdPacjent = g.Key.IdPacjent != null ? hash.Encode((int)g.Key.IdPacjent) : null,
+                        Pacjent = g.Key.IdPacjent != null ? g.Key.Nazwa : null,
+                        IdKlient = g.Key.IdOsoba != null ? hash.Encode((int)g.Key.IdOsoba) : "",
+                        Klient = g.Key.Imie + " " + g.Key.Nazwisko,
+                        IdWeterynarz = req.ID_weterynarz,
+                        Weterynarz = g.Key.WeterynarzIdOsoba != null ? context.Osobas.Where(i => i.IdOsoba.Equals(g.Key.WeterynarzIdOsoba)).Select(i => i.Imie + " " + i.Nazwisko).First() : null,
+                        Status = g.Key.Status,
+                        CzyOplacona = g.Key.CzyOplacona,
+                        Data = g.Key.WeterynarzIdOsoba != null ? context.Harmonograms.Where(x => x.IdWizyta.Equals(g.Key.IdWizyta)).OrderBy(x => x.DataRozpoczecia).Select(x => x.DataRozpoczecia).First() : null
+                    }).ToList().OrderByDescending(x => x.Data).ToList();
         }
     }
 }

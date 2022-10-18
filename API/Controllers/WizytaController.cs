@@ -1,4 +1,5 @@
 ﻿using Application.Common.Exceptions;
+using Application.DTO.Requests;
 using Application.Wizyty.Commands;
 using Application.Wizyty.Queries;
 using Microsoft.AspNetCore.Authorization;
@@ -27,7 +28,7 @@ namespace PRO_API.Controllers
             }));
         }
 
-        [Authorize]
+        [Authorize(Roles = "klient,weterynarz")]
         [HttpGet("moje_wizyty")]
         public async Task<IActionResult> GetWizytaKlient()
         {
@@ -52,14 +53,14 @@ namespace PRO_API.Controllers
         }
 
         [Authorize(Roles = "admin,weterynarz")]
-        [HttpGet("{ID_osoba}")]
-        public async Task<IActionResult> GetWizytaKlient(string ID_osoba)
+        [HttpGet("{ID_klient}")]
+        public async Task<IActionResult> GetWizytaKlient(string ID_klient)
         {
             try
             {
                 return Ok(await Mediator.Send(new WizytaKlientQuery
                 {
-                    ID_klient = ID_osoba
+                    ID_klient = ID_klient
                 }));
             }
             catch (Exception)
@@ -74,12 +75,19 @@ namespace PRO_API.Controllers
         {
             try
             {
-                /*return Ok(await Mediator.Send(new WizytaKlientQuery
+                if (isKlient())
                 {
-                    ID_klient = ID_osoba
-                }));*/
+                    return Ok(await Mediator.Send(new WizytaDetailsKlientQuery
+                    {
+                        ID_klient = GetUserId(),
+                        ID_wizyta = ID_wizyta
+                    }));
+                }
 
-                throw new NotImplementedException();
+                return Ok(await Mediator.Send(new WizytaDetailsAdminQuery
+                {
+                    ID_wizyta = ID_wizyta
+                }));
             }
             catch (Exception)
             {
@@ -89,7 +97,7 @@ namespace PRO_API.Controllers
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> AddWizyta(string ID_Harmonogram, string ID_Pacjent, string Notatka)    //klient albo weterynarz lub admin umówia wizytę dla klienta (telefonicznie albo na miejscu)
+        public async Task<IActionResult> AddWizyta(UmowWizyteRequest request)    //klient albo weterynarz lub admin umówia wizytę dla klienta (telefonicznie albo na miejscu)
         {
             try
             {
@@ -98,18 +106,18 @@ namespace PRO_API.Controllers
                     return Ok(await Mediator.Send(new UmowWizyteKlientCommand
                     {
                         ID_klient = GetUserId(),
-                        ID_pacjent = ID_Pacjent,
-                        ID_Harmonogram = ID_Harmonogram,
-                        Notatka = Notatka
+                        ID_pacjent = request.ID_Pacjent,
+                        ID_Harmonogram = request.ID_Harmonogram,
+                        Notatka = request.Notatka
                     }));
                 }
 
                 return Ok(await Mediator.Send(new UmowWizyteKlientCommand
                 {
-                    //ID_klient = ID_klient,        //dodać do definicji metody
-                    ID_pacjent = ID_Pacjent,
-                    ID_Harmonogram = ID_Harmonogram,
-                    Notatka = Notatka
+                    ID_klient = request.ID_Klient,
+                    ID_pacjent = request.ID_Pacjent,
+                    ID_Harmonogram = request.ID_Harmonogram,
+                    Notatka = request.Notatka
                 }));
             }
             catch (ConstraintException e)
@@ -122,7 +130,54 @@ namespace PRO_API.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(new { massage = e.Message});
+                return BadRequest(new
+                {
+                    massage = e.Message
+                });
+            }
+        }
+
+        [Authorize]
+        [HttpPut("{ID_wizyta}")]
+        public async Task<IActionResult> UpdateWizytaData(UmowWizyteRequest request, string ID_wizyta)    //klient albo weterynarz lub admin zmienia termin wizyty dla klienta (telefonicznie albo na miejscu)
+        {
+            try
+            {
+                if (isKlient())
+                {
+                    return Ok(await Mediator.Send(new PrzelozWizyteCommand
+                    {
+                        ID_wizyta = ID_wizyta,
+                        ID_klient = GetUserId(),
+                        ID_pacjent = request.ID_Pacjent,
+                        ID_Harmonogram = request.ID_Harmonogram,
+                        Notatka = request.Notatka
+                    }));
+                }
+
+                return Ok(await Mediator.Send(new PrzelozWizyteCommand
+                {
+                    ID_wizyta = ID_wizyta,
+                    ID_klient = request.ID_Klient,
+                    ID_pacjent = request.ID_Pacjent,
+                    ID_Harmonogram = request.ID_Harmonogram,
+                    Notatka = request.Notatka
+                }));
+            }
+            catch (ConstraintException e)
+            {
+                return BadRequest(new
+                {
+                    message = e.Message,
+                    value = e.ConstraintValue
+                });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new
+                {
+                    massage = e.Message
+                });
             }
         }
 

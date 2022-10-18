@@ -32,23 +32,7 @@ namespace PRO_API.Controllers
             return Ok(context.Osobas.ToList());
         }
 
-        [HttpPost("login")]
-        public async Task<IActionResult> Login()
-        {
-            return Ok(new
-            {
-                Token = "testToken",
-                RefreshToken = Guid.NewGuid().ToString()
-            });
-        }
-
-        /*[HttpGet("randomPassword")]
-        public async Task<IActionResult> GetRandomPassword(int count)
-        {
-            return Ok(.GetRandomPassword(count));
-        }*/
-
-        [HttpGet("sdfsdfsdfd")]
+/*        [HttpGet("sdfsdfsdfd")]
         public async Task<IActionResult> dfsdfsdfsd(int id)
         {
             for(int i = 0; i < 5; i++)
@@ -63,12 +47,6 @@ namespace PRO_API.Controllers
             }
 
             return Ok(context.SaveChanges());
-        }
-
-        [HttpPost("abc")]
-        public async Task<IActionResult> Post(int param)
-        {
-            return Ok(0);
-        }
+        }*/
     }
 }

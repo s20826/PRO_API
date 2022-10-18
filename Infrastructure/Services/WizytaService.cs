@@ -20,5 +20,13 @@ namespace Infrastructure.Services
         {
             return wizytaDate <= DateTime.Now.AddHours(-GlobalValues.GODZINY_DO_ANULOWANIA_WIZYTY_BEZ_KONSEKWENCJI);
         }
+
+        public (DateTime, DateTime) GetWizytaDates(List<Harmonogram> harmonograms)
+        {
+            var result = harmonograms.OrderBy(x => x.DataRozpoczecia).ToList();
+            var rozpoczecie = result.First().DataRozpoczecia;
+            var zakonczenie = result.Last().DataZakonczenia;
+            return (rozpoczecie, zakonczenie);
+        }
     }
 }

@@ -93,6 +93,7 @@ namespace PRO_API.Controllers
             }
         }
 
+
         [Authorize]
         [HttpPut("password")]
         public async Task<IActionResult> ChangeKontoPassword(KontoChangePasswordRequest request)

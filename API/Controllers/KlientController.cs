@@ -18,7 +18,7 @@ namespace PRO_API.Controllers
         }
 
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,weterynarz")]
         [HttpGet]
         public async Task<IActionResult> GetKlientList()
         {
@@ -29,7 +29,7 @@ namespace PRO_API.Controllers
         }
 
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,weterynarz")]
         [HttpGet("{ID_osoba}")]
         public async Task<IActionResult> GetKlientById(string ID_osoba)
         {
@@ -68,9 +68,31 @@ namespace PRO_API.Controllers
         }
 
 
-        [Authorize(Roles = "admin,klient")]
-        [HttpDelete("{ID_osoba}")]
-        public async Task<IActionResult> DeleteKlient(string ID_osoba)
+        [Authorize(Roles = "klient")]
+        [HttpDelete]
+        public async Task<IActionResult> DeleteKlient()
+        {
+            try
+            {
+                if (isKlient())
+                {
+                    await Mediator.Send(new DeleteKlientCommand
+                    {
+                        ID_osoba = GetUserId()
+                    });
+                }
+            }
+            catch (Exception)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpDelete("admin/{ID_osoba}")]
+        public async Task<IActionResult> DeleteKlientByAdmin(string ID_osoba)
         {
             try
             {

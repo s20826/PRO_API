@@ -38,7 +38,7 @@ namespace Application.Wizyty.Commands
 
             if (!wizytaRepository.IsWizytaAbleToCreate(context.Wizyta.Where(x => x.IdOsoba == id1).ToList()))
             {
-                //throw new ConstraintException("To many wizytas made", GlobalValues.MAX_UMOWIONYCH_WIZYT);
+                throw new ConstraintException("To many wizytas made", GlobalValues.MAX_UMOWIONYCH_WIZYT);
             }
 
             var result = await context.Wizyta.AddAsync(new Wizytum

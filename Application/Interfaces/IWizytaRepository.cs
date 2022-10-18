@@ -9,5 +9,7 @@ namespace Application.Interfaces
         bool IsWizytaAbleToCreate(List<Wizytum> wizytaList);
 
         bool IsWizytaAbleToCancel(DateTime wizytaDate);
+
+        public (DateTime, DateTime) GetWizytaDates(List<Harmonogram> harmonograms);
     }
 }

@@ -50,6 +50,54 @@ namespace Test.Services
             return new[] { wizytaList };
         }
 
+        private static object[] GetHarmonogramList1()
+        {
+            IList<Harmonogram> harmonograms = new List<Harmonogram>(){
+                new Harmonogram {
+                    IdWizyta = 1,
+                    DataRozpoczecia = new DateTime(2022, 10, 18, 12, 00, 00),
+                    DataZakonczenia = new DateTime(2022, 10, 18, 12, 30, 00)
+                },
+                new Harmonogram {
+                    IdWizyta = 1,
+                    DataRozpoczecia = new DateTime(2022, 10, 18, 13, 00, 00),
+                    DataZakonczenia = new DateTime(2022, 10, 18, 13, 30, 00)
+                }
+            };
+
+            return new[] { harmonograms };
+        }
+
+        private static object[] GetHarmonogramList2()
+        {
+            IList<Harmonogram> harmonograms = new List<Harmonogram>(){
+                new Harmonogram {
+                    IdWizyta = 1,
+                    DataRozpoczecia = new DateTime(2022, 10, 18, 12, 00, 00),
+                    DataZakonczenia = new DateTime(2022, 10, 18, 12, 30, 00)
+                },
+                new Harmonogram {
+                    IdWizyta = 1,
+                    DataRozpoczecia = new DateTime(2022, 10, 18, 11, 00, 00),
+                    DataZakonczenia = new DateTime(2022, 10, 18, 11, 30, 00)
+                }
+            };
+
+            return new[] { harmonograms };
+        }
+
+        private static object[] GetHarmonogramEmptyList()
+        {
+            IList<Harmonogram> harmonograms = new List<Harmonogram>(){
+                new Harmonogram {
+                    IdWizyta = 2,
+                    DataRozpoczecia = new DateTime(2022, 10, 18, 11, 00, 00),
+                    DataZakonczenia = new DateTime(2022, 10, 18, 11, 30, 00)
+                }
+            };
+
+            return new[] { harmonograms };
+        }
 
         [Test]
         [TestCaseSource("GetwizytaLists1")]
@@ -78,5 +126,30 @@ namespace Test.Services
             var result = new WizytaService().IsWizytaAbleToCancel(DateTime.Now.AddHours(hour));
             Assert.AreEqual(expectedResult, result);
         }
+
+        [Test]
+        [TestCaseSource("GetHarmonogramList1")]
+        public void HarmonogramCorrectDatesTest(List<Harmonogram> a)
+        {
+            (DateTime result, DateTime result2) = new WizytaService().GetWizytaDates(a);
+            Assert.AreEqual(new DateTime(2022, 10, 18, 12, 00, 00), result);
+            Assert.AreEqual(new DateTime(2022, 10, 18, 13, 30, 00), result2);
+        }
+
+        [Test]
+        [TestCaseSource("GetHarmonogramList2")]
+        public void HarmonogramWrongDatesTest(List<Harmonogram> a)
+        {
+            (DateTime result, DateTime result2) = new WizytaService().GetWizytaDates(a);
+            Assert.AreNotEqual(new DateTime(2022, 10, 18, 12, 00, 00), result);
+            Assert.AreNotEqual(new DateTime(2022, 10, 18, 13, 30, 00), result2);
+        }
+
+        /*[Test]
+        [TestCaseSource("GetHarmonogramEmptyList")]
+        public void EmptyHarmonogramThrowsAnExceptionTest(List<Harmonogram> a)
+        {
+            Assert.Throws<Exception>(() => new WizytaService().GetWizytaDates(a));
+        }*/
     }
 }

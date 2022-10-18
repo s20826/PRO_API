@@ -31,7 +31,6 @@ namespace Application.Specjalizacje.Queries
 
             return (from x in context.Specjalizacjas
                     where x.IdSpecjalizacja == id
-                    orderby x.Nazwa
                     select new GetSpecjalizacjaResponse()
                     {
                         IdSpecjalizacja = req.ID_specjalizacja,

@@ -1,9 +1,13 @@
-﻿using Application.Interfaces;
+﻿using Application.Common.Exceptions;
+using Application.Interfaces;
+using Domain.Enums;
+using Domain.Models;
 using MediatR;
 using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace Application.Wizyty.Commands
 {
@@ -36,6 +40,21 @@ namespace Application.Wizyty.Commands
             var wizyta = context.Wizyta.Where(x => x.IdWizyta.Equals(wizytaID)).FirstOrDefault();
             var harmonograms = context.Harmonograms.Where(x => x.IdWizyta.Equals(wizytaID)).ToList();
 
+            if (!((WizytaStatus)Enum.Parse(typeof(WizytaStatus), wizyta.Status, true)).Equals(WizytaStatus.Zaplanowana))
+            {
+                throw new Exception();
+            }
+
+            if (!klientID.Equals(wizyta.IdOsoba))
+            {
+                throw new UserNotAuthorizedException();
+            }
+
+            if (!harmonograms.Any())
+            {
+                throw new NotFoundException();
+            }
+
             (DateTime rozpoczecie, DateTime zakonczenie) = wizytaRepository.GetWizytaDates(harmonograms);
 
             if (!wizytaRepository.IsWizytaAbleToCancel(rozpoczecie))
@@ -43,23 +62,58 @@ namespace Application.Wizyty.Commands
                 //naliczenie kary lub wysłanie powiadomienia
             }
 
-            /*var result = await context.Wizyta.AddAsync(new Wizytum
+            //wyliczenie długości przekładanej wizyty
+            int wizytaLength = harmonograms.Count();
+
+            //ID weterynarza z nowej wizyty
+            int weterynarzID = context.Harmonograms.Where(x => x.IdWizyta.Equals(wizytaID)).First().WeterynarzIdOsoba;
+            var newDataRozpoczecia = context.Harmonograms.Where(x => x.IdHarmonogram.Equals(harmonogramID)).First().DataRozpoczecia;
+
+            int result = 0;
+            using (var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                IdOsoba = id1,
-                IdPacjent = req.ID_pacjent != "0" ? hash.Decode(req.ID_pacjent) : null,
-                Opis = "",
-                NotatkaKlient = req.Notatka,
-                Status = WizytaStatus.Zaplanowana.ToString(),
-                Cena = 0,
-                CzyOplacona = false
-            });*/
+                try
+                {
+                    var newHarmonograms = context.Harmonograms
+                        .Where(x => x.WeterynarzIdOsoba.Equals(weterynarzID) && x.DataRozpoczecia >= newDataRozpoczecia)
+                        .Take(wizytaLength)
+                        .ToList();
 
-            //await context.SaveChangesAsync(cancellationToken);
+                    //sprawdzenie czy są dostępne terminy do danego weterynarz w harmonogramie
+                    if (!wizytaRepository.IsWizytaAbleToReschedule(newHarmonograms, newDataRozpoczecia))
+                    {
+                        throw new NotFoundException();
+                    }
 
-            //var harmonogram = context.Harmonograms.Where(x => x.IdHarmonogram == id_harmonogram).FirstOrDefault();
-            //harmonogram.IdWizyta = result.Entity.IdWizyta;
 
-            return await context.SaveChangesAsync(cancellationToken);
+
+                    for (int i = 0; i <= harmonograms.Count; i++)
+                    {
+                        harmonograms.ElementAt(i).IdWizyta = wizytaID;
+                    }
+
+                    wizyta.IdPacjent = req.ID_pacjent != "0" ? hash.Decode(req.ID_pacjent) : null;
+                    wizyta.NotatkaKlient = req.Notatka;
+
+                    //usuwanie poprzednich zarezerwowanych terminów z harmonogramu
+                    foreach (Harmonogram h in harmonograms)
+                    {
+                        h.IdWizyta = null;
+                    }
+
+                    result = await context.SaveChangesAsync(cancellationToken);
+                    transaction.Complete();
+                }
+                catch (Exception)
+                {
+                    transaction.Dispose();
+                    throw new Exception();
+                }
+
+                transaction.Dispose();
+            }
+            
+            return result;
         }
     }
 }

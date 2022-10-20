@@ -17,7 +17,7 @@ namespace Test.Services
         {
             IList<Wizytum> wizytaList = new List<Wizytum>(){
                 new Wizytum {
-                    Status = WizytaStatus.Zaplanowana.ToString()
+                    Status = WizytaStatus.Zaplanowana.ToString(),
                 },
                 new Wizytum {
                     Status = WizytaStatus.Zaplanowana.ToString()
@@ -80,24 +80,18 @@ namespace Test.Services
                     IdWizyta = 1,
                     DataRozpoczecia = new DateTime(2022, 10, 18, 11, 00, 00),
                     DataZakonczenia = new DateTime(2022, 10, 18, 11, 30, 00)
-                }
-            };
-
-            return new[] { harmonograms };
-        }
-
-        private static object[] GetHarmonogramEmptyList()
-        {
-            IList<Harmonogram> harmonograms = new List<Harmonogram>(){
+                },
                 new Harmonogram {
-                    IdWizyta = 2,
-                    DataRozpoczecia = new DateTime(2022, 10, 18, 11, 00, 00),
-                    DataZakonczenia = new DateTime(2022, 10, 18, 11, 30, 00)
+                    IdWizyta = 1,
+                    DataRozpoczecia = new DateTime(2022, 10, 18, 11, 30, 00),
+                    DataZakonczenia = new DateTime(2022, 10, 18, 12, 00, 00)
                 }
             };
 
             return new[] { harmonograms };
         }
+
+
 
         [Test]
         [TestCaseSource("GetwizytaLists1")]
@@ -107,7 +101,6 @@ namespace Test.Services
             Assert.IsTrue(result);
         }
 
-
         [Test]
         [TestCaseSource("GetwizytaLists2")]
         public void WizytaNotAbleToCreateTest(List<Wizytum> a)
@@ -115,7 +108,6 @@ namespace Test.Services
             var result = new WizytaService().IsWizytaAbleToCreate(a);
             Assert.IsFalse(result);
         }
-
 
         [Test]
         [TestCase(-5,true)]
@@ -126,6 +118,9 @@ namespace Test.Services
             var result = new WizytaService().IsWizytaAbleToCancel(DateTime.Now.AddHours(hour));
             Assert.AreEqual(expectedResult, result);
         }
+
+
+
 
         [Test]
         [TestCaseSource("GetHarmonogramList1")]
@@ -145,11 +140,31 @@ namespace Test.Services
             Assert.AreNotEqual(new DateTime(2022, 10, 18, 13, 30, 00), result2);
         }
 
-        /*[Test]
-        [TestCaseSource("GetHarmonogramEmptyList")]
-        public void EmptyHarmonogramThrowsAnExceptionTest(List<Harmonogram> a)
+
+
+
+        [Test]
+        [TestCaseSource("GetHarmonogramList2")]
+        public void WizytaRescheduleReturnsTrue(List<Harmonogram> a)
         {
-            Assert.Throws<Exception>(() => new WizytaService().GetWizytaDates(a));
-        }*/
+            var result = new WizytaService().IsWizytaAbleToReschedule(a, new DateTime(2022, 10, 18, 11, 00, 00));
+            Assert.IsTrue(result);
+        }
+
+        [Test]
+        [TestCaseSource("GetHarmonogramList1")]
+        public void WizytaRescheduleReturnsFalse(List<Harmonogram> a)
+        {
+            var result = new WizytaService().IsWizytaAbleToReschedule(a, new DateTime(2022, 10, 18, 12, 00, 00));
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        [TestCaseSource("GetHarmonogramList2")]
+        public void WizytaRescheduleReturnsFalse2(List<Harmonogram> a)
+        {
+            var result = new WizytaService().IsWizytaAbleToReschedule(a, new DateTime(2022, 10, 18, 12, 00, 00));
+            Assert.IsFalse(result);
+        }
     }
 }

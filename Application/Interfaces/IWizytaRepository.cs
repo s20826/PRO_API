@@ -10,6 +10,8 @@ namespace Application.Interfaces
 
         bool IsWizytaAbleToCancel(DateTime wizytaDate);
 
-        public (DateTime, DateTime) GetWizytaDates(List<Harmonogram> harmonograms);
+        (DateTime, DateTime) GetWizytaDates(List<Harmonogram> harmonograms);
+
+        bool IsWizytaAbleToReschedule(List<Harmonogram> harmonograms, DateTime startDate);
     }
 }

@@ -28,5 +28,21 @@ namespace Infrastructure.Services
             var zakonczenie = result.Last().DataZakonczenia;
             return (rozpoczecie, zakonczenie);
         }
+
+        public bool IsWizytaAbleToReschedule(List<Harmonogram> harmonograms, DateTime startDate)
+        {
+            harmonograms = harmonograms.OrderBy(x => x.DataRozpoczecia).ToList();
+            var currentStartDate = startDate;
+            for (int i = 0; i < harmonograms.Count; i++)
+            {
+                if (!currentStartDate.Equals(harmonograms.ElementAt(i).DataRozpoczecia))
+                {
+                    return false;
+                }
+
+                currentStartDate = harmonograms.ElementAt(i).DataZakonczenia;
+            }
+            return true;
+        }
     }
 }

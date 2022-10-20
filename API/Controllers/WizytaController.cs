@@ -58,7 +58,7 @@ namespace PRO_API.Controllers
         {
             try
             {
-                return Ok(await Mediator.Send(new WizytaKlientQuery
+                return Ok(await Mediator.Send(new WizytaAdminQuery
                 {
                     ID_klient = ID_klient
                 }));
@@ -138,7 +138,7 @@ namespace PRO_API.Controllers
         }
 
         [Authorize]
-        [HttpPut("{ID_wizyta}")]
+        [HttpPut("przeloz/{ID_wizyta}")]
         public async Task<IActionResult> UpdateWizytaData(UmowWizyteRequest request, string ID_wizyta)    //klient albo weterynarz lub admin zmienia termin wizyty dla klienta (telefonicznie albo na miejscu)
         {
             try
@@ -171,6 +171,28 @@ namespace PRO_API.Controllers
                     message = e.Message,
                     value = e.ConstraintValue
                 });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new
+                {
+                    massage = e.Message
+                });
+            }
+        }
+
+        [Authorize(Roles = "weterynarz")]
+        [HttpPut("{ID_wizyta}")]
+        public async Task<IActionResult> UpdateWizytaInfo(WizytaInfoUpdateRequest request, string ID_wizyta)    //weterynarz zmienia informacje o wizycie (opis, status, dodaje wykonane usługi)
+        {
+            try
+            {
+                return Ok(await Mediator.Send(new UpdateWizytaInfoCommand
+                {
+                    ID_wizyta = ID_wizyta,
+                    ID_weterynarz = GetUserId(),
+                    request = request
+                }));
             }
             catch (Exception e)
             {

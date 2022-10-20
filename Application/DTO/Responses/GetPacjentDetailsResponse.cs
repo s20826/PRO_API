@@ -18,6 +18,6 @@ namespace Application.DTO.Responses
         public decimal Waga { get; set; }
         public bool Agresywne { get; set; }
         public string Wlasciciel { get; set; }
-        public PacjentWizytaResponse[] Wizyty { get; set; }
+        public bool Ubezplodnienie { get; set; }
     }
 }

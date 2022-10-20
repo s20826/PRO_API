@@ -11,12 +11,12 @@ using System.Threading.Tasks;
 
 namespace Application.Specjalizacje.Commands
 {
-    public class CreateSpecjalizacjaCommand : IRequest<string>
+    public class CreateSpecjalizacjaCommand : IRequest<int>
     {
         public SpecjalizacjaRequest request { get; set; }
     }
 
-    public class CreateSpecjalizacjaCommandHandle : IRequestHandler<CreateSpecjalizacjaCommand, string>
+    public class CreateSpecjalizacjaCommandHandle : IRequestHandler<CreateSpecjalizacjaCommand, int>
     {
         private readonly IKlinikaContext context;
         private readonly IHash hash;
@@ -26,18 +26,16 @@ namespace Application.Specjalizacje.Commands
             hash = _hash;
         }
 
-        public async Task<string> Handle(CreateSpecjalizacjaCommand req, CancellationToken cancellationToken)
+        public async Task<int> Handle(CreateSpecjalizacjaCommand req, CancellationToken cancellationToken)
         {
-            var result = await context.Specjalizacjas.AddAsync(
-                new Specjalizacja
-                {
-                    Nazwa = req.request.Nazwa,
-                    Opis = req.request.Opis
-                });
+            context.Specjalizacjas.Add(
+            new Specjalizacja
+            {
+                Nazwa = req.request.Nazwa,
+                Opis = req.request.Opis
+            });
 
-            await context.SaveChangesAsync(cancellationToken);
-
-            return hash.Encode(result.Entity.IdSpecjalizacja);
+            return await context.SaveChangesAsync(cancellationToken);
         }
     }
 }

@@ -49,8 +49,7 @@ namespace Application.Pacjenci.Queries
                      Waga = x.Waga,
                      Agresywne = x.Agresywne,
                      Wlasciciel = y.Imie + " " + y.Nazwisko,
-                     Wizyty = new PacjentWizytaResponse[0]
-
+                     Ubezplodnienie = x.Ubezplodnienie
                  }).First();
 
             return results;

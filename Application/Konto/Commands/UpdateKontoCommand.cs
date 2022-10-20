@@ -31,7 +31,7 @@ namespace Application.Konto.Commands
             var user = context.Osobas.Where(x => x.IdOsoba == id).FirstOrDefault();
             if (user == null)
             {
-                throw new NotFoundException();
+                throw new UserNotAuthorizedException();
             }
 
             user.NumerTelefonu = req.request.NumerTelefonu;

@@ -13,6 +13,7 @@ namespace Application.Konto.Commands
             RuleFor(x => x.request.NewHaslo).MaximumLength(30).WithMessage("Maksymalnie 30 znaków");
             RuleFor(x => x.request.NewHaslo).Matches("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$").WithMessage("Incorrect password");
 
+            RuleFor(x => x.request.NewHaslo2).Equal(x => x.request.NewHaslo);
             RuleFor(x => x.request.NewHaslo2).MaximumLength(30).WithMessage("Maksymalnie 30 znaków");
             RuleFor(x => x.request.NewHaslo2).Matches("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$").WithMessage("Incorrect password");
         }

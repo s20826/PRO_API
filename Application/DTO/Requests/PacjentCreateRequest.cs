@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Application.DTO.Request
 {
-    public partial class PacjentCreateRequest
+    public class PacjentCreateRequest
     {
         public string IdOsoba { get; set; }
 

@@ -16,7 +16,9 @@ namespace Test
                     NazwaUzytkownika = "Adam1",
                     Email = "Adam1@gmail.com",
                     NumerTelefonu = "123456789",
-                    Salt = "ayH570KmANkGyHqQroN6Nl30mclzaC6Rxfq4SedA+C4="
+                    Salt = "ayH570KmANkGyHqQroN6Nl30mclzaC6Rxfq4SedA+C4=",
+                    Haslo = "TP506vFmQn79Wumsfl012OL3XCvaDsnKGBsjZbRYrZdjnZOrtdaKpyK9VxDN5/+faDZwWUuT2xLbDv0gegrWAg==",
+                    Rola = ""
                 },
                 new Osoba       //weterynarz
                 {
@@ -44,6 +46,21 @@ namespace Test
                 {
                     IdOsoba = 1,
                     DataZalozeniaKonta = DateTime.Now
+                }
+            };
+        }
+
+        public static List<Pacjent> GetPacjentList()
+        {
+            return new List<Pacjent>
+            {
+                new Pacjent
+                {
+                    IdPacjent = 1,
+                    DataUrodzenia = DateTime.Now.AddDays(-1),
+                    Ubezplodnienie = false,
+                    Gatunek = "Kot",
+                    Waga = 4
                 }
             };
         }

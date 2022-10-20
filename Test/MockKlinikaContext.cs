@@ -13,6 +13,7 @@ namespace Test
             var myDbMoq = new Mock<IKlinikaContext>();
             myDbMoq.Setup(p => p.Osobas).Returns(GetQueryableMockDbSet(MockData.GetOsobaList()));
             myDbMoq.Setup(p => p.Klients).Returns(GetQueryableMockDbSet(MockData.GetKlientList()));
+            myDbMoq.Setup(p => p.Pacjents).Returns(GetQueryableMockDbSet(MockData.GetPacjentList()));
             myDbMoq.Setup(p => p.Weterynarzs).Returns(GetQueryableMockDbSet(MockData.GetWeterynarzList()));
             myDbMoq.Setup(p => p.WeterynarzSpecjalizacjas).Returns(GetQueryableMockDbSet(MockData.GetWeterynarzSpecjalizacjaList()));
             myDbMoq.Setup(p => p.Specjalizacjas).Returns(GetQueryableMockDbSet(MockData.GetSpecjalizacjaList()));

@@ -27,12 +27,7 @@ namespace Application.Pacjenci.Queries
         {
             int id = hash.Decode(req.ID_pacjent);
 
-            if (context.Pacjents.Where(x => x.IdPacjent == id).Any() != true)
-            {
-                throw new Exception("Nie ma pacjenta o ID = " + req.ID_pacjent);
-            }
-
-            var results =
+            var result =
                 (from x in context.Pacjents
                  join y in context.Osobas on x.IdOsoba equals y.IdOsoba
                  where x.IdPacjent == id
@@ -52,7 +47,7 @@ namespace Application.Pacjenci.Queries
                      Ubezplodnienie = x.Ubezplodnienie
                  }).First();
 
-            return results;
+            return result;
         }
     }
 }

@@ -6,6 +6,7 @@ using HashidsNet;
 using Infrastructure.Services;
 using Moq;
 using NUnit.Framework;
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -35,7 +36,7 @@ namespace Test.Mock
 
 
         [Test]
-        public async Task CreateSpecjalizacjaTest()
+        public async Task CreateSpecjalizacjaShouldBeCorrectTest()
         {
             var handler = new CreateSpecjalizacjaCommandHandle(mockContext.Object, hash);
 
@@ -54,7 +55,7 @@ namespace Test.Mock
 
 
         [Test]
-        public async Task UpdateSpecjalizacjaTest()
+        public async Task UpdateSpecjalizacjaShouldBeCorrectTest()
         {
             var handler = new UpdateSpecjalizacjaCommandHandle(mockContext.Object, hash);
 
@@ -74,7 +75,26 @@ namespace Test.Mock
 
 
         [Test]
-        public async Task DeleteSpecjalizacjaTest()
+        public void UpdateSpecjalizacjaShouldThrowAnExceptionTest()
+        {
+            var handler = new UpdateSpecjalizacjaCommandHandle(mockContext.Object, hash);
+
+            var command = new UpdateSpecjalizacjaCommand()
+            {
+                ID_specjalizacja = hash.Encode(-1),
+                request = new SpecjalizacjaRequest
+                {
+                    Opis = "update",
+                    Nazwa = "aaa"
+                }
+            };
+
+            Assert.ThrowsAsync<Exception>(async () => await handler.Handle(command, CancellationToken.None));
+        }
+
+
+        [Test]
+        public async Task DeleteSpecjalizacjaShouldBeCorrectTest()
         {
             var handler = new DeleteSpecjalizacjaCommandHandle(mockContext.Object, hash);
 
@@ -85,6 +105,20 @@ namespace Test.Mock
 
             await handler.Handle(command, CancellationToken.None);
             mockContext.Verify(m => m.SaveChangesAsync(CancellationToken.None), Times.Once());
+        }
+
+
+        [Test]
+        public void DeleteSpecjalizacjaShouldThrowAnExceptionTest()
+        {
+            var handler = new DeleteSpecjalizacjaCommandHandle(mockContext.Object, hash);
+
+            var command = new DeleteSpecjalizacjaCommand()
+            {
+                ID_specjalizacja = hash.Encode(-1)
+            };
+
+            Assert.ThrowsAsync<Exception>(async () => await handler.Handle(command, CancellationToken.None));
         }
     }
 }

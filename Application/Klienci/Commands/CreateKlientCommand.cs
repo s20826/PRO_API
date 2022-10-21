@@ -17,12 +17,12 @@ namespace Application.Klienci.Commands
         public KlientCreateRequest request { get; set; }
     }
 
-    public class CreateKlientCommandHandle : IRequestHandler<CreateKlientCommand, int>
+    public class CreateKlientCommandHandler : IRequestHandler<CreateKlientCommand, int>
     {
         private readonly IKlinikaContext context;
         private readonly IPasswordRepository passwordRepository;
         private readonly IConfiguration configuration;
-        public CreateKlientCommandHandle(IKlinikaContext klinikaContext, IPasswordRepository password, IConfiguration config)
+        public CreateKlientCommandHandler(IKlinikaContext klinikaContext, IPasswordRepository password, IConfiguration config)
         {
             context = klinikaContext;
             passwordRepository = password;

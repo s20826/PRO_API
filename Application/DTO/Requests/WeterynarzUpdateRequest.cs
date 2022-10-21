@@ -15,10 +15,6 @@ namespace Application.DTO
 
         public DateTime DataUrodzenia { get; set; }
 
-        public string NumerTelefonu { get; set; }
-
-        public string Email { get; set; }
-
         public decimal Pensja { get; set; }
 
         public DateTime DataZatrudnienia { get; set; }

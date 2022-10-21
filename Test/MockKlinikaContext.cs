@@ -15,6 +15,7 @@ namespace Test
             myDbMoq.Setup(p => p.Klients).Returns(GetQueryableMockDbSet(MockData.GetKlientList()));
             myDbMoq.Setup(p => p.Pacjents).Returns(GetQueryableMockDbSet(MockData.GetPacjentList()));
             myDbMoq.Setup(p => p.Weterynarzs).Returns(GetQueryableMockDbSet(MockData.GetWeterynarzList()));
+            myDbMoq.Setup(p => p.GodzinyPracies).Returns(GetQueryableMockDbSet(MockData.GetGodzinyPracyList()));
             myDbMoq.Setup(p => p.WeterynarzSpecjalizacjas).Returns(GetQueryableMockDbSet(MockData.GetWeterynarzSpecjalizacjaList()));
             myDbMoq.Setup(p => p.Specjalizacjas).Returns(GetQueryableMockDbSet(MockData.GetSpecjalizacjaList()));
             return myDbMoq;
@@ -30,6 +31,7 @@ namespace Test
             dbSet.As<IQueryable<T>>().Setup(m => m.ElementType).Returns(queryable.ElementType);
             dbSet.As<IQueryable<T>>().Setup(m => m.GetEnumerator()).Returns(() => queryable.GetEnumerator());
             dbSet.Setup(d => d.Add(It.IsAny<T>())).Callback<T>((s) => sourceList.Add(s));
+            dbSet.Setup(m => m.Remove(It.IsAny<T>())).Callback<T>((entity) => sourceList.Remove(entity));
 
             return dbSet.Object;
         }

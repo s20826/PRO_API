@@ -28,18 +28,13 @@ namespace Application.Weterynarze.Commands
         {
             int id = hash.Decode(req.ID_osoba);
 
-            var konto = context.Osobas.Where(x => x.IdOsoba == id).FirstOrDefault();
-            var weterynarz = context.Weterynarzs.Where(x => x.IdOsoba == id).FirstOrDefault();
-            if (konto is null || weterynarz is null)
-            {
-                throw new Exception();
-            }
+            var konto = context.Osobas.Where(x => x.IdOsoba == id).First();
+            var weterynarz = context.Weterynarzs.Where(x => x.IdOsoba == id).First();
 
             konto.Imie = req.request.Imie;
             konto.Nazwisko = req.request.Nazwisko;
-            konto.NumerTelefonu = req.request.NumerTelefonu;
-            konto.Email = req.request.Email;
 
+            weterynarz.DataUrodzenia = req.request.DataUrodzenia;
             weterynarz.Pensja = req.request.Pensja;
             weterynarz.DataZatrudnienia = req.request.DataZatrudnienia;
 

@@ -81,6 +81,19 @@ namespace Test
         }
 
 
+        public static List<GodzinyPracy> GetGodzinyPracyList()
+        {
+            return new List<GodzinyPracy>
+            {
+                new GodzinyPracy
+                {
+                    IdOsoba = 2,
+                    DzienTygodnia = 1
+                }
+            };
+        }
+
+
         public static List<Specjalizacja> GetSpecjalizacjaList()
         {
             return new List<Specjalizacja>
@@ -88,6 +101,12 @@ namespace Test
                 new Specjalizacja
                 {
                     IdSpecjalizacja = 1,
+                    Opis = "aaaaaaaaaaaa",
+                    Nazwa = "bbbbbbbbbbbb"
+                },
+                new Specjalizacja
+                {
+                    IdSpecjalizacja = 2,
                     Opis = "aaaaaaaaaaaa",
                     Nazwa = "bbbbbbbbbbbb"
                 }

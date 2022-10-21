@@ -26,7 +26,7 @@ namespace Application.WeterynarzSpecjalizacje.Commands
         {
             (int id1, int id2) = hash.Decode(req.ID_specjalizacja, req.ID_weterynarz);
 
-            await context.WeterynarzSpecjalizacjas.AddAsync(
+            context.WeterynarzSpecjalizacjas.Add(
                 new WeterynarzSpecjalizacja
                 {
                     IdSpecjalizacja = id1,

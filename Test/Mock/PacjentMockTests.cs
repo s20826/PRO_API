@@ -112,6 +112,7 @@ namespace Test.Mock
         [Test]
         public async Task DeletePacjentShouldBeCorrectTest()
         {
+            var before = mockContext.Object.Pacjents.Count();
             var handler = new DeletePacjentCommandHandle(mockContext.Object, hash);
 
             DeletePacjentCommand command = new DeletePacjentCommand()
@@ -121,7 +122,7 @@ namespace Test.Mock
 
             var result = await handler.Handle(command, CancellationToken.None);
             mockContext.Verify(m => m.SaveChangesAsync(CancellationToken.None), Times.Once());
-            Assert.AreEqual(1, mockContext.Object.Pacjents.Count());
+            Assert.AreEqual(before-1, mockContext.Object.Pacjents.Count());
         }
 
         [Test]

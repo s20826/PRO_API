@@ -28,8 +28,8 @@ namespace Application.WeterynarzSpecjalizacje.Commands
             (int id1, int id2) = hash.Decode(req.ID_specjalizacja, req.ID_weterynarz);
 
             context.WeterynarzSpecjalizacjas.Remove(
-                context.WeterynarzSpecjalizacjas.Where(x => x.IdSpecjalizacja == id1 && x.IdOsoba == id2).FirstOrDefault()
-            );
+                context.WeterynarzSpecjalizacjas.Where(x => x.IdSpecjalizacja == id1 && x.IdOsoba == id2).First()
+                );
 
             return await context.SaveChangesAsync(cancellationToken);
         }

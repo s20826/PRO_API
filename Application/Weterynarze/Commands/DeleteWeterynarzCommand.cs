@@ -26,19 +26,20 @@ namespace Application.Weterynarze.Commands
         {
             int id = hash.Decode(req.ID_osoba);
 
-            var weterynarz = context.Osobas.Where(x => x.IdOsoba == id).FirstOrDefault();
-            if (weterynarz != null)
-            {
-                throw new NotFoundException();
-            }
+            var weterynarz = context.Osobas.Where(x => x.IdOsoba == id).First();
 
+            weterynarz.NazwaUzytkownika = "";
             weterynarz.Haslo = "";
             weterynarz.Salt = "";
             weterynarz.RefreshToken = "";
             weterynarz.Email = "";
             weterynarz.NumerTelefonu = "";
 
-            context.GodzinyPracies.RemoveRange(context.GodzinyPracies.Where(x => x.IdOsoba == id).ToList());
+            var x = context.GodzinyPracies.Where(x => x.IdOsoba == id).ToList();
+            if (x.Any())
+            {
+                context.GodzinyPracies.RemoveRange(x);
+            }
 
             return await context.SaveChangesAsync(cancellationToken);
         }

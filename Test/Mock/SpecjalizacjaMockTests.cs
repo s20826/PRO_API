@@ -31,13 +31,14 @@ namespace Test.Mock
             var handler = new SpecjalizacjaListQueryHandle(mockContext.Object, hash);
             var result = await handler.Handle(new SpecjalizacjaListQuery(), CancellationToken.None);
 
-            Assert.AreEqual(result.Count(), 1);
+            Assert.AreEqual(result.Count(), 2);
         }
 
 
         [Test]
         public async Task CreateSpecjalizacjaShouldBeCorrectTest()
         {
+            var before = mockContext.Object.Specjalizacjas.Count();
             var handler = new CreateSpecjalizacjaCommandHandle(mockContext.Object, hash);
 
             var command = new CreateSpecjalizacjaCommand()
@@ -50,7 +51,7 @@ namespace Test.Mock
             };
 
             await handler.Handle(command, CancellationToken.None);
-            Assert.AreEqual(mockContext.Object.Specjalizacjas.Count(), 2);
+            Assert.AreEqual(mockContext.Object.Specjalizacjas.Count(), before+1);
         }
 
 
@@ -96,6 +97,7 @@ namespace Test.Mock
         [Test]
         public async Task DeleteSpecjalizacjaShouldBeCorrectTest()
         {
+            var before = mockContext.Object.Specjalizacjas.Count();
             var handler = new DeleteSpecjalizacjaCommandHandle(mockContext.Object, hash);
 
             var command = new DeleteSpecjalizacjaCommand()
@@ -105,6 +107,7 @@ namespace Test.Mock
 
             await handler.Handle(command, CancellationToken.None);
             mockContext.Verify(m => m.SaveChangesAsync(CancellationToken.None), Times.Once());
+            Assert.AreEqual(before - 1, mockContext.Object.Specjalizacjas.Count());
         }
 
 

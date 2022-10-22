@@ -9,9 +9,9 @@ namespace Application.Pacjenci.Commands
         {
             RuleFor(x => x.ID_pacjent).NotEmpty();
 
-            RuleFor(x => x.request.Agresywne).NotEmpty();
+            RuleFor(x => x.request.Agresywne).NotNull();
 
-            RuleFor(x => x.request.Ubezplodnienie).NotEmpty();
+            RuleFor(x => x.request.Ubezplodnienie).NotNull();
 
             RuleFor(x => x.request.DataUrodzenia).NotEmpty().LessThanOrEqualTo(DateTime.Now);
 

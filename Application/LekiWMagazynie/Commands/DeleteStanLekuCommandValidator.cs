@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Leki.Queries
+namespace Application.LekiWMagazynie.Commands
 {
-    public class StanLekuQueryValidator : AbstractValidator<StanLekuQuery>
+    public class DeleteStanLekuCommandValidator : AbstractValidator<DeleteStanLekuCommand>
     {
-        public StanLekuQueryValidator()
+        public DeleteStanLekuCommandValidator()
         {
             RuleFor(x => x.ID_stan_leku).NotEmpty();
         }

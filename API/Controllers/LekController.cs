@@ -1,5 +1,4 @@
-﻿using Application.Commands.Lek;
-using Application.DTO.Request;
+﻿using Application.DTO.Requests;
 using Application.Leki.Commands;
 using Application.Leki.Queries;
 using Microsoft.AspNetCore.Authorization;
@@ -37,82 +36,66 @@ namespace PRO_API.Controllers
                     ID_lek = ID_lek
                 }));
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return NotFound();
             }
         }
+
 
         [Authorize(Roles = "admin,weterynarz")]
-        [HttpGet("magazyn/{ID_stan_leku}")]
-        public async Task<IActionResult> GetLekWMagazynieByIdAsync(string ID_stan_leku)
+        [HttpPost]
+        public async Task<IActionResult> AddLek(LekRequest request)
         {
             try
             {
-                return Ok(await Mediator.Send(new StanLekuQuery
+                return Ok(await Mediator.Send(new CreateLekCommand
                 {
-                    ID_stan_leku = ID_stan_leku
+                    request = request
                 }));
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                return NotFound();
+                return BadRequest();
             }
         }
 
-        [Authorize(Roles = "admin")]
-        [HttpPost("magazyn/{ID_lek}")]
-        public async Task<IActionResult> AddStanLeku(string ID_lek, StanLekuRequest request)
+
+        [Authorize(Roles = "admin,weterynarz")]
+        [HttpPut("{ID_lek}")]
+        public async Task<IActionResult> UpdateLek(string ID_lek, LekRequest request)
         {
             try
             {
-                return Ok(await Mediator.Send(new CreateStanLekuCommand
+                return Ok(await Mediator.Send(new UpdateLekCommand
                 {
                     ID_lek = ID_lek,
                     request = request
                 }));
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                return NotFound();
+                return BadRequest();
             }
         }
 
-        [Authorize(Roles = "admin")]
-        [HttpPut("magazyn/{ID_stan_leku}")]
-        public async Task<IActionResult> UpdateStanLeku(string ID_stan_leku, StanLekuRequest request)
-        {
-            try { 
-                await Mediator.Send(new UpdateStanLekuCommand
-                {
-                    ID_stan_leku = ID_stan_leku,
-                    request = request
-                });
-            }
-            catch (Exception e)
-            {
-                return NotFound();
-            }
 
-            return NoContent();
-        }
-
-        [Authorize(Roles = "admin")]
-        [HttpDelete("magazyn/{ID_stan_leku}")]
-        public async Task<IActionResult> DeleteStanLeku(string ID_stan_leku)
+        [Authorize(Roles = "admin,weterynarz")]
+        [HttpDelete("{ID_lek}")]
+        public async Task<IActionResult> DeleteLek(string ID_lek)
         {
             try
             {
-                await Mediator.Send(new DeleteStanLekuCommand
+                await Mediator.Send(new DeleteLekCommand
                 {
-                    ID_stan_leku = ID_stan_leku
+                    ID_lek = ID_lek
                 });
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                return NotFound();
+                return BadRequest();
             }
-            
+
             return NoContent();
         }
     }

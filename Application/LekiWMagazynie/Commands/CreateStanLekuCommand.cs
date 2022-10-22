@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Leki.Commands
+namespace Application.LekiWMagazynie.Commands
 {
     public class CreateStanLekuCommand : IRequest<int>
     {

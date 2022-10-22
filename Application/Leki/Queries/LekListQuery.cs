@@ -30,9 +30,10 @@ namespace Application.Leki.Queries
 
         public async Task<List<GetLekListResponse>> Handle(LekListQuery req, CancellationToken cancellationToken)
         {
-            var query = "SELECT l.ID_lek, l.Nazwa, SUM(ilosc) AS Ilosc, l.Jednostka_Miary FROM Lek l, Lek_W_Magazynie m " +
-                "WHERE l.ID_lek = m.ID_lek AND Data_waznosci > GETDATE()" +
-                "GROUP BY Nazwa, Jednostka_Miary, l.ID_lek";
+            var query = "SELECT l.ID_lek, l.Nazwa, SUM(ISNULL(ilosc, 0)) AS Ilosc, l.Jednostka_Miary FROM Lek l " +
+                "LEFT join LeK_w_magazynie m on m.ID_lek = l.ID_lek " +
+                "GROUP BY Nazwa, Jednostka_Miary, l.ID_lek " +
+                "ORDER BY Nazwa";
 
             SqlConnection connection = new SqlConnection(configuration.GetConnectionString("KlinikaDatabase"));
             await connection.OpenAsync();
@@ -47,7 +48,7 @@ namespace Application.Leki.Queries
                 {
                     IdLek = hash.Encode(int.Parse(reader["ID_lek"].ToString())),
                     Nazwa = reader["Nazwa"].ToString(),
-                    Ilosc = (uint)int.Parse(reader["Ilosc"].ToString()),
+                    Ilosc = int.Parse(reader["Ilosc"].ToString()),
                     JednostkaMiary = reader["Jednostka_Miary"].ToString()
                 });
             }

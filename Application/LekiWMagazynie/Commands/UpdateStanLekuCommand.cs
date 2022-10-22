@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Commands.Lek
+namespace Application.LekiWMagazynie.Commands
 {
     public class UpdateStanLekuCommand : IRequest<int>
     {

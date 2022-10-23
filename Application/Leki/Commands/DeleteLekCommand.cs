@@ -11,11 +11,11 @@ namespace Application.Leki.Commands
         public string ID_lek { get; set; }
     }
 
-    public class DeleteLekCommandHandle : IRequestHandler<DeleteLekCommand, int>
+    public class DeleteLekCommandHandler : IRequestHandler<DeleteLekCommand, int>
     {
         private readonly IKlinikaContext context;
         private readonly IHash hash;
-        public DeleteLekCommandHandle(IKlinikaContext klinikaContext, IHash _hash)
+        public DeleteLekCommandHandler(IKlinikaContext klinikaContext, IHash _hash)
         {
             context = klinikaContext;
             hash = _hash;

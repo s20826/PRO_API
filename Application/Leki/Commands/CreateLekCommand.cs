@@ -12,11 +12,11 @@ namespace Application.Leki.Commands
         public LekRequest request { get; set; }
     }
 
-    public class CreateStanLekuCommandHandle : IRequestHandler<CreateLekCommand, int>
+    public class CreateLekCommandHandler : IRequestHandler<CreateLekCommand, int>
     {
         private readonly IKlinikaContext context;
         private readonly IHash hash;
-        public CreateStanLekuCommandHandle(IKlinikaContext klinikaContext, IHash _hash)
+        public CreateLekCommandHandler(IKlinikaContext klinikaContext, IHash _hash)
         {
             context = klinikaContext;
             hash = _hash;

@@ -4,8 +4,6 @@ using Application.LekiWMagazynie.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace PRO_API.Controllers
@@ -18,7 +16,7 @@ namespace PRO_API.Controllers
         }
 
         [Authorize(Roles = "admin,weterynarz")]
-        [HttpGet("magazyn/{ID_stan_leku}")]
+        [HttpGet("{ID_stan_leku}")]
         public async Task<IActionResult> GetLekWMagazynieById(string ID_stan_leku)
         {
             try
@@ -36,7 +34,7 @@ namespace PRO_API.Controllers
 
 
         [Authorize(Roles = "admin")]
-        [HttpPost("magazyn/{ID_lek}")]
+        [HttpPost("{ID_lek}")]
         public async Task<IActionResult> AddStanLeku(string ID_lek, StanLekuRequest request)
         {
             try
@@ -55,28 +53,26 @@ namespace PRO_API.Controllers
 
 
         [Authorize(Roles = "admin")]
-        [HttpPut("magazyn/{ID_stan_leku}")]
+        [HttpPut("{ID_stan_leku}")]
         public async Task<IActionResult> UpdateStanLeku(string ID_stan_leku, StanLekuRequest request)
         {
             try
             {
-                await Mediator.Send(new UpdateStanLekuCommand
+                return Ok(await Mediator.Send(new UpdateStanLekuCommand
                 {
                     ID_stan_leku = ID_stan_leku,
                     request = request
-                });
+                }));
             }
             catch (Exception)
             {
                 return NotFound();
             }
-
-            return NoContent();
         }
 
 
         [Authorize(Roles = "admin")]
-        [HttpDelete("magazyn/{ID_stan_leku}")]
+        [HttpDelete("{ID_stan_leku}")]
         public async Task<IActionResult> DeleteStanLeku(string ID_stan_leku)
         {
             try

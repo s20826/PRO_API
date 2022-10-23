@@ -31,12 +31,12 @@ namespace Application.GodzinaPracy.Commands
         {
             int id = hash.Decode(req.ID_osoba);
             var list = context.GodzinyPracies.Where(x => x.IdOsoba == id).ToList();
-            if (list.Any())
+            if (!list.Any())
             {
                 throw new Exception("Ten pracownik nie ma ustawionych godzin pracy.");
             }
 
-            context.GodzinyPracies.Remove(context.GodzinyPracies.Where(x => ((DniTygodnia)x.DzienTygodnia).ToString() == req.dzien).FirstOrDefault());
+            context.GodzinyPracies.Remove(context.GodzinyPracies.Where(x => ((DniTygodnia)x.DzienTygodnia).ToString() == req.dzien).First());
 
             return await context.SaveChangesAsync(cancellationToken);
         }

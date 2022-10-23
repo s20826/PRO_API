@@ -16,11 +16,11 @@ namespace Application.LekiWMagazynie.Commands
         public StanLekuRequest request { get; set; }
     }
 
-    public class UpdateStanLekuCommandHandle : IRequestHandler<UpdateStanLekuCommand, int>
+    public class UpdateStanLekuCommandHandler : IRequestHandler<UpdateStanLekuCommand, int>
     {
         private readonly IKlinikaContext context;
         private readonly IHash hash;
-        public UpdateStanLekuCommandHandle(IKlinikaContext klinikaContext, IHash _hash)
+        public UpdateStanLekuCommandHandler(IKlinikaContext klinikaContext, IHash _hash)
         {
             context = klinikaContext;
             hash = _hash;

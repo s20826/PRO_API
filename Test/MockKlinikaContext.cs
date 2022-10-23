@@ -18,6 +18,8 @@ namespace Test
             myDbMoq.Setup(p => p.GodzinyPracies).Returns(GetQueryableMockDbSet(MockData.GetGodzinyPracyList()));
             myDbMoq.Setup(p => p.WeterynarzSpecjalizacjas).Returns(GetQueryableMockDbSet(MockData.GetWeterynarzSpecjalizacjaList()));
             myDbMoq.Setup(p => p.Specjalizacjas).Returns(GetQueryableMockDbSet(MockData.GetSpecjalizacjaList()));
+            myDbMoq.Setup(p => p.Leks).Returns(GetQueryableMockDbSet(MockData.GetLekList()));
+            myDbMoq.Setup(p => p.LekWMagazynies).Returns(GetQueryableMockDbSet(MockData.GetLekWMagazynieList()));
             return myDbMoq;
         }
 

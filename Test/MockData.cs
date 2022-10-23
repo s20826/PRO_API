@@ -88,6 +88,11 @@ namespace Test
                 new GodzinyPracy
                 {
                     IdOsoba = 2,
+                    DzienTygodnia = 0
+                },
+                new GodzinyPracy
+                {
+                    IdOsoba = 2,
                     DzienTygodnia = 1
                 }
             };
@@ -122,6 +127,34 @@ namespace Test
                 {
                     IdSpecjalizacja = 1,
                     IdOsoba = 2
+                }
+            };
+        }
+
+
+        public static List<Lek> GetLekList()
+        {
+            return new List<Lek>
+            {
+                new Lek
+                {
+                    IdLek = 1,
+                    Nazwa = "LekNazwa",
+                    JednostkaMiary = "ml"
+                }
+            };
+        }
+
+        public static List<LekWMagazynie> GetLekWMagazynieList()
+        {
+            return new List<LekWMagazynie>
+            {
+                new LekWMagazynie
+                {
+                    IdStanLeku = 1,
+                    IdLek = 1,
+                    Ilosc = 15,
+                    DataWaznosci = DateTime.Now.AddYears(1)
                 }
             };
         }

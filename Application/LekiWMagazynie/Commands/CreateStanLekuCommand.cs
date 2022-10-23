@@ -17,11 +17,11 @@ namespace Application.LekiWMagazynie.Commands
         public StanLekuRequest request { get; set; }
     }
 
-    public class CreateStanLekuCommandHandle : IRequestHandler<CreateStanLekuCommand, int>
+    public class CreateStanLekuCommandHandler : IRequestHandler<CreateStanLekuCommand, int>
     {
         private readonly IKlinikaContext context;
         private readonly IHash hash;
-        public CreateStanLekuCommandHandle(IKlinikaContext klinikaContext, IHash _hash)
+        public CreateStanLekuCommandHandler(IKlinikaContext klinikaContext, IHash _hash)
         {
             context = klinikaContext;
             hash = _hash;

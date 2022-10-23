@@ -101,18 +101,16 @@ namespace PRO_API.Controllers
         {
             try
             {
-                await Mediator.Send(new UpdatePacjentCommand
+                return Ok(await Mediator.Send(new UpdatePacjentCommand
                 {
                     request = request,
                     ID_pacjent = ID_Pacjent
-                });
+                }));
             }
             catch (Exception)
             {
                 return BadRequest();
             }
-
-            return NoContent();
         }
 
         [Authorize(Roles = "admin")]

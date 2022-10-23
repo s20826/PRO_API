@@ -15,11 +15,11 @@ namespace Application.LekiWMagazynie.Commands
         public string ID_stan_leku { get; set; }
     }
 
-    public class DeleteStanLekuCommandHandle : IRequestHandler<DeleteStanLekuCommand, int>
+    public class DeleteStanLekuCommandHandler : IRequestHandler<DeleteStanLekuCommand, int>
     {
         private readonly IKlinikaContext context;
         private readonly IHash hash;
-        public DeleteStanLekuCommandHandle(IKlinikaContext klinikaContext, IHash _hash)
+        public DeleteStanLekuCommandHandler(IKlinikaContext klinikaContext, IHash _hash)
         {
             context = klinikaContext;
             hash = _hash;

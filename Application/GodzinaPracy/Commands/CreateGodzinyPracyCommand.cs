@@ -31,7 +31,6 @@ namespace Application.GodzinaPracy.Commands
         {
             int id = hash.Decode(req.ID_osoba);
             var i = 0;
-            //var list = context.GodzinyPracies.Where(x => x.IdOsoba == id).ToList();
 
             foreach (GodzinyPracyRequest request in req.requestList)
             {

@@ -101,7 +101,7 @@ namespace Test.Mock
 
 
         [Test]
-        public void ChangePasswordThrowsAnExceptionTest()
+        public void ChangePasswordNotCorrectTest()
         {
             var handler = new ChangePasswordCommandHandle(mockContext.Object, new PasswordService(), configuration, hash, new LoginService());
 

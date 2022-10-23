@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
 using Microsoft.Extensions.Configuration;
+using Domain;
 
 namespace Application.Konto.Commands
 {
@@ -40,7 +41,11 @@ namespace Application.Konto.Commands
         {
             var user = context.Osobas.Where(x => x.NazwaUzytkownika.Equals(req.request.NazwaUzytkownika)).FirstOrDefault();
 
-            loginRepository.CheckCredentails(user, passwordRepository, req.request.Haslo, int.Parse(configuration["PasswordIterations"]));
+            if (!loginRepository.CheckCredentails(user, passwordRepository, req.request.Haslo, int.Parse(configuration["PasswordIterations"])))
+            {
+                await context.SaveChangesAsync(cancellationToken);
+                throw new UserNotAuthorizedException("Incorrect");
+            }
 
             List<Claim> userclaim = new List<Claim>
             {

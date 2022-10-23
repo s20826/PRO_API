@@ -9,6 +9,6 @@ namespace Application.Interfaces
 {
     public interface ILoginRepository
     {
-        public void CheckCredentails(Osoba user, IPasswordRepository passwordRepository, string haslo, int iterations);
+        public bool CheckCredentails(Osoba user, IPasswordRepository passwordRepository, string haslo, int iterations);
     }
 }

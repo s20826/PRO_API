@@ -1,4 +1,5 @@
-﻿using Application.DTO.Requests;
+﻿using Application.Common.Exceptions;
+using Application.DTO.Requests;
 using Application.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Configuration;
@@ -36,7 +37,10 @@ namespace Application.Konto.Commands
             int id = hash.Decode(req.ID_osoba);
 
             var user = context.Osobas.Where(x => x.IdOsoba == id).FirstOrDefault();
-            loginRepository.CheckCredentails(user, passwordRepository, req.request.CurrentHaslo, int.Parse(configuration["PasswordIterations"]));
+            if(!loginRepository.CheckCredentails(user, passwordRepository, req.request.CurrentHaslo, int.Parse(configuration["PasswordIterations"]))){
+                await context.SaveChangesAsync(cancellationToken);
+                throw new UserNotAuthorizedException("Incorrect");
+            }
 
             string hashedPassword = passwordRepository.HashPassword(Convert.FromBase64String(user.Salt), req.request.NewHaslo, int.Parse(configuration["PasswordIterations"]));
             user.Haslo = hashedPassword;

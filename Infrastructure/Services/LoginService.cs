@@ -1,21 +1,26 @@
 ﻿using Application.Common.Exceptions;
 using Application.Interfaces;
+using Domain;
 using Domain.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Services
 {
     public class LoginService : ILoginRepository
     {
-        public void CheckCredentails(Osoba user, IPasswordRepository passwordRepository, string haslo, int iterations)
+        public bool CheckCredentails(Osoba user, IPasswordRepository passwordRepository, string haslo, int iterations)
         {
             if (user == null)
             {
                 throw new UserNotAuthorizedException("Incorrect");
+            }
+
+            if(user.DataBlokady != null)
+            {
+                if(user.DataBlokady > DateTime.Now)
+                {
+                    throw new ConstraintException("Account blocked", user.DataBlokady.ToString());
+                }
             }
             
             string passwordHash = user.Haslo;
@@ -24,8 +29,16 @@ namespace Infrastructure.Services
 
             if (!passwordHash.Equals(currentHashedPassword))
             {
-                throw new UserNotAuthorizedException("Incorrect");
+                user.LiczbaProb += 1;
+                if (user.LiczbaProb >= GlobalValues.LICZBA_PROB)
+                {
+                    user.DataBlokady = DateTime.Now.AddHours(GlobalValues.GODZINY_BLOKADY);
+                }
+                return false;
             }
+
+            user.LiczbaProb = 0;
+            return true;
         }
     }
 }

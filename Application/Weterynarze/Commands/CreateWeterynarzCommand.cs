@@ -37,7 +37,7 @@ namespace Application.Weterynarze.Commands
         {
             if (context.Osobas.Where(x => x.NazwaUzytkownika.Equals(req.request.Login)).Any())
             {
-                throw new Exception("Ta nazwa użytkownika jest już zajęta");
+                throw new Exception("Not unique");
             }
 
             byte[] salt = passwordRepository.GenerateSalt();

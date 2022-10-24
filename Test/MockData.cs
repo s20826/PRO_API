@@ -145,6 +145,7 @@ namespace Test
             };
         }
 
+
         public static List<LekWMagazynie> GetLekWMagazynieList()
         {
             return new List<LekWMagazynie>
@@ -156,6 +157,28 @@ namespace Test
                     Ilosc = 15,
                     DataWaznosci = DateTime.Now.AddYears(1)
                 }
+            };
+        }
+
+
+        public static List<Choroba> GetChorobaList()
+        {
+            return new List<Choroba>
+            {
+                new Choroba
+                {
+                    IdChoroba = 1,
+                    Nazwa = "ból brzucha"
+                }
+            };
+        }
+
+
+        public static List<ChorobaLek> GetChorobaLekList()
+        {
+            return new List<ChorobaLek>
+            {
+                
             };
         }
     }

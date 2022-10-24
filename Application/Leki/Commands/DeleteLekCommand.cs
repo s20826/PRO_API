@@ -26,6 +26,7 @@ namespace Application.Leki.Commands
             int id = hash.Decode(req.ID_lek);
 
             context.LekWMagazynies.RemoveRange(context.LekWMagazynies.Where(x => x.IdLek.Equals(id)).ToList());
+            context.ChorobaLeks.RemoveRange(context.ChorobaLeks.Where(x => x.IdLek.Equals(id)).ToList());
             context.Leks.Remove(context.Leks.Where(x => x.IdLek.Equals(id)).First());
 
             return await context.SaveChangesAsync(cancellationToken);

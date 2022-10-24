@@ -1,8 +1,15 @@
 ﻿using Application.Interfaces;
+using Domain.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Moq;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Test
 {
@@ -20,6 +27,9 @@ namespace Test
             myDbMoq.Setup(p => p.Specjalizacjas).Returns(GetQueryableMockDbSet(MockData.GetSpecjalizacjaList()));
             myDbMoq.Setup(p => p.Leks).Returns(GetQueryableMockDbSet(MockData.GetLekList()));
             myDbMoq.Setup(p => p.LekWMagazynies).Returns(GetQueryableMockDbSet(MockData.GetLekWMagazynieList()));
+            myDbMoq.Setup(p => p.Chorobas).Returns(GetQueryableMockDbSet(MockData.GetChorobaList()));
+            myDbMoq.Setup(p => p.ChorobaLeks).Returns(GetQueryableMockDbSet(MockData.GetChorobaLekList()));
+
             return myDbMoq;
         }
 

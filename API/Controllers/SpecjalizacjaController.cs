@@ -2,6 +2,7 @@
 using Application.Specjalizacje.Commands;
 using Application.Specjalizacje.Queries;
 using Application.WeterynarzSpecjalizacje.Commands;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -16,6 +17,7 @@ namespace PRO_API.Controllers
 
         }
 
+        [Authorize(Roles = "admin")]
         [HttpGet]
         public async Task<IActionResult> GetSpecjalizacjaList()
         {
@@ -25,6 +27,7 @@ namespace PRO_API.Controllers
             }));
         }
 
+        [Authorize(Roles = "admin")]
         [HttpGet("details/{ID_specjalizacja}")]
         public async Task<IActionResult> GetSpecjalizacjaById(string ID_specjalizacja)
         {
@@ -41,6 +44,7 @@ namespace PRO_API.Controllers
             }
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<IActionResult> AddSpecjalizacja(SpecjalizacjaRequest request)
         {
@@ -57,6 +61,7 @@ namespace PRO_API.Controllers
             }
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPut("{ID_specjalizacja}")]
         public async Task<IActionResult> UpdateSpecjalizacja(string ID_specjalizacja, SpecjalizacjaRequest request)
         {
@@ -74,6 +79,7 @@ namespace PRO_API.Controllers
             }
         }
 
+        [Authorize(Roles = "admin")]
         [HttpDelete("{ID_specjalizacja}")]
         public async Task<IActionResult> DeleteSpecjalizacja(string ID_specjalizacja)
         {

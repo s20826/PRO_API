@@ -2,6 +2,7 @@
 using Application.Interfaces;
 using Domain.Models;
 using MediatR;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -24,12 +25,26 @@ namespace Application.Leki.Commands
 
         public async Task<int> Handle(CreateLekCommand req, CancellationToken cancellationToken)
         {
-            context.Leks.Add(new Lek
+            var result = context.Leks.Add(new Lek
             {
                 Nazwa = req.request.Nazwa,
                 JednostkaMiary = req.request.JednostkaMiary
             });
 
+            List<string> list = new List<string>(req.request.Choroby);
+            if(list.Count > 0)
+            {
+                int lekID = result.Entity.IdLek != null ? result.Entity.IdLek : 0;
+                foreach (string a in list)
+                {
+                    context.ChorobaLeks.Add(new ChorobaLek
+                    {
+                        IdChoroba = hash.Decode(a),
+                        IdLek = lekID
+                    });
+                }
+            }
+            
             return await context.SaveChangesAsync(cancellationToken);
         }
     }

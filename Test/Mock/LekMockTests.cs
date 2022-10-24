@@ -5,6 +5,7 @@ using HashidsNet;
 using Infrastructure.Services;
 using Moq;
 using NUnit.Framework;
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -35,7 +36,8 @@ namespace Test.Mock
                 request = new LekRequest
                 {
                     Nazwa = "aaa",
-                    JednostkaMiary = "ml"
+                    JednostkaMiary = "ml",
+                    Choroby = Array.Empty<string>()
                 }
             };
 
@@ -56,7 +58,8 @@ namespace Test.Mock
                 request = new LekRequest
                 {
                     Nazwa = "newNazwa",
-                    JednostkaMiary = "ml"
+                    JednostkaMiary = "ml",
+                    Choroby = Array.Empty<string>()
                 }
             };
 

@@ -69,6 +69,24 @@ namespace PRO_API.Controllers
             }
         }
 
+
+        [Authorize]
+        [HttpGet("pacjent/{ID_Pacjent}")]
+        public async Task<IActionResult> GetWizytaPacjent(string ID_Pacjent)
+        {
+            try
+            {
+                return Ok(await Mediator.Send(new WizytaPacjentQuery
+                {
+                    ID_Pacjent = ID_Pacjent
+                }));
+            }
+            catch (Exception)
+            {
+                return NotFound();
+            }
+        }
+
         [Authorize]
         [HttpGet("details/{ID_wizyta}")]
         public async Task<IActionResult> GetWizytaDetails(string ID_wizyta)

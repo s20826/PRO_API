@@ -9,6 +9,7 @@ namespace Domain.Models
     {
         public Pacjent()
         {
+            Szczepienies = new HashSet<Szczepienie>();
             Wizyta = new HashSet<Wizytum>();
         }
 
@@ -19,12 +20,13 @@ namespace Domain.Models
         public string Rasa { get; set; }
         public string Masc { get; set; }
         public string Plec { get; set; }
-        public DateTime DataUrodzenia { get; set; }
+        public DateTime? DataUrodzenia { get; set; }
         public decimal Waga { get; set; }
         public bool Agresywne { get; set; }
         public bool Ubezplodnienie { get; set; }
 
         public virtual Klient IdOsobaNavigation { get; set; }
+        public virtual ICollection<Szczepienie> Szczepienies { get; set; }
         public virtual ICollection<Wizytum> Wizyta { get; set; }
     }
 }

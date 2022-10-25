@@ -12,11 +12,12 @@ namespace Domain.Models
             Szczepienies = new HashSet<Szczepienie>();
         }
 
-        public int IdSzczepionka { get; set; }
-        public string Nazwa { get; set; }
+        public int IdLek { get; set; }
         public string Zastosowanie { get; set; }
         public bool CzyObowiazkowa { get; set; }
+        public DateTime OkresWaznosci { get; set; }
 
+        public virtual Lek IdLekNavigation { get; set; }
         public virtual ICollection<Szczepienie> Szczepienies { get; set; }
     }
 }

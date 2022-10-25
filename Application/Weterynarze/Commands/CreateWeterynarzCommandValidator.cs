@@ -1,9 +1,4 @@
 ﻿using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Weterynarze.Commands
 {
@@ -25,9 +20,9 @@ namespace Application.Weterynarze.Commands
 
             RuleFor(x => x.request.Pensja).NotEmpty().GreaterThan(0).LessThanOrEqualTo(99999);
 
-            RuleFor(x => x.request.Haslo).NotEmpty().MinimumLength(8).MaximumLength(30).Matches("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$");
+            RuleFor(x => x.request.Haslo).NotEmpty().MaximumLength(30).Matches("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{5,}$");
 
-            RuleFor(x => x.request.Login).NotEmpty().MinimumLength(8).MaximumLength(50);
+            RuleFor(x => x.request.Login).NotEmpty().MinimumLength(5).MaximumLength(50);
         }
     }
 }

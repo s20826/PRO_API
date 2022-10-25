@@ -11,7 +11,6 @@ namespace Domain.Models
         {
             KlientZnizkas = new HashSet<KlientZnizka>();
             Pacjents = new HashSet<Pacjent>();
-            Skierowanies = new HashSet<Skierowanie>();
             Wizyta = new HashSet<Wizytum>();
         }
 
@@ -21,7 +20,6 @@ namespace Domain.Models
         public virtual Osoba IdOsobaNavigation { get; set; }
         public virtual ICollection<KlientZnizka> KlientZnizkas { get; set; }
         public virtual ICollection<Pacjent> Pacjents { get; set; }
-        public virtual ICollection<Skierowanie> Skierowanies { get; set; }
         public virtual ICollection<Wizytum> Wizyta { get; set; }
     }
 }

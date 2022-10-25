@@ -33,6 +33,7 @@ namespace Application.Leki.Queries
                 return new {
                     Nazwa = t.Nazwa,
                     JednostkaMiary = t.JednostkaMiary,
+                    Producent = t.Producent,
                     Choroby = Enumerable.Empty<string>().ToList(),
                     LekList = Enumerable.Empty<GetStanLekuResponse>().ToList()
                 };
@@ -42,6 +43,7 @@ namespace Application.Leki.Queries
             {
                 Nazwa = t.Nazwa,
                 JednostkaMiary = t.JednostkaMiary,
+                Producent = t.Producent,
                 Choroby = (from i in context.ChorobaLeks
                            join j in context.Chorobas on i.IdChoroba equals j.IdChoroba into qs
                            from j in qs.DefaultIfEmpty()

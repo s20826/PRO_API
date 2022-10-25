@@ -7,11 +7,11 @@ namespace Domain.Models
 {
     public partial class Szczepienie
     {
-        public int IdSzczepionka { get; set; }
-        public int IdWizyta { get; set; }
+        public int IdLek { get; set; }
+        public int IdPacjent { get; set; }
         public DateTime DataWaznosci { get; set; }
 
-        public virtual Szczepionka IdSzczepionkaNavigation { get; set; }
-        public virtual Wizytum IdWizytaNavigation { get; set; }
+        public virtual Szczepionka IdLekNavigation { get; set; }
+        public virtual Pacjent IdPacjentNavigation { get; set; }
     }
 }

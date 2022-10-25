@@ -9,7 +9,6 @@ namespace Domain.Models
     {
         public Usluga()
         {
-            Skierowanies = new HashSet<Skierowanie>();
             WizytaUslugas = new HashSet<WizytaUsluga>();
         }
 
@@ -20,7 +19,6 @@ namespace Domain.Models
         public bool Narkoza { get; set; }
         public string Dolegliwosc { get; set; }
 
-        public virtual ICollection<Skierowanie> Skierowanies { get; set; }
         public virtual ICollection<WizytaUsluga> WizytaUslugas { get; set; }
     }
 }

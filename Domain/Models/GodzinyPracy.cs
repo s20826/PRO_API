@@ -12,5 +12,7 @@ namespace Domain.Models
         public int DzienTygodnia { get; set; }
         public TimeSpan GodzinaRozpoczecia { get; set; }
         public TimeSpan GodzinaZakonczenia { get; set; }
+
+        public virtual Weterynarz IdOsobaNavigation { get; set; }
     }
 }

@@ -19,13 +19,11 @@ namespace Application.Klienci.Commands
             RuleFor(x => x.request.NazwaUzytkownika).MinimumLength(2).WithMessage("To pole wymaga od 2 do 50 znaków");
             RuleFor(x => x.request.NazwaUzytkownika).MaximumLength(50).WithMessage("To pole wymaga od 2 do 50 znaków");
 
-            RuleFor(x => x.request.Haslo).MinimumLength(8).WithMessage("Minimum 8 znaków");
             RuleFor(x => x.request.Haslo).MaximumLength(30).WithMessage("Maksymalnie 30 znaków");
-            RuleFor(x => x.request.Haslo).Matches("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$").WithMessage("Hasło musi zawierać wielką literę i cyfrę");
+            RuleFor(x => x.request.Haslo).Matches("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{5,}$").WithMessage("Hasło musi zawierać wielką literę i cyfrę");
 
-            RuleFor(x => x.request.Haslo).MinimumLength(8).WithMessage("Minimum 8 znaków");
-            RuleFor(x => x.request.Haslo).MaximumLength(30).WithMessage("Maksymalnie 30 znaków");
-            RuleFor(x => x.request.Haslo).Matches("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$").WithMessage("Hasło musi zawierać wielką literę i cyfrę");
+            RuleFor(x => x.request.Haslo2).MaximumLength(30).WithMessage("Maksymalnie 30 znaków");
+            RuleFor(x => x.request.Haslo2).Matches("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{5,}$").WithMessage("Hasło musi zawierać wielką literę i cyfrę");
         }
     }
 }

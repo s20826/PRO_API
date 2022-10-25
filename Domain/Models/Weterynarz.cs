@@ -9,8 +9,8 @@ namespace Domain.Models
     {
         public Weterynarz()
         {
+            GodzinyPracies = new HashSet<GodzinyPracy>();
             Harmonograms = new HashSet<Harmonogram>();
-            Nagroda = new HashSet<Nagrodum>();
             WeterynarzSpecjalizacjas = new HashSet<WeterynarzSpecjalizacja>();
         }
 
@@ -20,8 +20,8 @@ namespace Domain.Models
         public DateTime DataZatrudnienia { get; set; }
 
         public virtual Osoba IdOsobaNavigation { get; set; }
+        public virtual ICollection<GodzinyPracy> GodzinyPracies { get; set; }
         public virtual ICollection<Harmonogram> Harmonograms { get; set; }
-        public virtual ICollection<Nagrodum> Nagroda { get; set; }
         public virtual ICollection<WeterynarzSpecjalizacja> WeterynarzSpecjalizacjas { get; set; }
     }
 }

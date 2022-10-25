@@ -10,7 +10,7 @@ namespace Application.DTO.Responses
         public string Rasa { get; set; }
         public string Masc { get; set; }
         public string Plec { get; set; }
-        public DateTime DataUrodzenia { get; set; }
+        public DateTime? DataUrodzenia { get; set; }
         public decimal Waga { get; set; }
         public bool Agresywne { get; set; }
         public string Wlasciciel { get; set; }

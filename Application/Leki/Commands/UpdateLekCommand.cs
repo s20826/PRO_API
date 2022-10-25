@@ -33,6 +33,7 @@ namespace Application.Leki.Commands
             var lek = context.Leks.Where(x => x.IdLek.Equals(id)).First();
             lek.Nazwa = req.request.Nazwa;
             lek.JednostkaMiary = req.request.JednostkaMiary;
+            lek.Producent = req.request.Producent;
 
             List<string> list = new List<string>(req.request.Choroby);
             if (list.Count > 0)

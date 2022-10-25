@@ -18,7 +18,9 @@ namespace Domain.Models
         public int IdLek { get; set; }
         public string Nazwa { get; set; }
         public string JednostkaMiary { get; set; }
+        public string Producent { get; set; }
 
+        public virtual Szczepionka Szczepionka { get; set; }
         public virtual ICollection<ChorobaLek> ChorobaLeks { get; set; }
         public virtual ICollection<LekWMagazynie> LekWMagazynies { get; set; }
         public virtual ICollection<LekWizytum> LekWizyta { get; set; }

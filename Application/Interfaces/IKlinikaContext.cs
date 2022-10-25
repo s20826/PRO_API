@@ -21,12 +21,10 @@ namespace Application.Interfaces
         public DbSet<Lek> Leks { get; set; }
         public DbSet<LekWMagazynie> LekWMagazynies { get; set; }
         public DbSet<LekWizytum> LekWizyta { get; set; }
-        public DbSet<Nagrodum> Nagroda { get; set; }
         public DbSet<Osoba> Osobas { get; }
         public DbSet<Pacjent> Pacjents { get; }
         public DbSet<ReceptaLek> ReceptaLeks { get; set; }
         public DbSet<Receptum> Recepta { get; set; }
-        public DbSet<Skierowanie> Skierowanies { get; set; }
         public DbSet<Specjalizacja> Specjalizacjas { get; set; }
         public DbSet<Szczepienie> Szczepienies { get; set; }
         public DbSet<Szczepionka> Szczepionkas { get; set; }

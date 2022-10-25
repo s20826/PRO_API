@@ -28,7 +28,8 @@ namespace Application.Leki.Commands
             var result = context.Leks.Add(new Lek
             {
                 Nazwa = req.request.Nazwa,
-                JednostkaMiary = req.request.JednostkaMiary
+                JednostkaMiary = req.request.JednostkaMiary,
+                Producent = req.request.Producent
             });
 
             List<string> list = new List<string>(req.request.Choroby);

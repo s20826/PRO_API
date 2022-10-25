@@ -32,11 +32,8 @@ namespace Application.Wizyty.Queries
             return (from x in context.Wizyta
                     join d in context.Harmonograms on x.IdWizyta equals d.IdWizyta into harmonogram
                     from y in harmonogram.DefaultIfEmpty()
-                    join k in context.Osobas on x.IdOsoba equals k.IdOsoba
-                    /*join d in context.Pacjents on x.IdPacjent equals d.IdPacjent into pacjent
-                    from p in pacjent.DefaultIfEmpty()*/
                     where x.IdPacjent == id
-                    group x by new { x.IdWizyta, x.IdOsoba, x.IdPacjent, x.Status, x.CzyOplacona, y.WeterynarzIdOsoba, k.Imie, k.Nazwisko }
+                    group x by new { x.IdWizyta, x.IdOsoba, x.IdPacjent, x.Status, x.CzyOplacona, y.WeterynarzIdOsoba }
                     into g
                     select new GetWizytaListResponse()
                     {
@@ -44,8 +41,8 @@ namespace Application.Wizyty.Queries
                         IdPacjent = req.ID_Pacjent,
                         Pacjent = null,
                         IdKlient = null,
-                        Klient = g.Key.Imie + " " + g.Key.Nazwisko,
-                        IdWeterynarz = null,
+                        Klient = null,
+                        IdWeterynarz = g.Key.WeterynarzIdOsoba != null ? hash.Encode(g.Key.WeterynarzIdOsoba) : null,
                         Weterynarz = g.Key.WeterynarzIdOsoba != null ? context.Osobas.Where(i => i.IdOsoba.Equals(g.Key.WeterynarzIdOsoba)).Select(i => i.Imie + " " + i.Nazwisko).First() : null,
                         Status = g.Key.Status,
                         CzyOplacona = g.Key.CzyOplacona,

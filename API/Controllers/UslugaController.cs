@@ -1,4 +1,6 @@
-﻿using Application.Uslugi.Queries;
+﻿using Application.DTO.Requests;
+using Application.Uslugi.Commands;
+using Application.Uslugi.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -39,6 +41,41 @@ namespace PRO_API.Controllers
             catch (Exception)
             {
                 return NotFound();
+            }
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPost]
+        public async Task<IActionResult> AddUsluga(UslugaRequest request)
+        {
+            try
+            {
+                return Ok(await Mediator.Send(new CreateUslugaCommand
+                {
+                    request = request
+                }));
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPut("{ID_usluga}")]
+        public async Task<IActionResult> UpdateUsluga(string ID_usluga, UslugaRequest request)
+        {
+            try
+            {
+                return Ok(await Mediator.Send(new UpdateUslugaCommand
+                {
+                    ID_usluga = ID_usluga,
+                    request = request
+                }));
+            }
+            catch (Exception)
+            {
+                return BadRequest();
             }
         }
     }

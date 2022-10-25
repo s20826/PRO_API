@@ -21,7 +21,6 @@
 
   <ItemGroup>
     <Folder Include="Harmonogramy\Commands\" />
-    <Folder Include="Uslugi\Commands\" />
   </ItemGroup>
 
 </Project>

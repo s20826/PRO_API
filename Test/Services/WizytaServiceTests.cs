@@ -44,6 +44,12 @@ namespace Test.Services
                 },
                 new Wizytum {
                     Status = WizytaStatus.Zaplanowana.ToString()
+                },
+                new Wizytum {
+                    Status = WizytaStatus.Zaplanowana.ToString()
+                },
+                new Wizytum {
+                    Status = WizytaStatus.Zaplanowana.ToString()
                 }
             };
 

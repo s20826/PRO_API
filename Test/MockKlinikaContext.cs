@@ -29,6 +29,10 @@ namespace Test
             myDbMoq.Setup(p => p.LekWMagazynies).Returns(GetQueryableMockDbSet(MockData.GetLekWMagazynieList()));
             myDbMoq.Setup(p => p.Chorobas).Returns(GetQueryableMockDbSet(MockData.GetChorobaList()));
             myDbMoq.Setup(p => p.ChorobaLeks).Returns(GetQueryableMockDbSet(MockData.GetChorobaLekList()));
+            myDbMoq.Setup(p => p.Szczepionkas).Returns(GetQueryableMockDbSet(MockData.GetSzczepionkaList()));
+            myDbMoq.Setup(p => p.Szczepienies).Returns(GetQueryableMockDbSet(MockData.GetSzczepienieList()));
+            myDbMoq.Setup(p => p.Uslugas).Returns(GetQueryableMockDbSet(MockData.GetUslugaList()));
+            myDbMoq.Setup(p => p.WizytaUslugas).Returns(GetQueryableMockDbSet(MockData.GetWizytaUslugaList()));
 
             return myDbMoq;
         }

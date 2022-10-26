@@ -141,6 +141,12 @@ namespace Test
                     IdLek = 1,
                     Nazwa = "LekNazwa",
                     JednostkaMiary = "ml"
+                },
+                new Lek
+                {
+                    IdLek = 2,
+                    Nazwa = "Szczepionka 1",
+                    JednostkaMiary = "ml"
                 }
             };
         }
@@ -179,6 +185,60 @@ namespace Test
             return new List<ChorobaLek>
             {
                 
+            };
+        }
+
+        public static List<WizytaUsluga> GetWizytaUslugaList()
+        {
+            return new List<WizytaUsluga>
+            {
+                new WizytaUsluga
+                {
+                    IdUsluga = 1,
+                    IdWizyta = 1
+                }
+            };
+        }
+
+        public static List<Usluga> GetUslugaList()
+        {
+            return new List<Usluga>
+            {
+                new Usluga
+                {
+                    IdUsluga = 1,
+                    NazwaUslugi = "UslugaName",
+                    Narkoza = false,
+                    Cena = 120
+                }
+            };
+        }
+
+        public static List<Szczepionka> GetSzczepionkaList()
+        {
+            return new List<Szczepionka>
+            {
+                new Szczepionka
+                {
+                    IdLek = 2,
+                    CzyObowiazkowa = false,
+                    Zastosowanie = "",
+                    OkresWaznosci = new DateTime(10, 10, 10)
+                }
+            };
+        }
+
+        public static List<Szczepienie> GetSzczepienieList()
+        {
+            return new List<Szczepienie>
+            {
+                new Szczepienie
+                {
+                    IdLek = 2,
+                    IdPacjent = 1,
+                    Dawka = 10,
+                    DataWaznosci = DateTime.Now.AddDays(1)
+                }
             };
         }
     }

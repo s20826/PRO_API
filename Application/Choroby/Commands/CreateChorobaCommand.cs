@@ -12,11 +12,11 @@ namespace Application.Choroby.Commands
         public ChorobaRequest request { get; set; }
     }
 
-    public class UslugaListQueryHandler : IRequestHandler<CreateChorobaCommand, int>
+    public class CreateChorobaCommandHandler : IRequestHandler<CreateChorobaCommand, int>
     {
         private readonly IKlinikaContext context;
         private readonly IHash hash;
-        public UslugaListQueryHandler(IKlinikaContext klinikaContext, IHash _hash)
+        public CreateChorobaCommandHandler(IKlinikaContext klinikaContext, IHash _hash)
         {
             context = klinikaContext;
             hash = _hash;

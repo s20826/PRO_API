@@ -9,8 +9,6 @@ using System.Threading.Tasks;
 
 namespace PRO_API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
     public class GodzinyPracyController : ApiControllerBase
     {
         public GodzinyPracyController()
@@ -18,7 +16,7 @@ namespace PRO_API.Controllers
 
         }
 
-        [Authorize(Roles = "admin")]
+        //[Authorize(Roles = "admin")]
         [HttpGet("{ID_osoba}")]
         public async Task<IActionResult> GetGodzinyPracy(string ID_osoba)
         {
@@ -108,7 +106,7 @@ namespace PRO_API.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpDelete("{ID_osoba}")]
-        public async Task<IActionResult> DeleteGodzinyPracy(string ID_osoba, string dzien)
+        public async Task<IActionResult> DeleteGodzinyPracy(string ID_osoba, int dzien)
         {
             try
             {

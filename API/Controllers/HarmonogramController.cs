@@ -1,4 +1,5 @@
-﻿using Application.Harmonogramy.Queries;
+﻿using Application.Harmonogramy.Commands;
+using Application.Harmonogramy.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -6,25 +7,34 @@ using System.Threading.Tasks;
 
 namespace PRO_API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
     public class HarmonogramController : ApiControllerBase
     {
-        [Authorize(Roles = "klient,weterynarz")]
-        [HttpGet]
-        public async Task<IActionResult> GetHarmonogram(DateTime date)
+        //ustawia harmonogramy na podany dzień dla wszystkich weterynarzy według ich godzin pracy
+        [HttpPost("day")]
+        public async Task<IActionResult> AddHarmonogramForADay(DateTime date)
         {
             try
             {
-                if (isKlient())
+                return Ok(await Mediator.Send(new CreateHarmonogramDefaultCommand
                 {
-                    return Ok(await Mediator.Send(new HarmonogramKlientQuery
-                    {
-                        Date = date
-                    }));
-                }
+                    Data = date
+                }));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
 
-                return Ok(await Mediator.Send(new HarmonogramWeterynarzQuery
+
+        //klient umawia wizytę albo pracownik kliniki umówia wizytę na prośbę klienta
+        [Authorize(Roles = "klient,weterynarz,admin")]
+        [HttpGet]
+        public async Task<IActionResult> GetHarmonogram(DateTime date)      
+        {
+            try
+            {
+                return Ok(await Mediator.Send(new HarmonogramKlientQuery
                 {
                     Date = date
                 }));
@@ -35,15 +45,45 @@ namespace PRO_API.Controllers
             }
         }
 
+
+        //admin wyświetla harmonogram weterynarza
         [Authorize(Roles = "admin")]
-        [HttpGet("{ID_osoba}")]
-        public async Task<IActionResult> GetKlinikaHarmonogram(string ID_osoba, DateTime startDate, DateTime endDate)
+        [HttpGet("klinika/{ID_osoba}")]
+        public async Task<IActionResult> GetKlinikaAdminHarmonogram(string ID_osoba, DateTime startDate, DateTime endDate)
         {
             try
             {
-                return Ok(await Mediator.Send(new HarmonogramAdminQuery
+                return Ok(await Mediator.Send(new HarmonogramAdminByIDQuery
                 {
                     ID_osoba = ID_osoba,
+                    StartDate = startDate,
+                    EndDate = endDate
+                }));
+            }
+            catch (Exception)
+            {
+                return NotFound();
+            }
+        }
+
+        [Authorize(Roles = "weterynarz,admin")]
+        [HttpGet("klinika")]
+        public async Task<IActionResult> GetKlinikaHarmonogram(DateTime startDate, DateTime endDate)
+        {
+            try
+            {
+                if (isWeterynarz())
+                {
+                    return Ok(await Mediator.Send(new HarmonogramWeterynarzQuery
+                    {
+                        ID_osoba = GetUserId(),
+                        StartDate = startDate,
+                        EndDate = endDate
+                    }));
+                }
+
+                return Ok(await Mediator.Send(new HarmonogramAdminQuery
+                {
                     StartDate = startDate,
                     EndDate = endDate
                 }));

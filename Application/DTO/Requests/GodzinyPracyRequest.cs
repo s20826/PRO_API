@@ -8,7 +8,7 @@ namespace Application.DTO.Requests
 {
     public class GodzinyPracyRequest
     {
-        public string DzienTygodnia { get; set; }
+        public int DzienTygodnia { get; set; }
         public TimeSpan GodzinaRozpoczecia { get; set; }
         public TimeSpan GodzinaZakonczenia { get; set; }
     }

@@ -460,24 +460,26 @@ namespace Infrastructure.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.Opis)
-                    .HasMaxLength(300)
+                    .HasMaxLength(500)
                     .IsUnicode(false);
             });
 
             modelBuilder.Entity<Szczepienie>(entity =>
             {
-                entity.HasKey(e => new { e.IdPacjent, e.IdLek })
+                entity.HasKey(e => e.IdSzczepienie)
                     .HasName("Szczepienie_pk");
 
                 entity.ToTable("Szczepienie");
 
-                entity.Property(e => e.IdPacjent).HasColumnName("ID_pacjent");
-
-                entity.Property(e => e.IdLek).HasColumnName("ID_lek");
+                entity.Property(e => e.IdSzczepienie).HasColumnName("ID_szczepienie");
 
                 entity.Property(e => e.DataWaznosci)
                     .HasColumnType("date")
                     .HasColumnName("Data_waznosci");
+
+                entity.Property(e => e.IdLek).HasColumnName("ID_lek");
+
+                entity.Property(e => e.IdPacjent).HasColumnName("ID_pacjent");
 
                 entity.HasOne(d => d.IdLekNavigation)
                     .WithMany(p => p.Szczepienies)

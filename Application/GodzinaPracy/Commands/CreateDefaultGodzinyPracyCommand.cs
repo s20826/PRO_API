@@ -31,7 +31,7 @@ namespace Application.GodzinaPracy.Commands
         {
             int id = hash.Decode(req.ID_osoba);
 
-            for (int i = 0; i < GlobalValues.DNI_PRACY; i++)
+            for (int i = 1; i <= GlobalValues.DNI_PRACY; i++)
             {
                 context.GodzinyPracies.Add(new GodzinyPracy
                 {

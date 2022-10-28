@@ -12,7 +12,9 @@ namespace Application.Harmonogramy.Queries
 {
     public class HarmonogramWeterynarzQuery : IRequest<List<GetHarmonogramWeterynarzResponse>>
     {
-        public DateTime Date { get; set; }
+        public string ID_osoba { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
     }
 
     public class HarmonogramWeterynarzQueryHandle : IRequestHandler<HarmonogramWeterynarzQuery, List<GetHarmonogramWeterynarzResponse>>
@@ -27,19 +29,21 @@ namespace Application.Harmonogramy.Queries
 
         public async Task<List<GetHarmonogramWeterynarzResponse>> Handle(HarmonogramWeterynarzQuery req, CancellationToken cancellationToken)
         {
+            int id = hash.Decode(req.ID_osoba);
+
             var results =
                 (from x in context.Harmonograms
                  join z in context.Wizyta on x.IdWizyta equals z.IdWizyta into wizyta from t in wizyta.DefaultIfEmpty()
-                 where x.DataRozpoczecia.Date == req.Date
+                 where x.DataRozpoczecia.Date >= req.StartDate && x.DataZakonczenia.Date <= req.EndDate && x.WeterynarzIdOsoba == id
                  select new GetHarmonogramWeterynarzResponse()
                  {
                      IdHarmonogram = hash.Encode(x.IdHarmonogram),
                      Data = x.DataRozpoczecia,
-                     IdKlient = t.IdOsoba != null ? hash.Encode((int)t.IdOsoba) : null,
-                     Klient = t.IdOsoba != null ? context.Osobas.Where(k => k.IdOsoba == t.IdOsoba).Select(k => k.Imie + " " + k.Nazwisko).First() : null,
-                     IdPacjent = t.IdPacjent != null ? hash.Encode((int)t.IdPacjent) : null,
-                     Pacjent = t.IdPacjent != null ? context.Pacjents.Where(p => p.IdPacjent == t.IdPacjent).Select(p => p.Nazwa).First() : null,
-                     CzyZajete = t.IdOsoba != null
+                     IdKlient = x.IdWizyta != null ? hash.Encode(t.IdOsoba) : null,
+                     Klient = x.IdWizyta != null ? context.Osobas.Where(k => k.IdOsoba == t.IdOsoba).Select(k => k.Imie + " " + k.Nazwisko).First() : null,
+                     IdPacjent = x.IdWizyta != null ? hash.Encode((int)t.IdPacjent) : null,
+                     Pacjent = x.IdWizyta != null ? context.Pacjents.Where(p => p.IdPacjent == t.IdPacjent).Select(p => p.Nazwa).FirstOrDefault() : null,
+                     CzyZajete = x.IdWizyta != null
                  }).ToList();
 
             return results;

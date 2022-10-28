@@ -88,12 +88,12 @@ namespace Test
                 new GodzinyPracy
                 {
                     IdOsoba = 2,
-                    DzienTygodnia = 0
+                    DzienTygodnia = 1
                 },
                 new GodzinyPracy
                 {
                     IdOsoba = 2,
-                    DzienTygodnia = 1
+                    DzienTygodnia = 2
                 }
             };
         }
@@ -238,6 +238,19 @@ namespace Test
                     IdPacjent = 1,
                     Dawka = 10,
                     DataWaznosci = DateTime.Now.AddDays(1)
+                }
+            };
+        }
+
+        public static List<Znizka> GetZnizkaList()
+        {
+            return new List<Znizka>
+            {
+                new Znizka
+                {
+                    IdZnizka = 1,
+                    NazwaZnizki = "Znizka 1",
+                    ProcentZnizki = 12.5M
                 }
             };
         }

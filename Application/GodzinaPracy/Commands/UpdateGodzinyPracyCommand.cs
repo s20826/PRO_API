@@ -37,7 +37,7 @@ namespace Application.GodzinaPracy.Commands
             }
             foreach (GodzinyPracyRequest request in req.requestList)
             {
-                var dzien = list.Where(x => ((DniTygodnia)x.DzienTygodnia).ToString() == request.DzienTygodnia).First();
+                var dzien = list.Where(x => x.DzienTygodnia == request.DzienTygodnia).First();
                 dzien.GodzinaRozpoczecia = request.GodzinaRozpoczecia;
                 dzien.GodzinaZakonczenia = request.GodzinaZakonczenia;
             }

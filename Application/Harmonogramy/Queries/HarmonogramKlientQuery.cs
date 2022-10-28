@@ -26,8 +26,7 @@ namespace Application.Harmonogramy.Queries
 
         public async Task<List<GetHarmonogramKlientResponse>> Handle(HarmonogramKlientQuery req, CancellationToken cancellationToken)
         {
-            var culture = new System.Globalization.CultureInfo("pl-PL");
-            //var day = culture.DateTimeFormat.GetDayName(DateTime.Today.DayOfWeek);
+            //var culture = new System.Globalization.CultureInfo("pl-PL");
 
             var results =
                 (from x in context.Harmonograms
@@ -38,7 +37,7 @@ namespace Application.Harmonogramy.Queries
                      IdHarmonogram = hash.Encode(x.IdHarmonogram),
                      IdWeterynarz = hash.Encode(x.WeterynarzIdOsoba),
                      Data = x.DataRozpoczecia,
-                     Dzien = culture.DateTimeFormat.GetDayName(x.DataRozpoczecia.DayOfWeek).ToString(),
+                     Dzien = (int)x.DataRozpoczecia.DayOfWeek,
                      Weterynarz = w.Imie + " " + w.Nazwisko
                  }).ToList();
 

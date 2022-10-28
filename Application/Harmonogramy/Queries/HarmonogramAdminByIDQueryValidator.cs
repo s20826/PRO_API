@@ -1,15 +1,10 @@
 ﻿using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Harmonogramy.Queries
 {
-    public class HarmonogramWeterynarzQueryValidator : AbstractValidator<HarmonogramWeterynarzQuery>
+    public class HarmonogramAdminByIDQueryValidator : AbstractValidator<HarmonogramAdminByIDQuery>
     {
-        public HarmonogramWeterynarzQueryValidator()
+        public HarmonogramAdminByIDQueryValidator()
         {
             RuleFor(x => x.ID_osoba).NotEmpty();
 

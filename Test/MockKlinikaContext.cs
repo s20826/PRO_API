@@ -33,6 +33,7 @@ namespace Test
             myDbMoq.Setup(p => p.Szczepienies).Returns(GetQueryableMockDbSet(MockData.GetSzczepienieList()));
             myDbMoq.Setup(p => p.Uslugas).Returns(GetQueryableMockDbSet(MockData.GetUslugaList()));
             myDbMoq.Setup(p => p.WizytaUslugas).Returns(GetQueryableMockDbSet(MockData.GetWizytaUslugaList()));
+            myDbMoq.Setup(p => p.Znizkas).Returns(GetQueryableMockDbSet(MockData.GetZnizkaList()));
 
             return myDbMoq;
         }

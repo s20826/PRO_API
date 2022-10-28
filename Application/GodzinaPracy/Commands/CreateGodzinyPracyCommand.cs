@@ -34,8 +34,8 @@ namespace Application.GodzinaPracy.Commands
 
             foreach (GodzinyPracyRequest request in req.requestList)
             {
-                var dzien = (DniTygodnia)Enum.Parse(typeof(DniTygodnia), request.DzienTygodnia, true);
-                i = (int)dzien;
+
+                i = request.DzienTygodnia;
                 if (context.GodzinyPracies.Where(x => x.DzienTygodnia == i && x.IdOsoba == id).Any())
                 {
                     throw new Exception();
@@ -44,7 +44,7 @@ namespace Application.GodzinaPracy.Commands
                 context.GodzinyPracies.Add(new GodzinyPracy
                 {
                     IdOsoba = id,
-                    DzienTygodnia = (int)dzien,
+                    DzienTygodnia = i,
                     GodzinaRozpoczecia = request.GodzinaRozpoczecia,
                     GodzinaZakonczenia = request.GodzinaZakonczenia
                 });

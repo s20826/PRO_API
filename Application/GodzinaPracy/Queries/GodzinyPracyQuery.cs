@@ -35,7 +35,7 @@ namespace Application.GodzinaPracy.Queries
                  where x.IdOsoba == id
                  select new GodzinyPracyResponse()
                  {
-                     DzienTygodnia = ((DniTygodnia)x.DzienTygodnia).ToString(),
+                     DzienTygodnia = x.DzienTygodnia,
                      GodzinaRozpoczecia = x.GodzinaRozpoczecia,
                      GodzinaZakonczenia = x.GodzinaZakonczenia
                  }).ToList();

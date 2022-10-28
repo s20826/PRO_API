@@ -14,7 +14,7 @@ namespace Application.GodzinaPracy.Commands
     public class DeleteGodzinyPracyCommand : IRequest<int>
     {
         public string ID_osoba { get; set; }
-        public string dzien { get; set; }
+        public int dzien { get; set; }
     }
 
     public class DeleteGodzinyPracyCommandHandle : IRequestHandler<DeleteGodzinyPracyCommand, int>
@@ -36,7 +36,7 @@ namespace Application.GodzinaPracy.Commands
                 throw new Exception("Ten pracownik nie ma ustawionych godzin pracy.");
             }
 
-            context.GodzinyPracies.Remove(context.GodzinyPracies.Where(x => ((DniTygodnia)x.DzienTygodnia).ToString() == req.dzien).First());
+            context.GodzinyPracies.Remove(context.GodzinyPracies.Where(x => x.DzienTygodnia == req.dzien).First());
 
             return await context.SaveChangesAsync(cancellationToken);
         }

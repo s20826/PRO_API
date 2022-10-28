@@ -57,7 +57,7 @@ namespace Test.Mock
                 requestList = new List<GodzinyPracyRequest>{
                     new GodzinyPracyRequest
                     {
-                        DzienTygodnia = "Niedziela",
+                        DzienTygodnia = 7,
                         GodzinaRozpoczecia = new TimeSpan(9, 0, 0),
                         GodzinaZakonczenia = new TimeSpan(17, 0, 0)
                     }
@@ -80,7 +80,7 @@ namespace Test.Mock
                 requestList = new List<GodzinyPracyRequest>{
                     new GodzinyPracyRequest
                     {
-                        DzienTygodnia = DniTygodnia.Poniedziałek.ToString(),
+                        DzienTygodnia = 1,
                         GodzinaRozpoczecia = new TimeSpan(9, 0, 0),
                         GodzinaZakonczenia = new TimeSpan(17, 0, 0)
                     }
@@ -102,7 +102,7 @@ namespace Test.Mock
                 requestList = new List<GodzinyPracyRequest>{
                     new GodzinyPracyRequest
                     {
-                        DzienTygodnia = DniTygodnia.Sobota.ToString(),
+                        DzienTygodnia = 6,
                         GodzinaRozpoczecia = new TimeSpan(9, 0, 0),
                         GodzinaZakonczenia = new TimeSpan(17, 0, 0)
                     }
@@ -122,7 +122,7 @@ namespace Test.Mock
             var command = new DeleteGodzinyPracyCommand()
             {
                 ID_osoba = hash.Encode(2),
-                dzien = DniTygodnia.Poniedziałek.ToString()
+                dzien = 1
             };
             
             await handler.Handle(command, CancellationToken.None);
@@ -139,7 +139,7 @@ namespace Test.Mock
             var command = new DeleteGodzinyPracyCommand()
             {
                 ID_osoba = hash.Encode(2),
-                dzien = DniTygodnia.Sobota.ToString()
+                dzien = 6
             };
 
             Assert.ThrowsAsync<InvalidOperationException>(async () => await handler.Handle(command, CancellationToken.None));

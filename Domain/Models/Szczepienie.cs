@@ -7,6 +7,7 @@ namespace Domain.Models
 {
     public partial class Szczepienie
     {
+        public int IdSzczepienie { get; set; }
         public int IdLek { get; set; }
         public int IdPacjent { get; set; }
         public DateTime? DataWaznosci { get; set; }

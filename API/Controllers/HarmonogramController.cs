@@ -11,11 +11,48 @@ namespace PRO_API.Controllers
     {
         //ustawia harmonogramy na podany dzień dla wszystkich weterynarzy według ich godzin pracy
         [HttpPost("day")]
-        public async Task<IActionResult> AddHarmonogramForADay(DateTime date)
+        public async Task<IActionResult> AddHarmonogramsForADay(DateTime date)
         {
             try
             {
                 return Ok(await Mediator.Send(new CreateHarmonogramDefaultCommand
+                {
+                    Data = date
+                }));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+
+        //ustawia harmonogramy na podany dzień dla wszystkich weterynarzy według ich godzin pracy
+        [HttpPost("day/{ID_weterynarz}")]
+        public async Task<IActionResult> AddWeterynarzHarmonogramForADay(DateTime date, string ID_weterynarz)
+        {
+            try
+            {
+                return Ok(await Mediator.Send(new CreateHarmonogramByIDCommand
+                {
+                    Data = date,
+                    ID_weterynarz = ID_weterynarz
+                }));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+
+        //usuwa harmonogramy na podany dzień wszystkim weterynarzom
+        [HttpDelete("day")]
+        public async Task<IActionResult> DeleteHarmonogramsForADay(DateTime date)
+        {
+            try
+            {
+                return Ok(await Mediator.Send(new DeleteHarmonogramCommand
                 {
                     Data = date
                 }));
@@ -65,6 +102,7 @@ namespace PRO_API.Controllers
                 return NotFound();
             }
         }
+
 
         [Authorize(Roles = "weterynarz,admin")]
         [HttpGet("klinika")]

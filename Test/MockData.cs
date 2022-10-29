@@ -1,4 +1,5 @@
-﻿using Domain.Models;
+﻿using Domain.Enums;
+using Domain.Models;
 using System;
 using System.Collections.Generic;
 
@@ -88,12 +89,23 @@ namespace Test
                 new GodzinyPracy
                 {
                     IdOsoba = 2,
-                    DzienTygodnia = 1
+                    DzienTygodnia = 1,
+                    GodzinaRozpoczecia = new TimeSpan(10,0,0),
+                    GodzinaZakonczenia = new TimeSpan(13,0,0)
                 },
                 new GodzinyPracy
                 {
                     IdOsoba = 2,
-                    DzienTygodnia = 2
+                    DzienTygodnia = ((int)new DateTime(2022,10,25).DayOfWeek),
+                    GodzinaRozpoczecia = new TimeSpan(10,0,0),
+                    GodzinaZakonczenia = new TimeSpan(13,17,0)
+                },
+                new GodzinyPracy
+                {
+                    IdOsoba = 2,
+                    DzienTygodnia = ((int)new DateTime(2022,10,26).DayOfWeek),
+                    GodzinaRozpoczecia = new TimeSpan(10,0,0),
+                    GodzinaZakonczenia = new TimeSpan(13,0,0)
                 }
             };
         }
@@ -184,7 +196,7 @@ namespace Test
         {
             return new List<ChorobaLek>
             {
-                
+
             };
         }
 
@@ -251,6 +263,52 @@ namespace Test
                     IdZnizka = 1,
                     NazwaZnizki = "Znizka 1",
                     ProcentZnizki = 12.5M
+                }
+            };
+        }
+
+        public static List<Harmonogram> GetHarmonogramList()
+        {
+            return new List<Harmonogram>
+            {
+                new Harmonogram
+                {
+                    IdHarmonogram = 1,
+                    DataRozpoczecia = new DateTime(2022,10,27,12,0,0),
+                    DataZakonczenia = new DateTime(2022,10,27,12,30,0),
+                    WeterynarzIdOsoba = 2,
+                    IdWizyta = null
+                },
+                new Harmonogram
+                {
+                    IdHarmonogram = 2,
+                    DataRozpoczecia = new DateTime(2022,10,27,12,30,0),
+                    DataZakonczenia = new DateTime(2022,10,27,13,00,0),
+                    WeterynarzIdOsoba = 2,
+                    IdWizyta = 1
+                },
+                new Harmonogram
+                {
+                    IdHarmonogram = 3,
+                    DataRozpoczecia = new DateTime(2022,10,27,13,0,0),
+                    DataZakonczenia = new DateTime(2022,10,27,13,30,0),
+                    WeterynarzIdOsoba = 2,
+                    IdWizyta = 1
+                }
+            };
+        }
+
+        public static List<Wizytum> GetWizytaList()
+        {
+            return new List<Wizytum>
+            {
+                new Wizytum
+                {
+                    IdWizyta = 1,
+                    IdOsoba = 1,
+                    IdPacjent = 1,
+                    Status = WizytaStatus.Zaplanowana.ToString(),
+                    Cena = 200
                 }
             };
         }

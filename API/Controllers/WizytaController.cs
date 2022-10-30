@@ -254,5 +254,22 @@ namespace PRO_API.Controllers
                 return BadRequest();
             }
         }
+
+        //[Authorize(Roles = "admin")]
+        [HttpDelete("system")]
+        public async Task<IActionResult> DeleteWizytaBySystem()    //system usuwa wszystkie anulowane wizyty
+        {
+            try
+            {
+                return Ok(await Mediator.Send(new DeleteWizytaSystemCommand
+                {
+
+                }));
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
     }
 }

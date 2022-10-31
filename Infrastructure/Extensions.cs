@@ -15,6 +15,7 @@ namespace Infrastructure
             services.AddScoped<IWizytaRepository, WizytaService>();
             services.AddScoped<ILoginRepository, LoginService>();
             services.AddScoped<IHarmonogramRepository, HarmonogramService>();
+            services.AddScoped<IEmailSender, EmailSender>();
 
             services.AddScoped<IKlinikaContext, KlinikaContext>();
 

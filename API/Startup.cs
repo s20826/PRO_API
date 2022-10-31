@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -69,14 +70,23 @@ namespace PRO_API
             services.AddDbContext<KlinikaContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("KlinikaDatabase")));
 
+            var emailConfig = Configuration
+                .GetSection("EmailConfiguration")
+                .Get<EmailConfiguration>();
+            services.AddSingleton(emailConfig);
+
+            /*services.Configure<FormOptions>(o => {
+                o.ValueLengthLimit = int.MaxValue;
+                o.MultipartBodyLengthLimit = int.MaxValue;
+                o.MemoryBufferThreshold = int.MaxValue;
+            });*/
 
             services.AddControllers().AddNewtonsoftJson(Configuration => Configuration.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddInfrastructure()
                 .AddApplication()
                 .AddDomain();
-            //services.AddMediatR(typeof(Startup).Assembly);
-            
-            
+
+            services.AddScoped<IEmailSender, EmailSender>();
 
             services.AddSwaggerGen(c =>
             {

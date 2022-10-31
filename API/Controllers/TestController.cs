@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Infrastructure.Models;
+using Application.Interfaces;
 
 namespace PRO_API.Controllers
 {
@@ -13,8 +14,10 @@ namespace PRO_API.Controllers
         private readonly IConfiguration configuration;
         private readonly IHashids hashids;
         private readonly KlinikaContext context;
-        public TestController(IConfiguration config, IHashids ihashids, KlinikaContext klinikaContext)
+        private readonly IEmailSender _emailSender;
+        public TestController(IEmailSender emailSender, IConfiguration config, IHashids ihashids, KlinikaContext klinikaContext)
         {
+            _emailSender = emailSender;
             configuration = config;
             hashids = ihashids;
             context = klinikaContext;
@@ -32,21 +35,38 @@ namespace PRO_API.Controllers
             return Ok(context.Osobas.ToList());
         }
 
-/*        [HttpGet("sdfsdfsdfd")]
-        public async Task<IActionResult> dfsdfsdfsd(int id)
+        [HttpPost("email/haslo")]
+        public async Task<IActionResult> SendTestEmail()
         {
-            for(int i = 0; i < 5; i++)
+            //var files = Request.Form.Files.Any() ? Request.Form.Files : new FormFileCollection();
+            try
             {
-                context.GodzinyPracies.Add(new Domain.Models.GodzinyPracy
-                {
-                    DzienTygodnia = i,
-                    GodzinaRozpoczecia = new TimeSpan(9, 0, 0),
-                    GodzinaZakonczenia = new TimeSpan(17,0,0),
-                    IdOsoba = id
-                });
-            }
+                await _emailSender.SendHasloEmail("michalostrowski00@gmail.com", "**password**");
 
-            return Ok(context.SaveChanges());
-        }*/
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+
+        [HttpPost("email/wizyta")]
+        public async Task<IActionResult> SendTestEmail2()
+        {
+            //var files = Request.Form.Files.Any() ? Request.Form.Files : new FormFileCollection();
+            try
+            {
+                var culture = new System.Globalization.CultureInfo("pl-PL");
+                var day = culture.DateTimeFormat.GetDayName(DateTime.Today.DayOfWeek);
+                await _emailSender.SendUmowWizytaEmail("michalostrowski00@gmail.com", DateTime.Now.Date.ToString() + " (" + day + ") " + DateTime.Now.TimeOfDay);
+
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
     }
 }

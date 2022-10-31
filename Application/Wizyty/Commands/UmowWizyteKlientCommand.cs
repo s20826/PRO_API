@@ -24,11 +24,13 @@ namespace Application.Wizyty.Commands
         private readonly IKlinikaContext context;
         private readonly IHash hash;
         private readonly IWizytaRepository wizytaRepository;
-        public UmowWizyteKlientCommandHandle(IKlinikaContext klinikaContext, IHash _hash, IWizytaRepository _wizytaRepository)
+        private readonly IEmailSender sender;
+        public UmowWizyteKlientCommandHandle(IKlinikaContext klinikaContext, IHash _hash, IWizytaRepository _wizytaRepository, IEmailSender emailSender)
         {
             context = klinikaContext;
             hash = _hash;
             wizytaRepository = _wizytaRepository;
+            sender = emailSender;
         }
 
         public async Task<int> Handle(UmowWizyteKlientCommand req, CancellationToken cancellationToken)
@@ -52,12 +54,16 @@ namespace Application.Wizyty.Commands
                 CzyOplacona = false
             });
 
-            await context.SaveChangesAsync(cancellationToken);
-
             var harmonogram = context.Harmonograms.Where(x => x.IdHarmonogram == id_harmonogram).FirstOrDefault();
             harmonogram.IdWizyta = result.Entity.IdWizyta;
 
-            return await context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
+
+            //wysłanie maila z potwierdzeniem umówienia wizyty
+            var to = context.Osobas.Where(x => x.IdOsoba.Equals(id1)).First().Email;
+            //await sender.SendUmowWizytaEmail(to, harmonogram.DataRozpoczecia.ToString());
+
+            return 0;
         }
     }
 }

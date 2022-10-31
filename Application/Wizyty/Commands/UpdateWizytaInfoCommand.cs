@@ -1,6 +1,7 @@
 ﻿using Application.Common.Exceptions;
 using Application.DTO.Requests;
 using Application.Interfaces;
+using Domain.Models;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -42,8 +43,22 @@ namespace Application.Wizyty.Commands
                 throw new UserNotAuthorizedException();
             }
 
+            List<Usluga> uslugas = new List<Usluga>();
+
+            for(int i = 0; i < req.request.Uslugi.Length; i++)
+            {
+                context.WizytaUslugas.Add(new WizytaUsluga
+                {
+                    IdUsluga = hash.Decode(req.request.Uslugi[i]),
+                    IdWizyta = wizytaID
+                });
+
+                uslugas.Add(context.Uslugas.Where(x => x.IdUsluga.Equals(req.request.Uslugi[i])).First());
+            }
+
             wizyta.Opis = req.request.Opis;
-            wizyta.IdPacjent = req.request.ID_Pacjent != "0" ? hash.Decode(req.request.ID_Pacjent) : null;
+            wizyta.IdPacjent = req.request.ID_Pacjent != null ? hash.Decode(req.request.ID_Pacjent) : null;
+            wizyta.Cena = wizytaRepository.GetWizytaCena(uslugas);
 
             return await context.SaveChangesAsync(cancellationToken);
         }

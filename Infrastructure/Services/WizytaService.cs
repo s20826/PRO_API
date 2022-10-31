@@ -44,5 +44,15 @@ namespace Infrastructure.Services
             }
             return true;
         }
+
+        public decimal GetWizytaCena(List<Usluga> uslugaList)
+        {
+            if(uslugaList.Count == 0)
+            {
+                return 50;
+            }
+
+            return uslugaList.Sum(x => x.Cena);
+        }
     }
 }

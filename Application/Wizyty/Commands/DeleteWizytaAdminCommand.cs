@@ -1,5 +1,7 @@
-﻿using Application.Interfaces;
+﻿using Application.Common.Exceptions;
+using Application.Interfaces;
 using Domain.Enums;
+using Domain.Models;
 using MediatR;
 using System;
 using System.Linq;
@@ -18,18 +20,20 @@ namespace Application.Wizyty.Commands
         private readonly IKlinikaContext context;
         private readonly IHash hash;
         private readonly IWizytaRepository wizytaRepository;
-        public DeleteWizytaAdminCommandHandle(IKlinikaContext klinikaContext, IHash _hash, IWizytaRepository _wizytaRepository)
+        private readonly IEmailSender sender;
+        public DeleteWizytaAdminCommandHandle(IKlinikaContext klinikaContext, IHash _hash, IWizytaRepository _wizytaRepository, IEmailSender emailSender)
         {
             context = klinikaContext;
             hash = _hash;
             wizytaRepository = _wizytaRepository;
+            sender = emailSender;
         }
 
         public async Task<int> Handle(DeleteWizytaAdminCommand req, CancellationToken cancellationToken)
         {
             int id = hash.Decode(req.ID_wizyta);
 
-            var harmonogram = context.Harmonograms.Where(x => x.IdWizyta.Equals(id)).FirstOrDefault();
+            var harmonograms = context.Harmonograms.Where(x => x.IdWizyta.Equals(id)).ToList();
             var wizyta = context.Wizyta.Where(x => x.IdWizyta.Equals(id)).FirstOrDefault();
 
             if (!((WizytaStatus)Enum.Parse(typeof(WizytaStatus), wizyta.Status, true)).Equals(WizytaStatus.Zaplanowana))
@@ -37,10 +41,24 @@ namespace Application.Wizyty.Commands
                 throw new Exception();
             }
 
-            harmonogram.IdWizyta = null;
-            wizyta.Status = WizytaStatus.AnulowanaKlinika.ToString();
+            if (!harmonograms.Any())
+            {
+                throw new NotFoundException();
+            }
 
-            return await context.SaveChangesAsync(cancellationToken);
+            foreach (Harmonogram h in harmonograms)
+            {
+                h.IdWizyta = null;
+            }
+
+            wizyta.Status = WizytaStatus.AnulowanaKlinika.ToString();
+            await context.SaveChangesAsync(cancellationToken);
+
+            //wysłanie maila z potwierdzeniem anulowania wizyty do klienta
+            var to = context.Osobas.Where(x => x.IdOsoba.Equals(wizyta.IdOsoba)).First().Email;
+            //await sender.SendWizytaEmail(to, harmonogram.DataRozpoczecia.ToString());
+
+            return 0;
         }
     }
 }

@@ -13,5 +13,7 @@ namespace Application.Interfaces
         (DateTime, DateTime) GetWizytaDates(List<Harmonogram> harmonograms);
 
         bool IsWizytaAbleToReschedule(List<Harmonogram> harmonograms, DateTime startDate);
+
+        decimal GetWizytaCena(List<Usluga> uslugaList);
     }
 }

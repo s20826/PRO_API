@@ -6,6 +6,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Infrastructure.Models;
 using Application.Interfaces;
+using System.Net.Mail;
+using System.Net;
 
 namespace PRO_API.Controllers
 {
@@ -41,7 +43,7 @@ namespace PRO_API.Controllers
             //var files = Request.Form.Files.Any() ? Request.Form.Files : new FormFileCollection();
             try
             {
-                await _emailSender.SendHasloEmail("michalostrowski00@gmail.com", "**password**");
+                await _emailSender.SendHasloEmail("to@example.com", "**password**");
 
                 return NoContent();
             }
@@ -59,9 +61,24 @@ namespace PRO_API.Controllers
             {
                 var culture = new System.Globalization.CultureInfo("pl-PL");
                 var day = culture.DateTimeFormat.GetDayName(DateTime.Today.DayOfWeek);
-                await _emailSender.SendUmowWizytaEmail("michalostrowski00@gmail.com", DateTime.Now.Date.ToString() + " (" + day + ") " + DateTime.Now.TimeOfDay);
+                await _emailSender.SendUmowWizytaEmail("to@example.com", DateTime.Now, "Zbigniew Nowak");
 
                 return NoContent();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+
+        [HttpPost("sad")]
+        public async Task<IActionResult> DAFE()
+        {
+            //var files = Request.Form.Files.Any() ? Request.Form.Files : new FormFileCollection();
+            try
+            {
+
+                return Ok(1-(15.6M/100));
             }
             catch (Exception e)
             {

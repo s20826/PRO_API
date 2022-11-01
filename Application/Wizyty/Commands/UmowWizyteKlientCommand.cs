@@ -61,7 +61,8 @@ namespace Application.Wizyty.Commands
 
             //wysłanie maila z potwierdzeniem umówienia wizyty
             var to = context.Osobas.Where(x => x.IdOsoba.Equals(id1)).First().Email;
-            //await sender.SendUmowWizytaEmail(to, harmonogram.DataRozpoczecia.ToString());
+            var weterynarz = context.Osobas.Where(x => x.IdOsoba.Equals(harmonogram.WeterynarzIdOsoba)).Select(x => x.Imie + " " + x.Nazwisko).First();
+            await sender.SendUmowWizytaEmail(to, harmonogram.DataRozpoczecia, weterynarz);
 
             return 0;
         }

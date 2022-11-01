@@ -216,7 +216,7 @@ namespace PRO_API.Controllers
             {
                 return BadRequest(new
                 {
-                    massage = e.Message
+                    massage = e
                 });
             }
         }

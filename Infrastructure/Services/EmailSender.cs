@@ -40,8 +40,12 @@ namespace Infrastructure.Services
             await Send(email);
         }
 
-        public async Task SendUmowWizytaEmail(string to, string data)
+        public async Task SendUmowWizytaEmail(string to, DateTime data, string weterynarz)
         {
+            var culture = new System.Globalization.CultureInfo("pl-PL");
+            var day = culture.DateTimeFormat.GetDayName(DateTime.Today.DayOfWeek);
+            string termin = data.ToShortDateString() + " (" + day + ") " + data.ToShortTimeString();
+
             var body = string.Format(
                "<h2>" +
                "Potwiedzenie rezerwacji w klinice PetMed" +
@@ -50,12 +54,40 @@ namespace Infrastructure.Services
                "Termin: " +
                "{0}" +
                "</p>" +
+               "Weterynarz: " +
+               "{1}" +
+               "</p>" +
                "</br>" +
                "<p style='font - family: Arial, Helvetica, sans - serif;'>" +
                "Klinika PetMed" +
-               "</p>", data);
+               "</p>", termin, weterynarz);
 
             var email = CreateEmail(to, "Potwierdzenie wizyty");
+            var bodyBuilder = new BodyBuilder { HtmlBody = body };
+            email.Body = bodyBuilder.ToMessageBody();
+
+            await Send(email);
+        }
+
+        public async Task SendAnulujWizyteEmail(string to, DateTime data)
+        {
+            var culture = new System.Globalization.CultureInfo("pl-PL");
+            var day = culture.DateTimeFormat.GetDayName(DateTime.Today.DayOfWeek);
+            string termin = data.ToShortDateString() + " (" + day + ") " + data.ToShortTimeString();
+
+            var body = string.Format(
+               "<h2>" +
+               "Twoje wizyta w klinice PetMed została anulowana" +
+               "</h2>" +
+               "<p style='font - family: Arial, Helvetica, sans - serif;'>" +
+               "Termin: " +
+               "{0}" +
+               "</br>" +
+               "<p style='font - family: Arial, Helvetica, sans - serif;'>" +
+               "Klinika PetMed" +
+               "</p>", termin);
+
+            var email = CreateEmail(to, "Anulowanie wizyty");
             var bodyBuilder = new BodyBuilder { HtmlBody = body };
             email.Body = bodyBuilder.ToMessageBody();
 

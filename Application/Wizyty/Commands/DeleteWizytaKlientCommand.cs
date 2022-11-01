@@ -37,7 +37,7 @@ namespace Application.Wizyty.Commands
             int id = hash.Decode(req.ID_wizyta);
             int klientID = hash.Decode(req.ID_klient);
 
-            var harmonograms = context.Harmonograms.Where(x => x.IdWizyta.Equals(id)).ToList();
+            var harmonograms = context.Harmonograms.Where(x => x.IdWizyta.Equals(id)).OrderBy(x => x.DataRozpoczecia).ToList();
             var wizyta = context.Wizyta.Where(x => x.IdWizyta.Equals(id)).FirstOrDefault();
 
             if (!((WizytaStatus)Enum.Parse(typeof(WizytaStatus), wizyta.Status, true)).Equals(WizytaStatus.Zaplanowana))
@@ -72,7 +72,7 @@ namespace Application.Wizyty.Commands
 
             //wysłanie maila z potwierdzeniem anulowania wizyty
             var to = context.Osobas.Where(x => x.IdOsoba.Equals(klientID)).First().Email;
-            //await sender.SendWizytaEmail(to, harmonogram.DataRozpoczecia.ToString());
+            await sender.SendAnulujWizyteEmail(to, harmonograms.ElementAt(0).DataRozpoczecia);
 
             return 0;
         }

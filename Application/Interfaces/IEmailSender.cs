@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace Application.Interfaces
 {
@@ -6,6 +7,8 @@ namespace Application.Interfaces
     {
         Task SendHasloEmail(string to, string content);
 
-        Task SendUmowWizytaEmail(string to, string data);
+        Task SendUmowWizytaEmail(string to, DateTime data, string weterynarz);
+
+        Task SendAnulujWizyteEmail(string to, DateTime data);
     }
 }

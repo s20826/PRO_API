@@ -12,11 +12,6 @@ namespace PRO_API.Controllers
 {
     public class UslugaController : ApiControllerBase
     {
-        public UslugaController()
-        {
-
-        }
-
         [Authorize(Roles = "admin,weterynarz")]
         [HttpGet]
         public async Task<IActionResult> GetUslugaList()
@@ -67,16 +62,37 @@ namespace PRO_API.Controllers
         {
             try
             {
-                return Ok(await Mediator.Send(new UpdateUslugaCommand
+                await Mediator.Send(new UpdateUslugaCommand
                 {
                     ID_usluga = ID_usluga,
                     request = request
-                }));
+                });
             }
             catch (Exception)
             {
                 return BadRequest();
             }
+
+            return NoContent();
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpDelete("{ID_usluga}")]
+        public async Task<IActionResult> DeleteUsluga(string ID_usluga)
+        {
+            try
+            {
+                await Mediator.Send(new DeleteUslugaCommand
+                {
+                    ID_usluga = ID_usluga
+                });
+            }
+            catch (Exception)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
         }
     }
 }

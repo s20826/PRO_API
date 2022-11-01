@@ -1,6 +1,7 @@
 ﻿using Application.Common.Exceptions;
 using Application.DTO.Requests;
 using Application.Interfaces;
+using Domain.Enums;
 using Domain.Models;
 using MediatR;
 using System;
@@ -53,12 +54,23 @@ namespace Application.Wizyty.Commands
                     IdWizyta = wizytaID
                 });
 
-                uslugas.Add(context.Uslugas.Where(x => x.IdUsluga.Equals(req.request.Uslugi[i])).First());
+                uslugas.Add(context.Uslugas.Where(x => x.IdUsluga.Equals(hash.Decode(req.request.Uslugi[i]))).First());
             }
 
             wizyta.Opis = req.request.Opis;
             wizyta.IdPacjent = req.request.ID_Pacjent != null ? hash.Decode(req.request.ID_Pacjent) : null;
             wizyta.Cena = wizytaRepository.GetWizytaCena(uslugas);
+            wizyta.Status = WizytaStatus.Zrealizowana.ToString();
+
+            var klientZnizkaList = context.KlientZnizkas.Where(x => x.IdOsoba.Equals(wizyta.IdOsoba) && x.CzyWykorzystana == false).ToList();
+            if (klientZnizkaList.Any())
+            {
+                var klientZnizka = klientZnizkaList.First();
+                var znizka = context.Znizkas.Where(x => x.IdZnizka.Equals(klientZnizka.IdZnizka)).First();
+                wizyta.IdZnizka = znizka.IdZnizka;
+                wizyta.CenaZnizka = wizyta.Cena * (1 - (znizka.ProcentZnizki / 100));
+                klientZnizka.CzyWykorzystana = true;
+            }
 
             return await context.SaveChangesAsync(cancellationToken);
         }

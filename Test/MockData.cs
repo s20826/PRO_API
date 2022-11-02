@@ -246,6 +246,7 @@ namespace Test
             {
                 new Szczepienie
                 {
+                    IdSzczepienie = 1,
                     IdLek = 2,
                     IdPacjent = 1,
                     Dawka = 10,

@@ -1,4 +1,6 @@
-﻿using Application.Szczepienia.Queries;
+﻿using Application.DTO.Requests;
+using Application.Szczepienia.Commands;
+using Application.Szczepienia.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -42,6 +44,62 @@ namespace PRO_API.Controllers
             {
                 return NotFound();
             }
+        }
+
+        [Authorize(Roles = "weterynarz,admin")]
+        [HttpPost]
+        public async Task<IActionResult> AddSzczepienie(SzczepienieRequest szczepienieRequest)
+        {
+            try
+            {
+                return Ok(await Mediator.Send(new CreateSzczepienieCommand
+                {
+                    request = szczepienieRequest
+                }));
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
+
+        [Authorize(Roles = "weterynarz,admin")]
+        [HttpPut("{ID_szczepienie}")]
+        public async Task<IActionResult> UpdateSzczepienie(SzczepienieRequest szczepienieRequest, string ID_szczepienie)
+        {
+            try
+            {
+                await Mediator.Send(new UpdateSzczepienieCommand
+                {
+                    ID_szczepienie = ID_szczepienie,
+                    request = szczepienieRequest
+                });
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+
+            return NoContent();
+        }
+
+        [Authorize(Roles = "weterynarz,admin")]
+        [HttpDelete("{ID_szczepienie}")]
+        public async Task<IActionResult> DeleteSzczepienie(string ID_szczepienie)
+        {
+            try
+            {
+                await Mediator.Send(new DeleteSzczepienieCommand
+                {
+                    ID_szczepienie = ID_szczepienie
+                });
+            }
+            catch (Exception)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
         }
     }
 }

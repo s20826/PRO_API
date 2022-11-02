@@ -27,25 +27,6 @@ namespace Test.Mock
         }
 
 
-        /*[Test]
-        public async Task CreateChorobaShouldBeCorrectTest()
-        {
-            var before = mockContext.Object.Chorobas.Count();
-            var handler = new CreateSzczepionkaCommandHandler(mockContext.Object, hash);
-
-            var command = new CreateSzczepionkaCommand()
-            {
-                request = new SzczepionkaRequest
-                {
-                    Nazwa = "aaa"
-                }
-            };
-
-            await handler.Handle(command, CancellationToken.None);
-            Assert.AreEqual(mockContext.Object.Chorobas.Count(), before + 1);
-        }*/
-
-
         [Test]
         public async Task UpdateSzczepionkaShouldBeCorrectTest()
         {

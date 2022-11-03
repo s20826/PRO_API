@@ -25,12 +25,14 @@ namespace Application.Weterynarze.Commands
         private readonly IPasswordRepository passwordRepository;
         private readonly IConfiguration configuration;
         private readonly IHash hash;
-        public CreateWeterynarzCommandHandle(IKlinikaContext klinikaContext, IPasswordRepository password, IConfiguration config, IHash _hash)
+        private readonly IEmailSender emailSender;
+        public CreateWeterynarzCommandHandle(IKlinikaContext klinikaContext, IPasswordRepository password, IConfiguration config, IHash _hash, IEmailSender sender)
         {
             context = klinikaContext;
             passwordRepository = password;
             configuration = config;
             hash = _hash;
+            emailSender = sender;
         }
 
         public async Task<string> Handle(CreateWeterynarzCommand req, CancellationToken cancellationToken)
@@ -66,6 +68,8 @@ namespace Application.Weterynarze.Commands
             {
                 await trans.CommitAsync();
                 await connection.CloseAsync();
+                await emailSender.SendCreateAccountEmail(req.request.Email);
+
                 return hash.Encode(resultID);
             }
             else

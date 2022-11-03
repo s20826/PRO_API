@@ -10,5 +10,7 @@ namespace Application.Interfaces
         Task SendUmowWizytaEmail(string to, DateTime data, string weterynarz);
 
         Task SendAnulujWizyteEmail(string to, DateTime data);
+
+        Task SendCreateAccountEmail(string to);
     }
 }

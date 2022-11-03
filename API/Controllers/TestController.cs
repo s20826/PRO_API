@@ -53,14 +53,12 @@ namespace PRO_API.Controllers
             }
         }
 
-        [HttpPost("email/wizyta")]
+        [HttpPost("email/umowWizyte")]
         public async Task<IActionResult> SendTestEmail2()
         {
             //var files = Request.Form.Files.Any() ? Request.Form.Files : new FormFileCollection();
             try
             {
-                var culture = new System.Globalization.CultureInfo("pl-PL");
-                var day = culture.DateTimeFormat.GetDayName(DateTime.Today.DayOfWeek);
                 await _emailSender.SendUmowWizytaEmail("to@example.com", DateTime.Now, "Zbigniew Nowak");
 
                 return NoContent();
@@ -71,14 +69,29 @@ namespace PRO_API.Controllers
             }
         }
 
-        [HttpPost("sad")]
-        public async Task<IActionResult> DAFE()
+        [HttpPost("email/anulujWizyte")]
+        public async Task<IActionResult> SendTestEmail3()
         {
-            //var files = Request.Form.Files.Any() ? Request.Form.Files : new FormFileCollection();
             try
             {
+                await _emailSender.SendAnulujWizyteEmail("to@example.com", DateTime.Now);
 
-                return Ok(1-(15.6M/100));
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+
+        [HttpPost("email/createAccount")]
+        public async Task<IActionResult> SendTestEmail4()
+        {
+            try
+            {
+                await _emailSender.SendCreateAccountEmail("to@example.com");
+
+                return NoContent();
             }
             catch (Exception e)
             {

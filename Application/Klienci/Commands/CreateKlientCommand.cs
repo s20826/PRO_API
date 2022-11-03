@@ -22,11 +22,13 @@ namespace Application.Klienci.Commands
         private readonly IKlinikaContext context;
         private readonly IPasswordRepository passwordRepository;
         private readonly IConfiguration configuration;
-        public CreateKlientCommandHandler(IKlinikaContext klinikaContext, IPasswordRepository password, IConfiguration config)
+        private readonly IEmailSender emailSender;
+        public CreateKlientCommandHandler(IKlinikaContext klinikaContext, IPasswordRepository password, IConfiguration config, IEmailSender sender)
         {
             context = klinikaContext;
             passwordRepository = password;
             configuration = config;
+            emailSender = sender;
         }
 
         public async Task<int> Handle(CreateKlientCommand req, CancellationToken cancellationToken)
@@ -63,6 +65,8 @@ namespace Application.Klienci.Commands
             {
                 trans.Commit();
                 await connection.CloseAsync();
+                await emailSender.SendCreateAccountEmail(req.request.Email);
+
                 return 0;
             }
             else

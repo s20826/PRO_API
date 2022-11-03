@@ -60,6 +60,9 @@ namespace Infrastructure.Services
                "</br>" +
                "<p style='font - family: Arial, Helvetica, sans - serif;'>" +
                "Klinika PetMed" +
+               "</p>" +
+               "<p style='font - family: Arial, Helvetica, sans - serif;'>" +
+               "222 444 555" +
                "</p>", termin, weterynarz);
 
             var email = CreateEmail(to, "Potwierdzenie wizyty");
@@ -82,12 +85,40 @@ namespace Infrastructure.Services
                "<p style='font - family: Arial, Helvetica, sans - serif;'>" +
                "Termin: " +
                "{0}" +
+               "</p>" +
                "</br>" +
                "<p style='font - family: Arial, Helvetica, sans - serif;'>" +
                "Klinika PetMed" +
+               "</p>" +
+               "<p style='font - family: Arial, Helvetica, sans - serif;'>" +
+               "222 444 555" +
                "</p>", termin);
 
             var email = CreateEmail(to, "Anulowanie wizyty");
+            var bodyBuilder = new BodyBuilder { HtmlBody = body };
+            email.Body = bodyBuilder.ToMessageBody();
+
+            await Send(email);
+        }
+
+        public async Task SendCreateAccountEmail(string to)
+        {
+            var body = string.Format(
+               "<h2>" +
+               "Twoje konto w klinice PetMed zostało utworzone" +
+               "</h2>" +
+               "<p style='font - family: Arial, Helvetica, sans - serif;'>" +
+               "Cieszymy się, że z nami jesteś." +
+               "</p>" +
+               "</br>" +
+               "<p style='font - family: Arial, Helvetica, sans - serif;'>" +
+               "Klinika PetMed" +
+               "</p>" +
+               "<p style='font - family: Arial, Helvetica, sans - serif;'>" +
+               "222 444 555" +
+               "</p>");
+
+            var email = CreateEmail(to, "Konto zostało utworzone");
             var bodyBuilder = new BodyBuilder { HtmlBody = body };
             email.Body = bodyBuilder.ToMessageBody();
 

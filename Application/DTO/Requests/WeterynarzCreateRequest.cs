@@ -24,7 +24,5 @@ namespace Application.DTO
         public DateTime DataZatrudnienia { get; set; }
 
         public string Login { get; set; }
-
-        public string Haslo { get; set; }
     }
 }

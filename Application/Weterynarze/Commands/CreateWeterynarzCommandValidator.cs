@@ -12,15 +12,13 @@ namespace Application.Weterynarze.Commands
 
             RuleFor(x => x.request.Email).NotEmpty().MinimumLength(6).Matches(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)");
 
-            RuleFor(x => x.request.NumerTelefonu).NotEmpty().Matches(@"^(\+?[0-9]{9,11})").MaximumLength(12);
+            RuleFor(x => x.request.NumerTelefonu).NotEmpty().Matches(@"^(\+?[0-9]{9,11})");
 
             RuleFor(x => x.request.DataUrodzenia).NotEmpty();
 
             RuleFor(x => x.request.DataZatrudnienia).NotEmpty();
 
             RuleFor(x => x.request.Pensja).NotEmpty().GreaterThan(0).LessThanOrEqualTo(99999);
-
-            RuleFor(x => x.request.Haslo).NotEmpty().MaximumLength(30).Matches("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{5,}$");
 
             RuleFor(x => x.request.Login).NotEmpty().MinimumLength(5).MaximumLength(50);
         }

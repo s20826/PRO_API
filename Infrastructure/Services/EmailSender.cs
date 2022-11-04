@@ -23,7 +23,10 @@ namespace Infrastructure.Services
         {
             var body = string.Format(
                "<h2>" +
-               "Twoje nowe hasło w systemie to: " +
+               "Twoje konto w klinice PetMed zostało utworzone" +
+               "<p style='font - family: Arial, Helvetica, sans - serif; color: #00B2EE;'>" +
+               "Twoje hasło to: " +
+               "</p>" +
                "<p style='font - family: Arial, Helvetica, sans - serif; color: #00B2EE;'>" +
                "{0}" +
                "</p>" +
@@ -31,6 +34,9 @@ namespace Infrastructure.Services
                "</br>" +
                "<p style='font - family: Arial, Helvetica, sans - serif;'>" +
                "Klinika PetMed" +
+               "</p>" +
+               "<p style='font - family: Arial, Helvetica, sans - serif;'>" +
+               "222 444 555" +
                "</p>", createdPassword);
 
             var email = CreateEmail(to, "Twoje konto w serwisie PetMed zostało utworzone");

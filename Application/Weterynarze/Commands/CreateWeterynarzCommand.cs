@@ -42,8 +42,9 @@ namespace Application.Weterynarze.Commands
                 throw new Exception("Not unique");
             }
 
+            var generatedPassword = passwordRepository.GetRandomPassword(8);
             byte[] salt = passwordRepository.GenerateSalt();
-            var hashedPassword = passwordRepository.HashPassword(salt, req.request.Haslo, int.Parse(configuration["PasswordIterations"]));
+            var hashedPassword = passwordRepository.HashPassword(salt, generatedPassword, int.Parse(configuration["PasswordIterations"]));
             string saltBase64 = Convert.ToBase64String(salt);
 
             var query = "exec DodajWeterynarza @imie, @nazwisko, @dataUr, @numerTel, @email, @login, @haslo, @pensja, @dataZatrudnienia, @salt";
@@ -68,7 +69,7 @@ namespace Application.Weterynarze.Commands
             {
                 await trans.CommitAsync();
                 await connection.CloseAsync();
-                await emailSender.SendCreateAccountEmail(req.request.Email);
+                await emailSender.SendHasloEmail(req.request.Email, generatedPassword);
 
                 return hash.Encode(resultID);
             }

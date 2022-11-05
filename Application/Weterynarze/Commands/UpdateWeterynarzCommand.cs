@@ -33,6 +33,8 @@ namespace Application.Weterynarze.Commands
 
             konto.Imie = req.request.Imie;
             konto.Nazwisko = req.request.Nazwisko;
+            konto.Email = req.request.Email;
+            konto.NumerTelefonu = req.request.NumerTelefonu;
 
             weterynarz.DataUrodzenia = req.request.DataUrodzenia;
             weterynarz.Pensja = req.request.Pensja;

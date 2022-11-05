@@ -24,13 +24,13 @@ namespace Infrastructure.Services
             var body = string.Format(
                "<h2>" +
                "Twoje konto w klinice PetMed zostało utworzone" +
-               "<p style='font - family: Arial, Helvetica, sans - serif; color: #00B2EE;'>" +
+               "</h2>" +
+               "<p style='font - family: Arial, Helvetica, sans - serif;'>" +
                "Twoje hasło to: " +
                "</p>" +
                "<p style='font - family: Arial, Helvetica, sans - serif; color: #00B2EE;'>" +
                "{0}" +
                "</p>" +
-               "</h2>" +
                "</br>" +
                "<p style='font - family: Arial, Helvetica, sans - serif;'>" +
                "Klinika PetMed" +

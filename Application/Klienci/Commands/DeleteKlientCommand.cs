@@ -27,6 +27,7 @@ namespace Application.Klienci.Commands
             int id = hash.Decode(req.ID_osoba);
 
             var osoba = context.Osobas.Where(x => x.IdOsoba == id).FirstOrDefault();
+            osoba.Nazwisko = osoba.Nazwisko.ElementAt(0).ToString();
             osoba.NazwaUzytkownika = "";
             osoba.Haslo = "";
             osoba.Salt = "";

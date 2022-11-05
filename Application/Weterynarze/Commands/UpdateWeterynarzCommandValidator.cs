@@ -18,7 +18,7 @@ namespace Application.Weterynarze.Commands
 
             RuleFor(x => x.request.Pensja).NotEmpty().GreaterThan(0).LessThanOrEqualTo(99999);
 
-            RuleFor(x => x.request.Email).MinimumLength(6).Matches(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)");
+            RuleFor(x => x.request.Email).MinimumLength(6).MaximumLength(50).Matches(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)");
 
             RuleFor(x => x.request.NumerTelefonu).NotEmpty().Matches(@"^(\+?[0-9]{9,11})");
         }

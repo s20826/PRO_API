@@ -28,13 +28,13 @@ namespace Application.Interfaces
         public DbSet<Specjalizacja> Specjalizacjas { get; set; }
         public DbSet<Szczepienie> Szczepienies { get; set; }
         public DbSet<Szczepionka> Szczepionkas { get; set; }
+        public DbSet<Urlop> Urlops { get; set; }
         public DbSet<Usluga> Uslugas { get; set; }
         public DbSet<Weterynarz> Weterynarzs { get; set; }
         public DbSet<WeterynarzSpecjalizacja> WeterynarzSpecjalizacjas { get; set; }
         public DbSet<WizytaChoroba> WizytaChorobas { get; set; }
         public DbSet<WizytaUsluga> WizytaUslugas { get; set; }
         public DbSet<Wizytum> Wizyta { get; set; }
-        public DbSet<Zdjecie> Zdjecies { get; set; }
         public DbSet<Znizka> Znizkas { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);

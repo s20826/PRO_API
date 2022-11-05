@@ -13,7 +13,6 @@ namespace Domain.Models
             LekWizyta = new HashSet<LekWizytum>();
             WizytaChorobas = new HashSet<WizytaChoroba>();
             WizytaUslugas = new HashSet<WizytaUsluga>();
-            Zdjecies = new HashSet<Zdjecie>();
         }
 
         public int IdWizyta { get; set; }
@@ -35,6 +34,5 @@ namespace Domain.Models
         public virtual ICollection<LekWizytum> LekWizyta { get; set; }
         public virtual ICollection<WizytaChoroba> WizytaChorobas { get; set; }
         public virtual ICollection<WizytaUsluga> WizytaUslugas { get; set; }
-        public virtual ICollection<Zdjecie> Zdjecies { get; set; }
     }
 }

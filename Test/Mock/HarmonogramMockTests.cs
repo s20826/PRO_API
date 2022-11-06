@@ -77,7 +77,7 @@ namespace Test.Mock
         {
             var before = mockContext.Object.Harmonograms.Count();
             var before2 = mockContext.Object.Wizyta.Where(x => x.Status == WizytaStatus.AnulowanaKlinika.ToString()).Count();
-            var handler = new DeleteHarmonogramCommandHandler(mockContext.Object, hash);
+            var handler = new DeleteHarmonogramCommandHandler(mockContext.Object, hash, new HarmonogramService());
 
             var command = new DeleteHarmonogramCommand()
             {

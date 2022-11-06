@@ -40,6 +40,23 @@ namespace PRO_API.Controllers
         }
 
         //[Authorize(Roles = "admin")]
+        [HttpGet("details/{ID_urlop}")]
+        public async Task<IActionResult> GetUrlopDetails(string ID_urlop)
+        {
+            try
+            {
+                return Ok(await Mediator.Send(new UrlopDetailsQuery
+                {
+                    ID_urlop = ID_urlop
+                }));
+            }
+            catch (Exception)
+            {
+                return NotFound();
+            }
+        }
+
+        //[Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<IActionResult> AddUrlop(UrlopRequest request)
         {
@@ -50,10 +67,49 @@ namespace PRO_API.Controllers
                     request = request
                 }));
             }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+
+        //[Authorize(Roles = "admin")]
+        [HttpPut("{ID_urlop}")]
+        public async Task<IActionResult> UpdateUrlop(string ID_urlop, UrlopRequest request)
+        {
+            try
+            {
+                await Mediator.Send(new UpdateUrlopCommand
+                {
+                    ID_urlop = ID_urlop,
+                    request = request
+                });
+            }
             catch (Exception)
             {
-                return BadRequest();
+                return NotFound();
             }
+
+            return NoContent();
+        }
+
+        //[Authorize(Roles = "admin")]
+        [HttpDelete("{ID_urlop}")]
+        public async Task<IActionResult> DeleteUrlop(string ID_urlop)
+        {
+            try
+            {
+                await Mediator.Send(new DeleteUrlopCommand
+                {
+                    ID_urlop = ID_urlop
+                });
+            }
+            catch (Exception)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
         }
     }
 }

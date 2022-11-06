@@ -20,10 +20,12 @@ namespace Application.Harmonogramy.Commands
     {
         private readonly IKlinikaContext context;
         private readonly IHash hash;
-        public DeleteHarmonogramCommandHandler(IKlinikaContext klinikaContext, IHash _hash)
+        private readonly IHarmonogramRepository harmonogramService;
+        public DeleteHarmonogramCommandHandler(IKlinikaContext klinikaContext, IHash _hash, IHarmonogramRepository harmonogramRepository)
         {
             context = klinikaContext;
             hash = _hash;
+            harmonogramService = harmonogramRepository;
         }
 
         public async Task<object> Handle(DeleteHarmonogramCommand req, CancellationToken cancellationToken)
@@ -35,16 +37,7 @@ namespace Application.Harmonogramy.Commands
                 throw new Exception("Harmonogram nie istnieje w dniu: " + req.Data);
             }
 
-            foreach(Harmonogram h in harmonograms)
-            {
-                if (h.IdWizyta.HasValue)
-                {
-                    var x = context.Wizyta.Where(x => x.IdWizyta.Equals(h.IdWizyta)).First();
-                    x.Status = WizytaStatus.AnulowanaKlinika.ToString();
-                }
-
-                context.Harmonograms.Remove(h);
-            }
+            harmonogramService.DeleteHarmonograms(harmonograms, context);
 
             return await context.SaveChangesAsync(cancellationToken);
         }

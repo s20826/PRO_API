@@ -65,7 +65,7 @@ namespace PRO_API.Controllers
 
 
         //klient umawia wizytę albo pracownik kliniki umówia wizytę na prośbę klienta
-        [Authorize(Roles = "klient,weterynarz,admin")]
+        //[Authorize(Roles = "klient,weterynarz,admin")]
         [HttpGet]
         public async Task<IActionResult> GetHarmonogram(DateTime date)      
         {

@@ -1,6 +1,8 @@
 ﻿using Application.DTO.Requests;
 using Application.Interfaces;
 using MediatR;
+using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,10 +17,12 @@ namespace Application.Urlopy.Commands
     {
         private readonly IKlinikaContext context;
         private readonly IHash hash;
-        public CreateUrlopCommandHandler(IKlinikaContext klinikaContext, IHash _hash)
+        private readonly IHarmonogramRepository harmonogramService;
+        public CreateUrlopCommandHandler(IKlinikaContext klinikaContext, IHash _hash, IHarmonogramRepository harmonogramRepository)
         {
             context = klinikaContext;
             hash = _hash;
+            harmonogramService = harmonogramRepository;
         }
 
         public async Task<int> Handle(CreateUrlopCommand req, CancellationToken cancellationToken)
@@ -30,6 +34,9 @@ namespace Application.Urlopy.Commands
                 IdOsoba = id,
                 Dzien = req.request.Data
             });
+
+            var harmonograms = context.Harmonograms.Where(x => x.DataRozpoczecia.Date.Equals(req.request.Data.Date) && x.WeterynarzIdOsoba.Equals(id)).ToList();
+            harmonogramService.DeleteHarmonograms(harmonograms, context);
 
             return await context.SaveChangesAsync(cancellationToken);
         }

@@ -14,6 +14,8 @@ namespace Test
                 new Osoba       //klient
                 {
                     IdOsoba = 1,
+                    Imie = "aaa",
+                    Nazwisko = "bbb",
                     NazwaUzytkownika = "Adam1",
                     Email = "Adam1@gmail.com",
                     NumerTelefonu = "123456789",
@@ -24,6 +26,8 @@ namespace Test
                 new Osoba       //weterynarz
                 {
                     IdOsoba = 2,
+                    Imie = "aaa",
+                    Nazwisko = "bbb",
                     NazwaUzytkownika = "Osoba2",
                     Email = "osoba2@gmail.com",
                     NumerTelefonu = "123456789",
@@ -31,6 +35,8 @@ namespace Test
                 new Osoba       //admin
                 {
                     IdOsoba = 3,
+                    Imie = "aaa",
+                    Nazwisko = "bbb",
                     NazwaUzytkownika = "Osoba2",
                     Email = "osoba2@gmail.com",
                     NumerTelefonu = "123456789",

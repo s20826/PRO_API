@@ -28,7 +28,6 @@ namespace Application.Klienci.Commands
 
             var osoba = context.Osobas.Where(x => x.IdOsoba == id).FirstOrDefault();
             osoba.Nazwisko = osoba.Nazwisko.ElementAt(0).ToString();
-            osoba.NazwaUzytkownika = "";
             osoba.Haslo = "";
             osoba.Salt = "";
             osoba.RefreshToken = "";

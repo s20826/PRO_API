@@ -63,7 +63,7 @@ namespace PRO_API.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpPut("{ID_osoba}")]
-        public async Task<IActionResult> UpdateWeterynarzZatrudnienie(string ID_osoba, WeterynarzUpdateRequest request)
+        public async Task<IActionResult> UpdateWeterynarz(string ID_osoba, WeterynarzUpdateRequest request)
         {
             try
             {
@@ -91,9 +91,9 @@ namespace PRO_API.Controllers
                     ID_osoba = ID_osoba
                 });
             }
-            catch(Exception)
+            catch(Exception e)
             {
-                return NotFound();
+                return NotFound(e);
             }
             
             return NoContent();

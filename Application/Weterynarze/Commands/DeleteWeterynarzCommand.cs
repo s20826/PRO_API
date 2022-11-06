@@ -27,8 +27,7 @@ namespace Application.Weterynarze.Commands
             int id = hash.Decode(req.ID_osoba);
 
             var weterynarz = context.Osobas.Where(x => x.IdOsoba == id).First();
-
-            weterynarz.NazwaUzytkownika = "";
+            weterynarz.Nazwisko = weterynarz.Nazwisko.ElementAt(0).ToString();
             weterynarz.Haslo = "";
             weterynarz.Salt = "";
             weterynarz.RefreshToken = "";

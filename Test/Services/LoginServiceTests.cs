@@ -48,6 +48,17 @@ namespace Test.Services
             return new[] { osoba1 };
         }
 
+        private static object[] GetOsoba4()
+        {
+            Osoba osoba1 = new Osoba
+            {
+                Haslo = "",
+                Salt = ""
+            };
+
+            return new[] { osoba1 };
+        }
+
 
         [Test]
         [TestCaseSource("GetOsoba1")]
@@ -73,6 +84,14 @@ namespace Test.Services
         public void LoginThrowsAnConstraintExceptionTest(object o)
         {
             Assert.Throws<ConstraintException>(() => new LoginService().CheckCredentails((Osoba)o, new PasswordService(), haslo, iterations));
+        }
+
+        [Test]
+        [TestCaseSource("GetOsoba4")]
+        public void LoginDeletedAccountShouldThrowAnExceptionTest(object o)
+        {
+            var result = new LoginService().CheckCredentails((Osoba)o, new PasswordService(), "", iterations);
+            Assert.IsFalse(result);
         }
 
 

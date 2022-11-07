@@ -42,6 +42,7 @@ namespace Application.Weterynarze.Queries
                      NumerTelefonu = x.NumerTelefonu,
                      Email = x.Email,
                      DataZatrudnienia = p.DataZatrudnienia,
+                     DataUrodzenia = p.DataUrodzenia,
                      Pensja = p.Pensja
                  }).FirstOrDefault();
 

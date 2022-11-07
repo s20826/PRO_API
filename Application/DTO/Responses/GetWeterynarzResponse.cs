@@ -14,6 +14,7 @@ namespace Application.DTO.Responses
         public string NumerTelefonu { get; set; }
         public string Email { get; set; }
         public DateTime DataZatrudnienia { get; set; }
+        public DateTime DataUrodzenia { get; set; }
         public decimal Pensja { get; set; }
     }
 }

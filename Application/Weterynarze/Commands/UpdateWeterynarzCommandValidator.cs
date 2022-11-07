@@ -20,7 +20,7 @@ namespace Application.Weterynarze.Commands
 
             RuleFor(x => x.request.Email).MinimumLength(6).MaximumLength(50).Matches(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)");
 
-            RuleFor(x => x.request.NumerTelefonu).Matches(@"^(\+?[0-9]{9,11})");
+            RuleFor(x => x.request.NumerTelefonu).Matches(@"^(\+?[0-9]{9,11})").MaximumLength(12);
         }
     }
 }

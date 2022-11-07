@@ -329,7 +329,7 @@ namespace Infrastructure.Models
 
                 entity.Property(e => e.NumerTelefonu)
                     .IsRequired()
-                    .HasMaxLength(10)
+                    .HasMaxLength(15)
                     .IsUnicode(false)
                     .HasColumnName("Numer_telefonu");
 

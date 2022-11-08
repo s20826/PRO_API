@@ -305,6 +305,19 @@ namespace Test
             };
         }
 
+        public static List<Urlop> GetUrlopList()
+        {
+            return new List<Urlop>
+            {
+                new Urlop
+                {
+                    IdUrlop = 1,
+                    IdOsoba = 2,
+                    Dzien = new DateTime(2022,10,1)
+                }
+            };
+        }
+
         public static List<Wizytum> GetWizytaList()
         {
             return new List<Wizytum>

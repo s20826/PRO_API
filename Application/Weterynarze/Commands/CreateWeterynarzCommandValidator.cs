@@ -19,8 +19,6 @@ namespace Application.Weterynarze.Commands
             RuleFor(x => x.request.DataZatrudnienia).NotEmpty();
 
             RuleFor(x => x.request.Pensja).NotEmpty().GreaterThan(0).LessThanOrEqualTo(99999);
-
-            RuleFor(x => x.request.Login).NotEmpty().MinimumLength(5).MaximumLength(50);
         }
     }
 }

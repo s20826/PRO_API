@@ -123,7 +123,7 @@ namespace Test.Mock
         [Test]
         public async Task UpdateKontoCorrectTestAsync()
         {
-            var handler = new UpdateKontoCommandHandle(mockContext.Object, new PasswordService(), hash);
+            var handler = new UpdateKontoCommandHandle(mockContext.Object, new PasswordService(), configuration, hash, new LoginService());
 
             var command = new UpdateKontoCommand()
             {
@@ -131,7 +131,8 @@ namespace Test.Mock
                 request = new KontoUpdateRequest
                 {
                     Email = "new@email.com",
-                    NumerTelefonu = "123123123"
+                    NumerTelefonu = "123123123",
+                    Haslo = "Adam1"
                 }
             };
 
@@ -143,7 +144,7 @@ namespace Test.Mock
         [Test]
         public void UpdateKontoThrowsAnExceptionTest()
         {
-            var handler = new UpdateKontoCommandHandle(mockContext.Object, new PasswordService(), hash);
+            var handler = new UpdateKontoCommandHandle(mockContext.Object, new PasswordService(), configuration, hash, new LoginService());
 
             var command = new UpdateKontoCommand()
             {

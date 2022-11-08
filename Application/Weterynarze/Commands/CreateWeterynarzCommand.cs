@@ -37,7 +37,9 @@ namespace Application.Weterynarze.Commands
 
         public async Task<string> Handle(CreateWeterynarzCommand req, CancellationToken cancellationToken)
         {
-            if (context.Osobas.Where(x => x.NazwaUzytkownika.Equals(req.request.Login)).Any())
+            var generatedLogin = "PetMed" + (context.Weterynarzs.Last().IdOsoba + 1);
+
+            if (context.Osobas.Where(x => x.NazwaUzytkownika.Equals(generatedLogin)).Any())
             {
                 throw new Exception("Not unique");
             }
@@ -51,34 +53,24 @@ namespace Application.Weterynarze.Commands
 
             SqlConnection connection = new SqlConnection(configuration.GetConnectionString("KlinikaDatabase"));
             connection.Open();
-            SqlTransaction trans = connection.BeginTransaction();
-            SqlCommand command = new SqlCommand(query, connection, trans);
+            //SqlTransaction trans = connection.BeginTransaction();
+            SqlCommand command = new SqlCommand(query, connection);
             command.Parameters.AddWithValue("@imie", req.request.Imie);
             command.Parameters.AddWithValue("@nazwisko", req.request.Nazwisko);
             command.Parameters.AddWithValue("@dataUr", req.request.DataUrodzenia);
             command.Parameters.AddWithValue("@numerTel", req.request.NumerTelefonu);
             command.Parameters.AddWithValue("@email", req.request.Email);
-            command.Parameters.AddWithValue("@login", req.request.Login);
+            command.Parameters.AddWithValue("@login", generatedLogin);
             command.Parameters.AddWithValue("@haslo", hashedPassword);
             command.Parameters.AddWithValue("@pensja", req.request.Pensja);
             command.Parameters.AddWithValue("@dataZatrudnienia", req.request.DataZatrudnienia);
             command.Parameters.AddWithValue("@salt", saltBase64);
 
-            int resultID = Convert.ToInt32(command.ExecuteScalar());
-            if (resultID > 0)
-            {
-                await trans.CommitAsync();
-                await connection.CloseAsync();
-                await emailSender.SendHasloEmail(req.request.Email, generatedPassword);
+            //int resultID = Convert.ToInt32(command.ExecuteScalar());
+            await connection.CloseAsync();
+            await emailSender.SendHasloEmail(req.request.Email, generatedPassword);
 
-                return hash.Encode(resultID);
-            }
-            else
-            {
-                await trans.RollbackAsync();
-                await connection.CloseAsync();
-                throw new Exception("Error, nie udało się dodać weterynarza");
-            }
+            return hash.Encode(Convert.ToInt32(command.ExecuteScalar()));
         }
     }
 }

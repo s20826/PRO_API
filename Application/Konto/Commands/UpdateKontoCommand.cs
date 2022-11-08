@@ -2,7 +2,6 @@
 using Application.DTO.Request;
 using Application.Interfaces;
 using MediatR;
-using Microsoft.Extensions.Configuration;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,17 +17,11 @@ namespace Application.Konto.Commands
     public class UpdateKontoCommandHandle : IRequestHandler<UpdateKontoCommand, int>
     {
         private readonly IKlinikaContext context;
-        private readonly IPasswordRepository passwordRepository;
-        private readonly IConfiguration configuration;
         private readonly IHash hash;
-        private readonly ILoginRepository loginRepository;
-        public UpdateKontoCommandHandle(IKlinikaContext klinikaContext, IPasswordRepository password, IConfiguration config, IHash _hash, ILoginRepository login)
+        public UpdateKontoCommandHandle(IKlinikaContext klinikaContext, IPasswordRepository password, IHash _hash)
         {
             context = klinikaContext;
-            passwordRepository = password;
-            configuration = config;
             hash = _hash;
-            loginRepository = login;
         }
 
         public async Task<int> Handle(UpdateKontoCommand req, CancellationToken cancellationToken)
@@ -36,10 +29,9 @@ namespace Application.Konto.Commands
             int id = hash.Decode(req.ID_osoba);
 
             var user = context.Osobas.Where(x => x.IdOsoba == id).FirstOrDefault();
-            if (!loginRepository.CheckCredentails(user, passwordRepository, req.request.Haslo, int.Parse(configuration["PasswordIterations"])))
+            if (user == null)
             {
-                await context.SaveChangesAsync(cancellationToken);
-                throw new UserNotAuthorizedException("Incorrect");
+                throw new UserNotAuthorizedException();
             }
 
             user.NumerTelefonu = req.request.NumerTelefonu;

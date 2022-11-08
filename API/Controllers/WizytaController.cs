@@ -9,8 +9,15 @@ using System.Threading.Tasks;
 
 namespace PRO_API.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class WizytaController : ApiControllerBase
     {
+        public WizytaController()
+        {
+
+        }
+
         [Authorize(Roles = "admin,weterynarz")]
         [HttpGet]
         public async Task<IActionResult> GetWizytaList()

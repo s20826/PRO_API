@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using System;
 
 namespace Application.Weterynarze.Commands
 {
@@ -12,7 +13,7 @@ namespace Application.Weterynarze.Commands
 
             RuleFor(x => x.request.Nazwisko).NotEmpty().MinimumLength(2).MaximumLength(50);
 
-            RuleFor(x => x.request.DataUrodzenia).NotEmpty();
+            RuleFor(x => x.request.DataUrodzenia).LessThan(DateTime.Now);
 
             RuleFor(x => x.request.DataZatrudnienia).NotEmpty();
 

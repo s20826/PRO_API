@@ -11,6 +11,8 @@ namespace Application.Konto.Commands
             RuleFor(x => x.request.Email).NotEmpty().Matches(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
 
             RuleFor(x => x.request.NumerTelefonu).NotEmpty().Matches(@"^(\+?[0-9]{9,11})").MaximumLength(12);
+
+            RuleFor(x => x.request.Haslo).MinimumLength(2).MaximumLength(30);
         }
     }
 }

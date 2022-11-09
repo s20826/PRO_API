@@ -102,14 +102,14 @@ namespace Test
                 new GodzinyPracy
                 {
                     IdOsoba = 2,
-                    DzienTygodnia = ((int)new DateTime(2022,10,25).DayOfWeek),
+                    DzienTygodnia = 2,
                     GodzinaRozpoczecia = new TimeSpan(10,0,0),
                     GodzinaZakonczenia = new TimeSpan(13,17,0)
                 },
                 new GodzinyPracy
                 {
                     IdOsoba = 2,
-                    DzienTygodnia = ((int)new DateTime(2022,10,26).DayOfWeek),
+                    DzienTygodnia = 3,
                     GodzinaRozpoczecia = new TimeSpan(10,0,0),
                     GodzinaZakonczenia = new TimeSpan(13,0,0)
                 }
@@ -313,7 +313,7 @@ namespace Test
                 {
                     IdUrlop = 1,
                     IdOsoba = 2,
-                    Dzien = new DateTime(2022,10,1)
+                    Dzien = new DateTime(2022,11,16)
                 }
             };
         }

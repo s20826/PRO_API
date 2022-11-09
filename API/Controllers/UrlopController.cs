@@ -12,7 +12,7 @@ namespace PRO_API.Controllers
 {
     public class UrlopController : ApiControllerBase
     {
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         [HttpGet]
         public async Task<IActionResult> GetUrlopList()
         {
@@ -22,7 +22,7 @@ namespace PRO_API.Controllers
             }));
         }
 
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         [HttpGet("{ID_weterynarz}")]
         public async Task<IActionResult> GetWeterynarzUrlopList(string ID_weterynarz)
         {
@@ -39,7 +39,7 @@ namespace PRO_API.Controllers
             }
         }
 
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         [HttpGet("details/{ID_urlop}")]
         public async Task<IActionResult> GetUrlopDetails(string ID_urlop)
         {
@@ -56,7 +56,7 @@ namespace PRO_API.Controllers
             }
         }
 
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<IActionResult> AddUrlop(UrlopRequest request)
         {
@@ -73,7 +73,7 @@ namespace PRO_API.Controllers
             }
         }
 
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         [HttpPut("{ID_urlop}")]
         public async Task<IActionResult> UpdateUrlop(string ID_urlop, UrlopRequest request)
         {
@@ -93,7 +93,7 @@ namespace PRO_API.Controllers
             return NoContent();
         }
 
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         [HttpDelete("{ID_urlop}")]
         public async Task<IActionResult> DeleteUrlop(string ID_urlop)
         {

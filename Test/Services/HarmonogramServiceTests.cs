@@ -1,5 +1,8 @@
-﻿using Domain.Models;
+﻿using Application.Interfaces;
+using Domain.Enums;
+using Domain.Models;
 using Infrastructure.Services;
+using Moq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -11,6 +14,15 @@ namespace Test.Services
 {
     public class HarmonogramServiceTests
     {
+        private Mock<IKlinikaContext> mockContext;
+
+        [SetUp]
+        public void SetUp()
+        {
+            mockContext = MockKlinikaContext.GetMockDbContext();
+        }
+
+
         private static object[] GetGodzinyPracy1()
         {
             GodzinyPracy godzinyPracy =
@@ -37,7 +49,7 @@ namespace Test.Services
 
         [Test]
         [TestCaseSource("GetGodzinyPracy1")]
-        public void HarmonogramShouldBeCorrectTest(GodzinyPracy a)
+        public void HarmonogramCountShouldBeCorrectTest(GodzinyPracy a)
         {
             var result = new HarmonogramService().HarmonogramCount(a);
             Assert.AreEqual(result, 6);
@@ -45,9 +57,33 @@ namespace Test.Services
 
         [Test]
         [TestCaseSource("GetGodzinyPracy2")]
-        public void HarmonogramThrowsAnExceptionTest(GodzinyPracy a)
+        public void HarmonogramCountThrowsAnExceptionTest(GodzinyPracy a)
         {
             Assert.Throws<Exception>(() => new HarmonogramService().HarmonogramCount(a));
+        }
+
+        [Test]
+        public void HarmonogramCreateShouldBeCorrectTest()
+        {
+            var before = mockContext.Object.Harmonograms.Count();
+            new HarmonogramService().CreateWeterynarzHarmonograms(mockContext.Object, new DateTime(2022,11,9), 2);
+            Assert.AreEqual(before + 6, mockContext.Object.Harmonograms.Count());
+        }
+
+        [Test]
+        public void HarmonogramCreateShouldBeNullTest()
+        {
+            var before = mockContext.Object.Harmonograms.Count();
+            new HarmonogramService().CreateWeterynarzHarmonograms(mockContext.Object, new DateTime(2022,11,16), 2);
+            Assert.AreEqual(before, mockContext.Object.Harmonograms.Count());
+        }
+
+        [Test]
+        public void HarmonogramDeleteShouldBeCorrectTest()
+        {
+            new HarmonogramService().DeleteHarmonograms(mockContext.Object.Harmonograms.ToList(), mockContext.Object);
+            Assert.AreEqual(0, mockContext.Object.Harmonograms.Count());
+            Assert.AreEqual(WizytaStatus.AnulowanaKlinika.ToString(), mockContext.Object.Wizyta.Where(x => x.IdWizyta == 1).First().Status);
         }
     }
 }

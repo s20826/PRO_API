@@ -29,6 +29,11 @@ namespace Application.Urlopy.Commands
         {
             int id = hash.Decode(req.request.ID_weterynarz);
 
+            if(context.Urlops.Where(x => x.Dzien.Date.Equals(req.request.Data) && x.IdOsoba.Equals(id)).Any())
+            {
+                throw new Exception("Taki urlop już istnieje");
+            }
+
             context.Urlops.Add(new Domain.Models.Urlop
             {
                 IdOsoba = id,

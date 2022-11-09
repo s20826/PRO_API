@@ -86,8 +86,6 @@ namespace PRO_API
                 .AddApplication()
                 .AddDomain();
 
-            services.AddScoped<IEmailSender, EmailSender>();
-
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "PRO_API", Version = "v1" });

@@ -33,6 +33,7 @@ namespace Application.Konto.Queries
             {
                 Imie = x.Imie,
                 Nazwisko = x.Nazwisko,
+                NazwaUzytkownika = x.NazwaUzytkownika,
                 NumerTelefonu = x.NumerTelefonu,
                 Email = x.Email
             }).FirstOrDefault();

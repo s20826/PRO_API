@@ -3,6 +3,7 @@ using Application.DTO.Request;
 using Application.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -42,8 +43,14 @@ namespace Application.Konto.Commands
                 throw new UserNotAuthorizedException("Incorrect");
             }
 
+            if (context.Osobas.Where(x => x.NazwaUzytkownika.Equals(req.request.NazwaUzytkownika)).Any())
+            {
+                throw new Exception("Not unique");
+            }
+
             user.NumerTelefonu = req.request.NumerTelefonu;
             user.Email = req.request.Email;
+            user.NazwaUzytkownika = req.request.NazwaUzytkownika;
 
             return await context.SaveChangesAsync(cancellationToken);
         }

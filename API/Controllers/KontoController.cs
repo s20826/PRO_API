@@ -86,7 +86,7 @@ namespace PRO_API.Controllers
             }
             catch (Exception e)
             {
-                return NotFound(new
+                return BadRequest(new
                 {
                     message = e.Message
                 });
@@ -108,7 +108,7 @@ namespace PRO_API.Controllers
             }
             catch (Exception e)
             {
-                return NotFound(new
+                return BadRequest(new
                 {
                     message = e.Message
                 });

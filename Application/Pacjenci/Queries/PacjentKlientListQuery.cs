@@ -44,7 +44,8 @@ namespace Application.Pacjenci.Queries
                  Nazwa = x.Nazwa,
                  Gatunek = x.Gatunek,
                  Rasa = x.Rasa,
-                 Masc = x.Masc
+                 Plec = x.Plec,
+                 Agresywne = x.Agresywne
              }).ToList();
 
             return results;

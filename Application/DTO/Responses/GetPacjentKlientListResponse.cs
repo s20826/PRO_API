@@ -12,6 +12,8 @@ namespace Application.DTO.Responses
         public string Nazwa { get; set; }
         public string Gatunek { get; set; }
         public string Rasa { get; set; }
-        public string Masc { get; set; }
+        public string Plec { get; set; }
+        public bool Agresywne { get; set; }
+
     }
 }

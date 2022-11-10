@@ -37,7 +37,7 @@ namespace Application.Pacjenci.Queries
                         Nazwa = x.Nazwa,
                         Gatunek = x.Gatunek,
                         Rasa = x.Rasa,
-                        Masc = x.Masc,
+                        Plec = x.Plec,
                         Wlasciciel = y.Imie + ' ' + y.Nazwisko
                     }).ToList();
         }

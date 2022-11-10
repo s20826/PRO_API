@@ -39,7 +39,7 @@ namespace Application.Konto.Commands
             var user = context.Osobas.Where(x => x.IdOsoba == id).FirstOrDefault();
             if(!loginRepository.CheckCredentails(user, passwordRepository, req.request.CurrentHaslo, int.Parse(configuration["PasswordIterations"]))){
                 await context.SaveChangesAsync(cancellationToken);
-                throw new UserNotAuthorizedException("Incorrect");
+                throw new UserNotAuthorizedException("Incorrect password");
             }
 
             string hashedPassword = passwordRepository.HashPassword(Convert.FromBase64String(user.Salt), req.request.NewHaslo, int.Parse(configuration["PasswordIterations"]));

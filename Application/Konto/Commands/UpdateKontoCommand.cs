@@ -40,12 +40,15 @@ namespace Application.Konto.Commands
             if (!loginRepository.CheckCredentails(user, passwordRepository, req.request.Haslo, int.Parse(configuration["PasswordIterations"])))
             {
                 await context.SaveChangesAsync(cancellationToken);
-                throw new UserNotAuthorizedException("Incorrect");
+                throw new UserNotAuthorizedException("Incorrect password");
             }
 
-            if (context.Osobas.Where(x => x.NazwaUzytkownika.Equals(req.request.NazwaUzytkownika)).Any())
+            if (!user.NazwaUzytkownika.Equals(req.request.NazwaUzytkownika))
             {
-                throw new Exception("Not unique");
+                if (context.Osobas.Where(x => x.NazwaUzytkownika.Equals(req.request.NazwaUzytkownika)).Any())
+                {
+                    throw new Exception("Not unique");
+                }
             }
 
             user.NumerTelefonu = req.request.NumerTelefonu;

@@ -50,7 +50,7 @@ namespace Application.Wizyty.Queries
                             DataZakonczenia = zakonczenie,
                             Opis = x.Opis,
                             NotatkaKlient = x.NotatkaKlient,
-                            Cena = x.Cena,
+                            Cena = (decimal)(x.CenaZnizka != null ? x.CenaZnizka : x.Cena),
                             Weterynarz = context.Osobas.Where(i => i.IdOsoba.Equals(harmonograms.First().WeterynarzIdOsoba)).Select(i => i.Imie + " " + i.Nazwisko).First(),
                             IdPacjent = x.IdPacjent != null ? hash.Encode(p.IdPacjent) : null,
                             Pacjent = x.IdPacjent != null ? p.Nazwa : null
@@ -70,12 +70,11 @@ namespace Application.Wizyty.Queries
                         DataZakonczenia = null,
                         Opis = x.Opis,
                         NotatkaKlient = x.NotatkaKlient,
-                        Cena = x.Cena,
+                        Cena = (decimal)(x.CenaZnizka != null ? x.CenaZnizka : x.Cena),
                         Weterynarz = null,
                         IdPacjent = x.IdPacjent != null ? hash.Encode((int)x.IdPacjent) : null,
                         Pacjent = x.IdPacjent != null ? p.Nazwa : null
                     }).FirstOrDefault();
-
         }
     }
 }

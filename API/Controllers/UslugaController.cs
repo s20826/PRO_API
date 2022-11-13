@@ -39,6 +39,23 @@ namespace PRO_API.Controllers
             }
         }
 
+        [Authorize]
+        [HttpGet("{ID_wizyta}")]
+        public async Task<IActionResult> GetWizytaUslugaList(string ID_wizyta)
+        {
+            try
+            {
+                return Ok(await Mediator.Send(new UslugaWizytaListQuery
+                {
+                    ID_wizyta = ID_wizyta
+                }));
+            }
+            catch (Exception)
+            {
+                return NotFound();
+            }
+        }
+
         [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<IActionResult> AddUsluga(UslugaRequest request)

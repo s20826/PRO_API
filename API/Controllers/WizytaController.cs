@@ -5,32 +5,26 @@ using Application.Wizyty.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PRO_API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
     public class WizytaController : ApiControllerBase
     {
-        public WizytaController()
-        {
-
-        }
-
         [Authorize(Roles = "admin,weterynarz")]
         [HttpGet]
-        public async Task<IActionResult> GetWizytaList()
+        public async Task<IActionResult> GetWizytaList(CancellationToken token)
         {
             return Ok(await Mediator.Send(new WizytaListQuery
             {
 
-            }));
+            }, token));
         }
 
         [Authorize(Roles = "klient,weterynarz")]
         [HttpGet("moje_wizyty")]
-        public async Task<IActionResult> GetWizytaKlient()
+        public async Task<IActionResult> GetWizytaKlient(CancellationToken token)
         {
             try
             {
@@ -39,12 +33,12 @@ namespace PRO_API.Controllers
                     return Ok(await Mediator.Send(new WizytaKlientQuery
                     {
                         ID_klient = GetUserId()
-                    }));
+                    }, token));
                 }
                 return Ok(await Mediator.Send(new WizytaWeterynarzQuery
                 {
                     ID_weterynarz = GetUserId()
-                }));
+                }, token));
             }
             catch (Exception)
             {
@@ -54,14 +48,14 @@ namespace PRO_API.Controllers
 
         [Authorize(Roles = "admin,weterynarz")]
         [HttpGet("{ID_klient}")]
-        public async Task<IActionResult> GetWizytaKlient(string ID_klient)
+        public async Task<IActionResult> GetWizytaKlient(string ID_klient, CancellationToken token)
         {
             try
             {
                 return Ok(await Mediator.Send(new WizytaAdminQuery
                 {
                     ID_klient = ID_klient
-                }));
+                }, token));
             }
             catch (Exception)
             {
@@ -72,14 +66,14 @@ namespace PRO_API.Controllers
 
         [Authorize]
         [HttpGet("pacjent/{ID_Pacjent}")]
-        public async Task<IActionResult> GetWizytaPacjent(string ID_Pacjent)
+        public async Task<IActionResult> GetWizytaPacjent(string ID_Pacjent, CancellationToken token)
         {
             try
             {
                 return Ok(await Mediator.Send(new WizytaPacjentQuery
                 {
                     ID_Pacjent = ID_Pacjent
-                }));
+                }, token));
             }
             catch (Exception)
             {
@@ -89,7 +83,7 @@ namespace PRO_API.Controllers
 
         [Authorize]
         [HttpGet("details/{ID_wizyta}")]
-        public async Task<IActionResult> GetWizytaDetails(string ID_wizyta)
+        public async Task<IActionResult> GetWizytaDetails(string ID_wizyta, CancellationToken token)
         {
             try
             {
@@ -99,13 +93,13 @@ namespace PRO_API.Controllers
                     {
                         ID_klient = GetUserId(),
                         ID_wizyta = ID_wizyta
-                    }));
+                    }, token));
                 }
 
                 return Ok(await Mediator.Send(new WizytaDetailsAdminQuery
                 {
                     ID_wizyta = ID_wizyta
-                }));
+                }, token));
             }
             catch (Exception)
             {
@@ -114,8 +108,8 @@ namespace PRO_API.Controllers
         }
 
         [Authorize]
-        [HttpPost]
-        public async Task<IActionResult> AddWizyta(UmowWizyteRequest request)    //klient albo weterynarz lub admin umówia wizytę dla klienta (telefonicznie albo na miejscu)
+        [HttpPost("umowWizyte")]
+        public async Task<IActionResult> AddWizyta(UmowWizyteRequest request, CancellationToken token)    //klient albo weterynarz lub admin umówia wizytę dla klienta (telefonicznie albo na miejscu)
         {
             try
             {
@@ -127,7 +121,7 @@ namespace PRO_API.Controllers
                         ID_pacjent = request.ID_Pacjent,
                         ID_Harmonogram = request.ID_Harmonogram,
                         Notatka = request.Notatka
-                    }));
+                    }, token));
                 }
 
                 return Ok(await Mediator.Send(new UmowWizyteKlientCommand
@@ -157,7 +151,7 @@ namespace PRO_API.Controllers
 
         [Authorize]
         [HttpPut("przeloz/{ID_wizyta}")]
-        public async Task<IActionResult> UpdateWizytaData(UmowWizyteRequest request, string ID_wizyta)    //klient albo weterynarz lub admin zmienia termin wizyty dla klienta (telefonicznie albo na miejscu)
+        public async Task<IActionResult> UpdateWizytaData(UmowWizyteRequest request, string ID_wizyta, CancellationToken token)   //klient albo weterynarz lub admin zmienia termin wizyty dla klienta (telefonicznie albo na miejscu)
         {
             try
             {
@@ -201,7 +195,7 @@ namespace PRO_API.Controllers
 
         [Authorize(Roles = "weterynarz")]
         [HttpPut("{ID_wizyta}")]
-        public async Task<IActionResult> UpdateWizytaInfo(WizytaInfoUpdateRequest request, string ID_wizyta)    //weterynarz zmienia informacje o wizycie (opis, status, dodaje wykonane usługi)
+        public async Task<IActionResult> UpdateWizytaInfo(WizytaInfoUpdateRequest request, string ID_wizyta, CancellationToken token)    //weterynarz zmienia informacje o wizycie (opis, status, dodaje wykonane usługi)
         {
             try
             {
@@ -223,7 +217,7 @@ namespace PRO_API.Controllers
 
         [Authorize]
         [HttpDelete("{ID_wizyta}")]
-        public async Task<IActionResult> DeleteWizyta(string ID_wizyta)    //klient albo weterynarz lub admin aunuluje wizytę dla klienta (telefonicznie albo na miejscu)
+        public async Task<IActionResult> DeleteWizyta(string ID_wizyta, CancellationToken token)  //klient albo weterynarz lub admin aunuluje wizytę dla klienta (telefonicznie albo na miejscu)
         {
             try
             {
@@ -240,7 +234,7 @@ namespace PRO_API.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpDelete("admin/{ID_wizyta}")]
-        public async Task<IActionResult> DeleteWizytaByKlinika(string ID_wizyta)    //admin anuluje wizytę, status wizyty ustawiony jako anulowany przez klinike
+        public async Task<IActionResult> DeleteWizytaByKlinika(string ID_wizyta, CancellationToken token)    //admin anuluje wizytę, status wizyty ustawiony jako anulowany przez klinike
         {
             try
             {

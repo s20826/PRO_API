@@ -4,41 +4,34 @@ using Application.Klienci.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PRO_API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
     public class KlientController : ApiControllerBase
     {
-        public KlientController()
-        {
-
-        }
-
-
         [Authorize(Roles = "admin,weterynarz")]
         [HttpGet]
-        public async Task<IActionResult> GetKlientList()
+        public async Task<IActionResult> GetKlientList(CancellationToken token)
         {
             return Ok(await Mediator.Send(new KlientListQuery
             {
 
-            }));
+            }, token));
         }
 
 
         [Authorize(Roles = "admin,weterynarz")]
         [HttpGet("{ID_osoba}")]
-        public async Task<IActionResult> GetKlientById(string ID_osoba)
+        public async Task<IActionResult> GetKlientById(string ID_osoba, CancellationToken token)
         {
             try
             {
                 return Ok(await Mediator.Send(new KlientQuery
                 {
                     ID_osoba = ID_osoba
-                }));
+                }, token));
             }
             catch (Exception)
             {
@@ -49,28 +42,25 @@ namespace PRO_API.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> AddKlient(KlientCreateRequest request)
+        public async Task<IActionResult> AddKlient(KlientCreateRequest request, CancellationToken token)
         {
             try
             {
                 return Ok(await Mediator.Send(new CreateKlientCommand
                 {
                     request = request
-                }));
+                }, token));
             } 
             catch (Exception e)
             {
-                return BadRequest(new
-                {
-                    message = e.Message
-                });
+                return BadRequest(e.Message);
             }
         }
 
 
         [Authorize(Roles = "klient")]
         [HttpDelete]
-        public async Task<IActionResult> DeleteKlient()
+        public async Task<IActionResult> DeleteKlient(CancellationToken token)
         {
             try
             {
@@ -79,7 +69,7 @@ namespace PRO_API.Controllers
                     await Mediator.Send(new DeleteKlientCommand
                     {
                         ID_osoba = GetUserId()
-                    });
+                    }, token);
                 }
             }
             catch (Exception)
@@ -92,14 +82,14 @@ namespace PRO_API.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpDelete("admin/{ID_osoba}")]
-        public async Task<IActionResult> DeleteKlientByAdmin(string ID_osoba)
+        public async Task<IActionResult> DeleteKlientByAdmin(string ID_osoba, CancellationToken token)
         {
             try
             {
                 await Mediator.Send(new DeleteKlientCommand
                 {
                     ID_osoba = ID_osoba
-                });
+                }, token);
             }
             catch (Exception)
             {

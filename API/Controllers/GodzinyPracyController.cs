@@ -5,29 +5,25 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PRO_API.Controllers
 {
     public class GodzinyPracyController : ApiControllerBase
     {
-        public GodzinyPracyController()
-        {
-
-        }
-
         //[Authorize(Roles = "admin")]
         [HttpGet("{ID_osoba}")]
-        public async Task<IActionResult> GetGodzinyPracy(string ID_osoba)
+        public async Task<IActionResult> GetGodzinyPracy(string ID_osoba, CancellationToken token)
         {
             try
             {
                 return Ok(await Mediator.Send(new GodzinyPracyQuery
                 {
                     ID_osoba = ID_osoba
-                }));
+                }, token));
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return NotFound();
             }
@@ -35,7 +31,7 @@ namespace PRO_API.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpPost("list/{ID_osoba}")]
-        public async Task<IActionResult> AddGodzinyPracyList(string ID_osoba, List<GodzinyPracyRequest> requests)
+        public async Task<IActionResult> AddGodzinyPracyList(string ID_osoba, List<GodzinyPracyRequest> requests, CancellationToken token)
         {
             try
             {
@@ -43,34 +39,34 @@ namespace PRO_API.Controllers
                 {
                     ID_osoba = ID_osoba,
                     requestList = requests
-                }));
+                }, token));
             }
             catch (Exception e)
             {
-                return NotFound();
+                return BadRequest(e.Message);
             }
         }
 
         [Authorize(Roles = "admin")]
         [HttpPost("default/{ID_osoba}")]
-        public async Task<IActionResult> AddGodzinyPracyList(string ID_osoba)
+        public async Task<IActionResult> AddGodzinyPracyList(string ID_osoba, CancellationToken token)
         {
             try
             {
                 return Ok(await Mediator.Send(new CreateDefaultGodzinyPracyCommand
                 {
                     ID_osoba = ID_osoba
-                }));
+                }, token));
             }
             catch (Exception e)
             {
-                return NotFound();
+                return BadRequest(e.Message);
             }
         }
 
         [Authorize(Roles = "admin")]
         [HttpPost("{ID_osoba}")]
-        public async Task<IActionResult> AddGodzinyPracy(string ID_osoba, GodzinyPracyRequest request)
+        public async Task<IActionResult> AddGodzinyPracy(string ID_osoba, GodzinyPracyRequest request, CancellationToken token)
         {
             try
             {
@@ -78,35 +74,37 @@ namespace PRO_API.Controllers
                 {
                     ID_osoba = ID_osoba,
                     requestList = new List<GodzinyPracyRequest>() { request }
-                }));
+                }, token));
             }
             catch (Exception e)
             {
-                return NotFound();
+                return BadRequest(e.Message);
             }
         }
 
         [Authorize(Roles = "admin")]
         [HttpPut("{ID_osoba}")]
-        public async Task<IActionResult> UpdateGodzinyPracy(string ID_osoba, List<GodzinyPracyRequest> requests)
+        public async Task<IActionResult> UpdateGodzinyPracy(string ID_osoba, List<GodzinyPracyRequest> requests, CancellationToken token)
         {
             try
             {
-                return Ok(await Mediator.Send(new UpdateGodzinyPracyCommand
+                await Mediator.Send(new UpdateGodzinyPracyCommand
                 {
                     ID_osoba = ID_osoba,
                     requestList = requests
-                }));
+                }, token);
             }
             catch (Exception e)
             {
-                return NotFound();
+                return BadRequest(e.Message);
             }
+
+            return NoContent();
         }
 
         [Authorize(Roles = "admin")]
         [HttpDelete("{ID_osoba}")]
-        public async Task<IActionResult> DeleteGodzinyPracy(string ID_osoba, int dzien)
+        public async Task<IActionResult> DeleteGodzinyPracy(string ID_osoba, int dzien, CancellationToken token)
         {
             try
             {
@@ -114,9 +112,9 @@ namespace PRO_API.Controllers
                 {
                     ID_osoba = ID_osoba,
                     dzien = dzien
-                });
+                }, token);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return NotFound();
             }

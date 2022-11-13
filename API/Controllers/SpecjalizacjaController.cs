@@ -5,21 +5,16 @@ using Application.WeterynarzSpecjalizacje.Commands;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PRO_API.Controllers
 {
     public class SpecjalizacjaController : ApiControllerBase
     {
-
-        public SpecjalizacjaController()
-        {
-
-        }
-
         [Authorize(Roles = "admin")]
         [HttpGet]
-        public async Task<IActionResult> GetSpecjalizacjaList()
+        public async Task<IActionResult> GetSpecjalizacjaList(CancellationToken token)
         {
             return Ok(await Mediator.Send(new SpecjalizacjaListQuery
             {
@@ -29,14 +24,14 @@ namespace PRO_API.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpGet("details/{ID_specjalizacja}")]
-        public async Task<IActionResult> GetSpecjalizacjaById(string ID_specjalizacja)
+        public async Task<IActionResult> GetSpecjalizacjaById(string ID_specjalizacja, CancellationToken token)
         {
             try 
             {
                 return Ok(await Mediator.Send(new SpecjalizacjaDetailsQuery
                 {
                     ID_specjalizacja = ID_specjalizacja
-                }));
+                }, token));
             }
             catch (Exception)
             {
@@ -46,14 +41,14 @@ namespace PRO_API.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpPost]
-        public async Task<IActionResult> AddSpecjalizacja(SpecjalizacjaRequest request)
+        public async Task<IActionResult> AddSpecjalizacja(SpecjalizacjaRequest request, CancellationToken token)
         {
             try
             {
                 return Ok(await Mediator.Send(new CreateSpecjalizacjaCommand
                 {
                     request = request
-                }));
+                }, token));
             }
             catch (Exception)
             {
@@ -63,7 +58,7 @@ namespace PRO_API.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpPut("{ID_specjalizacja}")]
-        public async Task<IActionResult> UpdateSpecjalizacja(string ID_specjalizacja, SpecjalizacjaRequest request)
+        public async Task<IActionResult> UpdateSpecjalizacja(string ID_specjalizacja, SpecjalizacjaRequest request, CancellationToken token)
         {
             try
             {
@@ -71,7 +66,7 @@ namespace PRO_API.Controllers
                 {
                     ID_specjalizacja = ID_specjalizacja,
                     request = request
-                }));
+                }, token));
             }
             catch (Exception)
             {
@@ -81,14 +76,14 @@ namespace PRO_API.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpDelete("{ID_specjalizacja}")]
-        public async Task<IActionResult> DeleteSpecjalizacja(string ID_specjalizacja)
+        public async Task<IActionResult> DeleteSpecjalizacja(string ID_specjalizacja, CancellationToken token)
         {
             try
             {
                 await Mediator.Send(new DeleteSpecjalizacjaCommand
                 {
                     ID_specjalizacja = ID_specjalizacja
-                });
+                }, token);
             }
             catch (Exception)
             {

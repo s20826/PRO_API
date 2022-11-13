@@ -2,6 +2,8 @@
 using Application.Znizki.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PRO_API.Controllers
@@ -10,34 +12,57 @@ namespace PRO_API.Controllers
     {
         [Authorize(Roles = "admin")]
         [HttpGet]
-        public async Task<IActionResult> GetZnizkaList()
+        public async Task<IActionResult> GetZnizkaList(CancellationToken token)
         {
-            return Ok(await Mediator.Send(new ZnizkaListQuery
+            try
             {
+                return Ok(await Mediator.Send(new ZnizkaListQuery
+                {
 
-            }));
+                }, token));
+            }
+            catch (Exception)
+            {
+                return NotFound();
+            }
         }
 
         [Authorize(Roles = "admin")]
         [HttpGet("details/{ID_znizka}")]
-        public async Task<IActionResult> GetZnizkaDetails(string ID_znizka)
+        public async Task<IActionResult> GetZnizkaDetails(string ID_znizka, CancellationToken token)
         {
-            return Ok(await Mediator.Send(new ZnizkaDetailsQuery
+            try
             {
-                ID_znizka = ID_znizka
-            }));
+                return Ok(await Mediator.Send(new ZnizkaDetailsQuery
+                {
+                    ID_znizka = ID_znizka
+                }, token));
+            }
+            catch (Exception)
+            {
+                return NotFound();
+            }
         }
 
         [Authorize(Roles = "admin")]
         [HttpPut("{ID_znizka}")]
-        public async Task<IActionResult> UpdateZnizka(string ID_znizka, string ZnizkaNazwa, decimal ProcentZnizki)
+        public async Task<IActionResult> UpdateZnizka(string ID_znizka, string ZnizkaNazwa, decimal ProcentZnizki, CancellationToken token)
         {
-            return Ok(await Mediator.Send(new UpdateZnizkaCommand
+            try
             {
-                ID_znizka = ID_znizka,
-                Nazwa = ZnizkaNazwa,
-                Procent = ProcentZnizki
-            }));
+                await Mediator.Send(new UpdateZnizkaCommand
+                {
+                    ID_znizka = ID_znizka,
+                    Nazwa = ZnizkaNazwa,
+                    Procent = ProcentZnizki
+                }, token);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+
+            return NoContent();
         }
     }
 }

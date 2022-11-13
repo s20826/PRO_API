@@ -130,7 +130,7 @@ namespace PRO_API.Controllers
                     ID_pacjent = request.ID_Pacjent,
                     ID_Harmonogram = request.ID_Harmonogram,
                     Notatka = request.Notatka
-                }));
+                }, token));
             }
             catch (ConstraintException e)
             {
@@ -164,7 +164,7 @@ namespace PRO_API.Controllers
                         ID_pacjent = request.ID_Pacjent,
                         ID_Harmonogram = request.ID_Harmonogram,
                         Notatka = request.Notatka
-                    }));
+                    }, token));
                 }
 
                 return Ok(await Mediator.Send(new PrzelozWizyteCommand
@@ -174,7 +174,7 @@ namespace PRO_API.Controllers
                     ID_pacjent = request.ID_Pacjent,
                     ID_Harmonogram = request.ID_Harmonogram,
                     Notatka = request.Notatka
-                }));
+                }, token));
             }
             catch (ConstraintException e)
             {
@@ -204,7 +204,7 @@ namespace PRO_API.Controllers
                     ID_wizyta = ID_wizyta,
                     ID_weterynarz = GetUserId(),
                     request = request
-                }));
+                }, token));
             }
             catch (Exception e)
             {
@@ -224,7 +224,7 @@ namespace PRO_API.Controllers
                 return Ok(await Mediator.Send(new DeleteWizytaKlientCommand
                 {
                     ID_wizyta = ID_wizyta
-                }));
+                }, token));
             }
             catch (Exception)
             {
@@ -241,7 +241,7 @@ namespace PRO_API.Controllers
                 return Ok(await Mediator.Send(new DeleteWizytaAdminCommand
                 {
                     ID_wizyta = ID_wizyta
-                }));
+                }, token));
             }
             catch (Exception)
             {

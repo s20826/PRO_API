@@ -1,89 +1,49 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Application.KlientZnizki.Queries;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Data;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PRO_API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class KlientZnizkaController : ControllerBase
+    public class KlientZnizkaController : ApiControllerBase
     {
-        /*private readonly IConfiguration configuration;
-        private readonly KlinikaContext context;
-
-        public KlientZnizkaController(IConfiguration config, KlinikaContext klinikaContext)
-        {
-            configuration = config;
-            context = klinikaContext;
-        }
-
-        
-
+        [Authorize(Roles = "admin,weterynarz")]
         [HttpGet("{ID_osoba}")]
-        public IActionResult GetKlientZnizka(int ID_osoba)
+        public async Task<IActionResult> GetKlientZnizka(string ID_osoba, CancellationToken token)
         {
-            if (context.KlientZnizkas.Where(x => x.IdOsoba == ID_osoba).Any() != true)
+            try
             {
-                return BadRequest("Nie ma przyznanych znizek dla klienta o ID = " + ID_osoba);
-            }
-            else
-            {
-                var results =
-                from x in context.Znizkas
-                join y in context.KlientZnizkas on x.IdZnizka equals y.IdZnizka into ps
-                from p in ps
-                where p.IdOsoba == ID_osoba
-                select new
+                return Ok(await Mediator.Send(new KlientZnizkaListQuery
                 {
-                    Nazwa = x.NazwaZnizki,
-                    Procent = x.ProcentZnizki,
-                    Data_przyznania = p.DataPrzyznania,
-                    Czy_wykorzystana = p.CzyWykorzystana
-                };
-
-                return Ok(results);
+                    ID_klient = ID_osoba
+                }, token));
+            }
+            catch (Exception)
+            {
+                return NotFound();
             }
         }
 
-        [HttpPost("{ID_osoba}/{idZnizka}")]
-        public IActionResult addKlientZnizka(int ID_osoba, int idZnizka)
+        [Authorize(Roles = "klient")]
+        [HttpGet("moje_znizki")]
+        public async Task<IActionResult> GetKlientZnizka(CancellationToken token)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest("Niepoprawne dane");
+                return Ok(await Mediator.Send(new KlientZnizkaListQuery
+                {
+                    ID_klient = GetUserId()
+                }, token));
             }
-
-            context.KlientZnizkas.Add(new KlientZnizka
+            catch (Exception)
             {
-                IdOsoba = ID_osoba,
-                IdZnizka = idZnizka,
-                DataPrzyznania = DateTime.Now,
-                CzyWykorzystana = false
-            });
-
-            context.SaveChanges();
-
-            return Ok("Pomyślnie dodano zniżkę klientowi");
+                return NotFound();
+            }
         }
-
-        [HttpDelete("{ID_osoba}/{idZnizka}")]
-        public IActionResult deleteKlientZnizka(int ID_osoba, int idZnizka)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest("Niepoprawne dane");
-            }
-            if (!context.Znizkas.Where(x => x.IdZnizka == ID_osoba).Any())
-            {
-                return BadRequest("Nie ma zniżki o ID = " + ID_osoba);
-            }
-
-            context.Remove(context.KlientZnizkas.Where(x => x.IdZnizka == idZnizka && x.IdOsoba == ID_osoba).First());
-            context.SaveChanges();
-
-            return Ok("Pomyślnie usunięto zniżkę.");
-        }*/
     }
 }

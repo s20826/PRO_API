@@ -6,70 +6,103 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PRO_API.Controllers
 {
     public class SzczepionkaController : ApiControllerBase
     {
-        public SzczepionkaController()
-        {
-
-        }
-
         [Authorize(Roles = "admin,weterynarz")]
         [HttpGet]
-        public async Task<IActionResult> GetSzczepionkaList()
+        public async Task<IActionResult> GetSzczepionkaList(CancellationToken token)
         {
-            return Ok(await Mediator.Send(new SzczepionkaListQuery
+            try
             {
+                return Ok(await Mediator.Send(new SzczepionkaListQuery
+                {
 
-            }));
+                }, token));
+            } catch (Exception)
+            {
+                return BadRequest();
+            }
         }
 
 
         [Authorize(Roles = "admin,weterynarz")]
         [HttpGet("{ID_szczepionka}")]
-        public async Task<IActionResult> GetSzczepionkaDetails(string ID_szczepionka)
+        public async Task<IActionResult> GetSzczepionkaDetails(string ID_szczepionka, CancellationToken token)
         {
-            return Ok(await Mediator.Send(new SzczepionkaDetailsQuery
+            try
             {
-                ID_szczepionka = ID_szczepionka
-            }));
+                return Ok(await Mediator.Send(new SzczepionkaDetailsQuery
+                {
+                    ID_szczepionka = ID_szczepionka
+                }, token));
+            } catch (Exception)
+            {
+                return BadRequest();
+            }
         }
 
 
         [Authorize(Roles = "admin,weterynarz")]
         [HttpPost]
-        public async Task<IActionResult> AddSzczepionka(SzczepionkaRequest request)
+        public async Task<IActionResult> AddSzczepionka(SzczepionkaRequest request, CancellationToken token)
         {
-            return Ok(await Mediator.Send(new CreateSzczepionkaCommand
+            try
             {
-                request = request
-            }));
+                return Ok(await Mediator.Send(new CreateSzczepionkaCommand
+                {
+                    request = request
+                }, token));
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
         }
 
 
         [Authorize(Roles = "admin,weterynarz")]
         [HttpPut("{ID_szczepionka}")]
-        public async Task<IActionResult> UpdateSzczepionka(string ID_szczepionka, SzczepionkaRequest request)
+        public async Task<IActionResult> UpdateSzczepionka(string ID_szczepionka, SzczepionkaRequest request, CancellationToken token)
         {
-            return Ok(await Mediator.Send(new UpdateSzczepionkaCommand
+            try
             {
-                ID_szczepionka = ID_szczepionka,
-                request = request
-            }));
+                await Mediator.Send(new UpdateSzczepionkaCommand
+                {
+                    ID_szczepionka = ID_szczepionka,
+                    request = request
+                }, token);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+
+            return NoContent();
         }
 
 
         [Authorize(Roles = "admin,weterynarz")]
         [HttpDelete("{ID_szczepionka}")]
-        public async Task<IActionResult> DeleteSzczepionka(string ID_szczepionka)
+        public async Task<IActionResult> DeleteSzczepionka(string ID_szczepionka, CancellationToken token)
         {
-            return Ok(await Mediator.Send(new DeleteSzczepionkaCommand
+            try
             {
-                ID_szczepionka = ID_szczepionka
-            }));
+                await Mediator.Send(new DeleteSzczepionkaCommand
+                {
+                    ID_szczepionka = ID_szczepionka
+                }, token);
+            }
+            catch (Exception)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
         }
     }
 }

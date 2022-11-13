@@ -3,6 +3,7 @@ using Application.Harmonogramy.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PRO_API.Controllers
@@ -10,15 +11,16 @@ namespace PRO_API.Controllers
     public class HarmonogramController : ApiControllerBase
     {
         //ustawia harmonogramy na podany dzień dla wszystkich weterynarzy według ich godzin pracy
+        //[Authorize(Roles = "admin")]
         [HttpPost("day")]
-        public async Task<IActionResult> AddHarmonogramsForADay(DateTime date)
+        public async Task<IActionResult> AddHarmonogramsForADay(DateTime date, CancellationToken token)
         {
             try
             {
                 return Ok(await Mediator.Send(new CreateHarmonogramDefaultCommand
                 {
                     Data = date
-                }));
+                }, token));
             }
             catch (Exception e)
             {
@@ -28,8 +30,9 @@ namespace PRO_API.Controllers
 
 
         //ustawia harmonogramy na podany dzień dla wszystkich weterynarzy według ich godzin pracy
+        //[Authorize(Roles = "admin")]
         [HttpPost("day/{ID_weterynarz}")]
-        public async Task<IActionResult> AddWeterynarzHarmonogramForADay(DateTime date, string ID_weterynarz)
+        public async Task<IActionResult> AddWeterynarzHarmonogramForADay(DateTime date, string ID_weterynarz, CancellationToken token)
         {
             try
             {
@@ -37,7 +40,7 @@ namespace PRO_API.Controllers
                 {
                     Data = date,
                     ID_weterynarz = ID_weterynarz
-                }));
+                }, token));
             }
             catch (Exception e)
             {
@@ -47,15 +50,16 @@ namespace PRO_API.Controllers
 
 
         //usuwa harmonogramy na podany dzień wszystkim weterynarzom
+        //[Authorize(Roles = "admin")]
         [HttpDelete("day")]
-        public async Task<IActionResult> DeleteHarmonogramsForADay(DateTime date)
+        public async Task<IActionResult> DeleteHarmonogramsForADay(DateTime date, CancellationToken token)
         {
             try
             {
                 return Ok(await Mediator.Send(new DeleteHarmonogramCommand
                 {
                     Data = date
-                }));
+                }, token));
             }
             catch (Exception e)
             {
@@ -67,14 +71,14 @@ namespace PRO_API.Controllers
         //klient umawia wizytę albo pracownik kliniki umówia wizytę na prośbę klienta
         //[Authorize(Roles = "klient,weterynarz,admin")]
         [HttpGet]
-        public async Task<IActionResult> GetHarmonogram(DateTime date)      
+        public async Task<IActionResult> GetHarmonogram(DateTime date, CancellationToken token)
         {
             try
             {
                 return Ok(await Mediator.Send(new HarmonogramKlientQuery
                 {
                     Date = date
-                }));
+                }, token));
             }
             catch (Exception)
             {
@@ -86,7 +90,7 @@ namespace PRO_API.Controllers
         //admin wyświetla harmonogram weterynarza
         [Authorize(Roles = "admin")]
         [HttpGet("klinika/{ID_osoba}")]
-        public async Task<IActionResult> GetKlinikaAdminHarmonogram(string ID_osoba, DateTime startDate, DateTime endDate)
+        public async Task<IActionResult> GetKlinikaAdminHarmonogram(string ID_osoba, DateTime startDate, DateTime endDate, CancellationToken token)
         {
             try
             {
@@ -95,7 +99,7 @@ namespace PRO_API.Controllers
                     ID_osoba = ID_osoba,
                     StartDate = startDate,
                     EndDate = endDate
-                }));
+                }, token));
             }
             catch (Exception)
             {
@@ -106,7 +110,7 @@ namespace PRO_API.Controllers
 
         [Authorize(Roles = "weterynarz,admin")]
         [HttpGet("klinika")]
-        public async Task<IActionResult> GetKlinikaHarmonogram(DateTime startDate, DateTime endDate)
+        public async Task<IActionResult> GetKlinikaHarmonogram(DateTime startDate, DateTime endDate, CancellationToken token)
         {
             try
             {
@@ -117,7 +121,7 @@ namespace PRO_API.Controllers
                         ID_osoba = GetUserId(),
                         StartDate = startDate,
                         EndDate = endDate
-                    }));
+                    }, token));
                 }
 
                 return Ok(await Mediator.Send(new HarmonogramAdminQuery

@@ -6,41 +6,34 @@ using Application.Konto.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PRO_API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
     public class KontoController : ApiControllerBase
     {
-        public KontoController()
-        {
-
-        }
-
-
         [Authorize]
         [HttpGet]
-        public async Task<IActionResult> GetKonto()
+        public async Task<IActionResult> GetKonto(CancellationToken token)
         {
             return Ok(await Mediator.Send(new KontoQuery
             {
                 ID_osoba = GetUserId()
-            }));
+            }, token));
         }
 
 
         [AllowAnonymous]
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginRequest request)
+        public async Task<IActionResult> Login(LoginRequest request, CancellationToken token)
         {
             try
             {
                 return Ok(await Mediator.Send(new LoginCommand
                 {
                     request = request
-                }));
+                }, token));
             }
             catch (Exception e)
             {
@@ -63,18 +56,18 @@ namespace PRO_API.Controllers
 
         [AllowAnonymous]
         [HttpPost("refreshToken")]
-        public async Task<IActionResult> GetToken(Guid refreshToken)
+        public async Task<IActionResult> GetToken(Guid refreshToken, CancellationToken token)
         {
             return Ok(await Mediator.Send(new RefreshCommand
             {
                 RefreshToken = refreshToken
-            }));
+            }, token));
         }
 
 
         [Authorize]
         [HttpPut]
-        public async Task<IActionResult> UpdateKontoCredentials(KontoUpdateRequest request)
+        public async Task<IActionResult> UpdateKontoCredentials(KontoUpdateRequest request, CancellationToken token)
         {
             try
             {
@@ -82,7 +75,7 @@ namespace PRO_API.Controllers
                 {
                     ID_osoba = GetUserId(),
                     request = request
-                }));
+                }, token));
             }
             catch (Exception e)
             {

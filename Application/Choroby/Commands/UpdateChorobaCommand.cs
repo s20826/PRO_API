@@ -29,8 +29,16 @@ namespace Application.Choroby.Commands
         public async Task<int> Handle(UpdateChorobaCommand req, CancellationToken cancellationToken)
         {
             int id = hash.Decode(req.ID_Choroba);
-
             var choroba = context.Chorobas.Where(x => x.IdChoroba.Equals(id)).First();
+
+            if (!choroba.Nazwa.Equals(req.request.Nazwa))
+            {
+                if (context.Chorobas.Where(x => x.Nazwa.Equals(req.request.Nazwa)).Any())
+                {
+                    throw new Exception("already exists");
+                }
+            }
+
             choroba.Nazwa = req.request.Nazwa;
             choroba.NazwaLacinska = req.request.NazwaLacinska;
             choroba.Opis = req.request.Opis;

@@ -2,6 +2,8 @@
 using Application.Interfaces;
 using Domain.Models;
 using MediatR;
+using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -24,6 +26,11 @@ namespace Application.Choroby.Commands
 
         public async Task<int> Handle(CreateChorobaCommand req, CancellationToken cancellationToken)
         {
+            if(context.Chorobas.Where(x => x.Nazwa.Equals(req.request.Nazwa)).Any())
+            {
+                throw new Exception("already exists");
+            }
+
             context.Chorobas.Add(new Choroba
             {
                 Nazwa = req.request.Nazwa,

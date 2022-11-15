@@ -53,9 +53,12 @@ namespace PRO_API.Controllers
                     request = request
                 }, token));
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return BadRequest();
+                return BadRequest(new 
+                { 
+                    message = e.Message
+                });
             }
         }
 
@@ -72,11 +75,14 @@ namespace PRO_API.Controllers
                     request = request
                 }, token));
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return BadRequest();
+                return BadRequest(new
+                {
+                    message = e.Message
+                });
             }
-            
+
         }
 
 

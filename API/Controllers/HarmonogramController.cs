@@ -90,15 +90,14 @@ namespace PRO_API.Controllers
         //admin wyświetla harmonogram weterynarza
         [Authorize(Roles = "admin")]
         [HttpGet("klinika/{ID_osoba}")]
-        public async Task<IActionResult> GetKlinikaAdminHarmonogram(string ID_osoba, DateTime startDate, DateTime endDate, CancellationToken token)
+        public async Task<IActionResult> GetKlinikaAdminHarmonogram(string ID_osoba, DateTime Date, CancellationToken token)
         {
             try
             {
                 return Ok(await Mediator.Send(new HarmonogramAdminByIDQuery
                 {
                     ID_osoba = ID_osoba,
-                    StartDate = startDate,
-                    EndDate = endDate
+                    Date = Date,
                 }, token));
             }
             catch (Exception)
@@ -110,7 +109,7 @@ namespace PRO_API.Controllers
 
         [Authorize(Roles = "weterynarz,admin")]
         [HttpGet("klinika")]
-        public async Task<IActionResult> GetKlinikaHarmonogram(DateTime startDate, DateTime endDate, CancellationToken token)
+        public async Task<IActionResult> GetKlinikaHarmonogram(DateTime date, CancellationToken token)
         {
             try
             {
@@ -119,15 +118,13 @@ namespace PRO_API.Controllers
                     return Ok(await Mediator.Send(new HarmonogramWeterynarzQuery
                     {
                         ID_osoba = GetUserId(),
-                        StartDate = startDate,
-                        EndDate = endDate
+                        Date = date
                     }, token));
                 }
 
                 return Ok(await Mediator.Send(new HarmonogramAdminQuery
                 {
-                    StartDate = startDate,
-                    EndDate = endDate
+                    Date = date
                 }));
             }
             catch (Exception)

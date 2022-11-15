@@ -13,8 +13,7 @@ namespace Application.Harmonogramy.Queries
     public class HarmonogramWeterynarzQuery : IRequest<List<GetHarmonogramWeterynarzResponse>>
     {
         public string ID_osoba { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public DateTime Date { get; set; }
     }
 
     public class HarmonogramWeterynarzQueryHandle : IRequestHandler<HarmonogramWeterynarzQuery, List<GetHarmonogramWeterynarzResponse>>
@@ -30,11 +29,13 @@ namespace Application.Harmonogramy.Queries
         public async Task<List<GetHarmonogramWeterynarzResponse>> Handle(HarmonogramWeterynarzQuery req, CancellationToken cancellationToken)
         {
             int id = hash.Decode(req.ID_osoba);
+            var StartDate = req.Date.AddDays(-(int)req.Date.DayOfWeek);
+            var EndDate = req.Date.AddDays(7 - (int)req.Date.DayOfWeek + 1);
 
             var results =
                 (from x in context.Harmonograms
                  join z in context.Wizyta on x.IdWizyta equals z.IdWizyta into wizyta from t in wizyta.DefaultIfEmpty()
-                 where x.DataRozpoczecia.Date >= req.StartDate && x.DataZakonczenia.Date <= req.EndDate && x.WeterynarzIdOsoba == id
+                 where x.DataRozpoczecia.Date >= StartDate && x.DataZakonczenia.Date <= EndDate && x.WeterynarzIdOsoba == id
                  select new GetHarmonogramWeterynarzResponse()
                  {
                      IdHarmonogram = hash.Encode(x.IdHarmonogram),

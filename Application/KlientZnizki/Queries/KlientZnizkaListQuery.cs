@@ -33,6 +33,7 @@ namespace Application.KlientZnizki.Queries
                     join y in context.KlientZnizkas on x.IdZnizka equals y.IdZnizka into ps
                     from p in ps
                     where p.IdOsoba == id
+                    orderby p.DataPrzyznania
                     select new GetKlientZnizkaResponse()
                     {
                         ID_Znizka = hash.Encode(x.IdZnizka),

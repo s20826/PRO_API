@@ -8,9 +8,7 @@ namespace Application.Harmonogramy.Queries
         {
             RuleFor(x => x.ID_osoba).NotEmpty();
 
-            RuleFor(x => x.StartDate).NotEmpty();
-
-            RuleFor(x => x.EndDate).NotEmpty().GreaterThanOrEqualTo(y => y.StartDate);
+            RuleFor(x => x.Date).NotEmpty();
         }
     }
 }

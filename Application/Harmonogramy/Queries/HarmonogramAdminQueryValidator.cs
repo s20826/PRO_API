@@ -11,9 +11,7 @@ namespace Application.Harmonogramy.Queries
     {
         public HarmonogramAdminQueryValidator()
         {
-            RuleFor(x => x.StartDate).NotEmpty();
-
-            RuleFor(x => x.EndDate).NotEmpty().GreaterThanOrEqualTo(y => y.StartDate);
+            RuleFor(x => x.Date).NotEmpty();
         }
     }
 }

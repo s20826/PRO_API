@@ -26,8 +26,6 @@ namespace Application.Harmonogramy.Queries
 
         public async Task<List<GetHarmonogramKlientResponse>> Handle(HarmonogramKlientQuery req, CancellationToken cancellationToken)
         {
-            //var culture = new System.Globalization.CultureInfo("pl-PL");
-
             var results =
                 (from x in context.Harmonograms
                  join w in context.Osobas on x.WeterynarzIdOsoba equals w.IdOsoba

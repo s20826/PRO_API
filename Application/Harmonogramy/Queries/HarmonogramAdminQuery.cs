@@ -11,8 +11,7 @@ namespace Application.Harmonogramy.Queries
 {
     public class HarmonogramAdminQuery : IRequest<List<GetHarmonogramAdminResponse>>
     {
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public DateTime Date { get; set; }
     }
 
     public class HarmonogramAdminQueryHandle : IRequestHandler<HarmonogramAdminQuery, List<GetHarmonogramAdminResponse>>
@@ -27,11 +26,14 @@ namespace Application.Harmonogramy.Queries
 
         public async Task<List<GetHarmonogramAdminResponse>> Handle(HarmonogramAdminQuery req, CancellationToken cancellationToken)
         {
+            var StartDate = req.Date.AddDays(-(int)req.Date.DayOfWeek);
+            var EndDate = req.Date.AddDays(7 - (int)req.Date.DayOfWeek + 1);
+
             var results =
                 (from x in context.Harmonograms
                  join z in context.Wizyta on x.IdWizyta equals z.IdWizyta into wizyta from t in wizyta.DefaultIfEmpty()
                  join w in context.Osobas on x.WeterynarzIdOsoba equals w.IdOsoba
-                 where x.DataRozpoczecia.Date >= req.StartDate && x.DataZakonczenia.Date <= req.EndDate
+                 where x.DataRozpoczecia.Date > StartDate && x.DataZakonczenia.Date < EndDate
                  select new GetHarmonogramAdminResponse()
                  {
                      IdHarmonogram = hash.Encode(x.IdHarmonogram),

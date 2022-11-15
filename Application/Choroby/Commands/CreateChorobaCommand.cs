@@ -26,7 +26,9 @@ namespace Application.Choroby.Commands
         {
             context.Chorobas.Add(new Choroba
             {
-                Nazwa = req.request.Nazwa
+                Nazwa = req.request.Nazwa,
+                NazwaLacinska = req.request.NazwaLacinska,
+                Opis = req.request.Opis
             });
 
             return await context.SaveChangesAsync(cancellationToken);

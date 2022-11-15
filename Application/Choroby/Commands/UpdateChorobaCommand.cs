@@ -32,6 +32,8 @@ namespace Application.Choroby.Commands
 
             var choroba = context.Chorobas.Where(x => x.IdChoroba.Equals(id)).First();
             choroba.Nazwa = req.request.Nazwa;
+            choroba.NazwaLacinska = req.request.NazwaLacinska;
+            choroba.Opis = req.request.Opis;
 
             return await context.SaveChangesAsync(cancellationToken);
         }

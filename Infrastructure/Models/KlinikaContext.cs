@@ -30,6 +30,7 @@ namespace Infrastructure.Models
         public virtual DbSet<LekWizytum> LekWizyta { get; set; }
         public virtual DbSet<Osoba> Osobas { get; set; }
         public virtual DbSet<Pacjent> Pacjents { get; set; }
+        public virtual DbSet<Powiadomienie> Powiadomienies { get; set; }
         public virtual DbSet<ReceptaLek> ReceptaLeks { get; set; }
         public virtual DbSet<Receptum> Recepta { get; set; }
         public virtual DbSet<Specjalizacja> Specjalizacjas { get; set; }
@@ -63,11 +64,23 @@ namespace Infrastructure.Models
 
                 entity.ToTable("Choroba");
 
+                entity.HasIndex(e => e.Nazwa, "Choroba_ak_1")
+                    .IsUnique();
+
                 entity.Property(e => e.IdChoroba).HasColumnName("ID_choroba");
 
                 entity.Property(e => e.Nazwa)
                     .IsRequired()
                     .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.NazwaLacinska)
+                    .HasMaxLength(100)
+                    .IsUnicode(false)
+                    .HasColumnName("Nazwa_lacinska");
+
+                entity.Property(e => e.Opis)
+                    .HasMaxLength(500)
                     .IsUnicode(false);
             });
 
@@ -328,7 +341,6 @@ namespace Infrastructure.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.NumerTelefonu)
-                    .IsRequired()
                     .HasMaxLength(15)
                     .IsUnicode(false)
                     .HasColumnName("Numer_telefonu");
@@ -398,6 +410,36 @@ namespace Infrastructure.Models
                     .HasForeignKey(d => d.IdOsoba)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Pacjent_Klient");
+            });
+
+            modelBuilder.Entity<Powiadomienie>(entity =>
+            {
+                entity.HasKey(e => e.IdPowiadomienie)
+                    .HasName("Powiadomienie_pk");
+
+                entity.ToTable("Powiadomienie");
+
+                entity.Property(e => e.IdPowiadomienie).HasColumnName("ID_powiadomienie");
+
+                entity.Property(e => e.Data).HasColumnType("datetime");
+
+                entity.Property(e => e.IdOsoba).HasColumnName("ID_osoba");
+
+                entity.Property(e => e.Kategoria)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Tekst)
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.IdOsobaNavigation)
+                    .WithMany(p => p.Powiadomienies)
+                    .HasForeignKey(d => d.IdOsoba)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Powiadomienie_Osoba");
             });
 
             modelBuilder.Entity<ReceptaLek>(entity =>

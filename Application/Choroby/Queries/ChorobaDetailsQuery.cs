@@ -34,7 +34,9 @@ namespace Application.Choroby.Queries
                     select new GetChorobaResponse()
                     {
                         ID_Choroba = req.ID_Choroba,
-                        Nazwa = x.Nazwa
+                        Nazwa = x.Nazwa,
+                        NazwaLacinska = x.NazwaLacinska,
+                        Opis = x.Opis
                     }).First();
         }
     }

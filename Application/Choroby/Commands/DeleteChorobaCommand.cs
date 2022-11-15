@@ -29,6 +29,7 @@ namespace Application.Choroby.Commands
             int id = hash.Decode(req.ID_Choroba);
 
             context.ChorobaLeks.RemoveRange(context.ChorobaLeks.Where(x => x.IdChoroba.Equals(id)).ToList());
+            context.WizytaChorobas.RemoveRange(context.WizytaChorobas.Where(x => x.IdChoroba.Equals(id)).ToList());
             context.Chorobas.Remove(context.Chorobas.Where(x => x.IdChoroba.Equals(id)).First());
 
             return await context.SaveChangesAsync(cancellationToken);

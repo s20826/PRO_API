@@ -32,7 +32,9 @@ namespace Application.Choroby.Queries
                     select new GetChorobaResponse()
                     {
                         ID_Choroba = hash.Encode(x.IdChoroba),
-                        Nazwa = x.Nazwa
+                        Nazwa = x.Nazwa,
+                        NazwaLacinska = x.NazwaLacinska,
+                        Opis = x.Opis
                     }).ToList();
         }
     }

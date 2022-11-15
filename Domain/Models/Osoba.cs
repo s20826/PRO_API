@@ -7,6 +7,11 @@ namespace Domain.Models
 {
     public partial class Osoba
     {
+        public Osoba()
+        {
+            Powiadomienies = new HashSet<Powiadomienie>();
+        }
+
         public int IdOsoba { get; set; }
         public string Imie { get; set; }
         public string Nazwisko { get; set; }
@@ -23,5 +28,6 @@ namespace Domain.Models
 
         public virtual Klient Klient { get; set; }
         public virtual Weterynarz Weterynarz { get; set; }
+        public virtual ICollection<Powiadomienie> Powiadomienies { get; set; }
     }
 }

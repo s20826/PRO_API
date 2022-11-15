@@ -23,6 +23,7 @@ namespace Application.Interfaces
         public DbSet<LekWizytum> LekWizyta { get; set; }
         public DbSet<Osoba> Osobas { get; }
         public DbSet<Pacjent> Pacjents { get; }
+        public DbSet<Powiadomienie> Powiadomienies { get; set; }
         public DbSet<ReceptaLek> ReceptaLeks { get; set; }
         public DbSet<Receptum> Recepta { get; set; }
         public DbSet<Specjalizacja> Specjalizacjas { get; set; }

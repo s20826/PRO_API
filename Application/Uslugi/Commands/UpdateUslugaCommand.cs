@@ -1,4 +1,5 @@
 ﻿using Application.DTO.Requests;
+using Application.DTO.Responses;
 using Application.Interfaces;
 using MediatR;
 using System;
@@ -20,10 +21,12 @@ namespace Application.Uslugi.Commands
     {
         private readonly IKlinikaContext context;
         private readonly IHash hash;
-        public UpdateUslugaCommandHandler(IKlinikaContext klinikaContext, IHash _hash)
+        private readonly ICache<GetUslugaResponse> cache;
+        public UpdateUslugaCommandHandler(IKlinikaContext klinikaContext, IHash ihash, ICache<GetUslugaResponse> _cache)
         {
             context = klinikaContext;
-            hash = _hash;
+            hash = ihash;
+            cache = _cache;
         }
 
         public async Task<int> Handle(UpdateUslugaCommand req, CancellationToken cancellationToken)
@@ -37,7 +40,10 @@ namespace Application.Uslugi.Commands
             usluga.Dolegliwosc = req.request.Dolegliwosc;
             usluga.Narkoza = req.request.Narkoza;
 
-            return await context.SaveChangesAsync(cancellationToken);
+            int result = await context.SaveChangesAsync(cancellationToken);
+            cache.Remove();
+
+            return result;
         }
     }
 }

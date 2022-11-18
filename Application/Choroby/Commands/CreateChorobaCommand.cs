@@ -1,4 +1,5 @@
 ﻿using Application.DTO.Requests;
+using Application.DTO.Responses;
 using Application.Interfaces;
 using Domain.Models;
 using MediatR;
@@ -18,10 +19,12 @@ namespace Application.Choroby.Commands
     {
         private readonly IKlinikaContext context;
         private readonly IHash hash;
-        public CreateChorobaCommandHandler(IKlinikaContext klinikaContext, IHash _hash)
+        private readonly ICache<GetChorobaResponse> cache;
+        public CreateChorobaCommandHandler(IKlinikaContext klinikaContext, IHash ihash, ICache<GetChorobaResponse> _cache)
         {
             context = klinikaContext;
-            hash = _hash;
+            hash = ihash;
+            cache = _cache;
         }
 
         public async Task<int> Handle(CreateChorobaCommand req, CancellationToken cancellationToken)
@@ -38,7 +41,10 @@ namespace Application.Choroby.Commands
                 Opis = req.request.Opis
             });
 
-            return await context.SaveChangesAsync(cancellationToken);
+            int result = await context.SaveChangesAsync(cancellationToken);
+            cache.Remove();
+
+            return result;
         }
     }
 }

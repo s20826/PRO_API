@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using Application.DTO.Responses;
+using Application.Interfaces;
 using MediatR;
 using System.Linq;
 using System.Threading;
@@ -15,10 +16,12 @@ namespace Application.Specjalizacje.Commands
     {
         private readonly IKlinikaContext context;
         private readonly IHash hash;
-        public DeleteSpecjalizacjaCommandHandle(IKlinikaContext klinikaContext, IHash _hash)
+        private readonly ICache<GetSpecjalizacjaResponse> cache;
+        public DeleteSpecjalizacjaCommandHandle(IKlinikaContext klinikaContext, IHash ihash, ICache<GetSpecjalizacjaResponse> _cache)
         {
             context = klinikaContext;
-            hash = _hash;
+            hash = ihash;
+            cache = _cache;
         }
 
         public async Task<int> Handle(DeleteSpecjalizacjaCommand req, CancellationToken cancellationToken)
@@ -30,7 +33,10 @@ namespace Application.Specjalizacje.Commands
             var specjalizacja = context.Specjalizacjas.Where(x => x.IdSpecjalizacja == id).First();
             context.Specjalizacjas.Remove(specjalizacja);
 
-            return await context.SaveChangesAsync(cancellationToken);
+            int result = await context.SaveChangesAsync(cancellationToken);
+            cache.Remove();
+
+            return result;
         }
     }
 }

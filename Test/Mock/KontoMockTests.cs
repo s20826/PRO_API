@@ -1,6 +1,7 @@
 ﻿using Application.Common.Exceptions;
 using Application.DTO.Request;
 using Application.DTO.Requests;
+using Application.DTO.Responses;
 using Application.Interfaces;
 using Application.Konto.Commands;
 using HashidsNet;
@@ -123,7 +124,7 @@ namespace Test.Mock
         [Test]
         public async Task UpdateKontoCorrectTestAsync()
         {
-            var handler = new UpdateKontoCommandHandle(mockContext.Object, new PasswordService(), configuration, hash, new LoginService());
+            var handler = new UpdateKontoCommandHandle(mockContext.Object, new PasswordService(), configuration, hash, new LoginService(), new MemoryMockCache<GetKlientListResponse>());
 
             var command = new UpdateKontoCommand()
             {
@@ -144,7 +145,7 @@ namespace Test.Mock
         [Test]
         public void UpdateKontoThrowsAnExceptionTest()
         {
-            var handler = new UpdateKontoCommandHandle(mockContext.Object, new PasswordService(), configuration, hash, new LoginService());
+            var handler = new UpdateKontoCommandHandle(mockContext.Object, new PasswordService(), configuration, hash, new LoginService(), new MemoryMockCache<GetKlientListResponse>());
 
             var command = new UpdateKontoCommand()
             {

@@ -15,27 +15,39 @@ namespace Application.Choroby.Queries
 
     }
 
-    public class UslugaListQueryHandler : IRequestHandler<ChorobaListQuery, List<GetChorobaResponse>>
+    public class ChorobaListQueryHandler : IRequestHandler<ChorobaListQuery, List<GetChorobaResponse>>
     {
         private readonly IKlinikaContext context;
         private readonly IHash hash;
-        public UslugaListQueryHandler(IKlinikaContext klinikaContext, IHash _hash)
+        private readonly ICache<GetChorobaResponse> cache;
+        public ChorobaListQueryHandler(IKlinikaContext klinikaContext, IHash _hash, ICache<GetChorobaResponse> _cache)
         {
             context = klinikaContext;
             hash = _hash;
+            cache = _cache;
         }
 
         public async Task<List<GetChorobaResponse>> Handle(ChorobaListQuery req, CancellationToken cancellationToken)
         {
-            return (from x in context.Chorobas
-                    orderby x.Nazwa
-                    select new GetChorobaResponse()
-                    {
-                        ID_Choroba = hash.Encode(x.IdChoroba),
-                        Nazwa = x.Nazwa,
-                        NazwaLacinska = x.NazwaLacinska,
-                        Opis = x.Opis
-                    }).ToList();
+            List<GetChorobaResponse> data;
+            data = cache.GetFromCache();
+
+            if(data is null)
+            {
+                data = (from x in context.Chorobas
+                        orderby x.Nazwa
+                        select new GetChorobaResponse()
+                        {
+                            ID_Choroba = hash.Encode(x.IdChoroba),
+                            Nazwa = x.Nazwa,
+                            NazwaLacinska = x.NazwaLacinska,
+                            Opis = x.Opis
+                        }).ToList();
+
+                cache.AddToCache(data);
+            }
+
+            return data;
         }
     }
 }

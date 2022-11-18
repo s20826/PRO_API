@@ -1,4 +1,5 @@
 ﻿using Application.DTO.Request;
+using Application.DTO.Responses;
 using Application.Interfaces;
 using MediatR;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 namespace Application.Pacjenci.Commands
 {
     public class UpdatePacjentCommand : IRequest<int>
-    {
+    { 
         public PacjentCreateRequest request { get; set; }
         public string ID_pacjent { get; set; }
     }
@@ -18,10 +19,12 @@ namespace Application.Pacjenci.Commands
     {
         private readonly IKlinikaContext context;
         private readonly IHash hash;
-        public UpdatePacjentCommandHandle(IKlinikaContext klinikaContext, IHash _hash)
+        private readonly ICache<GetPacjentListResponse> cache;
+        public UpdatePacjentCommandHandle(IKlinikaContext klinikaContext, IHash ihash, ICache<GetPacjentListResponse> _cache)
         {
             context = klinikaContext;
-            hash = _hash;
+            hash = ihash;
+            cache = _cache;
         }
 
         public async Task<int> Handle(UpdatePacjentCommand req, CancellationToken cancellationToken)
@@ -45,7 +48,10 @@ namespace Application.Pacjenci.Commands
             pacjent.Agresywne = req.request.Agresywne;
             pacjent.Ubezplodnienie = req.request.Ubezplodnienie;
 
-            return await context.SaveChangesAsync(cancellationToken);
+            int result = await context.SaveChangesAsync(cancellationToken);
+            cache.Remove();
+
+            return result;
         }
     }
 }

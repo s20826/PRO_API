@@ -1,4 +1,5 @@
 ﻿using Application.DTO.Requests;
+using Application.DTO.Responses;
 using Application.Interfaces;
 using MediatR;
 using System;
@@ -20,10 +21,12 @@ namespace Application.Choroby.Commands
     {
         private readonly IKlinikaContext context;
         private readonly IHash hash;
-        public UpdateChorobaCommandHandler(IKlinikaContext klinikaContext, IHash _hash)
+        private readonly ICache<GetChorobaResponse> cache;
+        public UpdateChorobaCommandHandler(IKlinikaContext klinikaContext, IHash ihash, ICache<GetChorobaResponse> _cache)
         {
             context = klinikaContext;
-            hash = _hash;
+            hash = ihash;
+            cache = _cache;
         }
 
         public async Task<int> Handle(UpdateChorobaCommand req, CancellationToken cancellationToken)
@@ -43,7 +46,10 @@ namespace Application.Choroby.Commands
             choroba.NazwaLacinska = req.request.NazwaLacinska;
             choroba.Opis = req.request.Opis;
 
-            return await context.SaveChangesAsync(cancellationToken);
+            int result = await context.SaveChangesAsync(cancellationToken);
+            cache.Remove();
+
+            return result;
         }
     }
 }

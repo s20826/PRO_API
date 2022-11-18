@@ -1,5 +1,6 @@
 ﻿using Application.Common.Exceptions;
 using Application.DTO.Request;
+using Application.DTO.Responses;
 using Application.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Configuration;
@@ -23,13 +24,15 @@ namespace Application.Konto.Commands
         private readonly IConfiguration configuration;
         private readonly IHash hash;
         private readonly ILoginRepository loginRepository;
-        public UpdateKontoCommandHandle(IKlinikaContext klinikaContext, IPasswordRepository password, IConfiguration config, IHash _hash, ILoginRepository login)
+        private readonly ICache<GetKlientListResponse> cache;
+        public UpdateKontoCommandHandle(IKlinikaContext klinikaContext, IPasswordRepository password, IConfiguration config, IHash _hash, ILoginRepository login, ICache<GetKlientListResponse> _cache)
         {
             context = klinikaContext;
             passwordRepository = password;
             configuration = config;
             hash = _hash;
             loginRepository = login;
+            cache = _cache;
         }
 
         public async Task<int> Handle(UpdateKontoCommand req, CancellationToken cancellationToken)
@@ -55,7 +58,10 @@ namespace Application.Konto.Commands
             user.Email = req.request.Email;
             user.NazwaUzytkownika = req.request.NazwaUzytkownika;
 
-            return await context.SaveChangesAsync(cancellationToken);
+            int result = await context.SaveChangesAsync(cancellationToken);
+            cache.Remove();
+
+            return result;
         }
     }
 }

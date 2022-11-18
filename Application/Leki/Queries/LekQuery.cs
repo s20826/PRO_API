@@ -50,7 +50,9 @@ namespace Application.Leki.Queries
                            where i.IdLek == id
                            select new
                            {
-                               j.Nazwa
+                               IdChoroba = hash.Encode(j.IdChoroba),
+                               Nazwa = j.Nazwa,
+                               NazwaLacinska = j.NazwaLacinska
                            }).ToList(),
                 LekList = (from y in context.LekWMagazynies
                            where y.IdLek == id

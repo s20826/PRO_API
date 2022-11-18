@@ -332,5 +332,17 @@ namespace Test
                 }
             };
         }
+
+        public static List<WizytaChoroba> GetWizytaChorobaList()
+        {
+            return new List<WizytaChoroba>
+            {
+                new WizytaChoroba
+                {
+                    IdWizyta = 1,
+                    IdChoroba = 1
+                }
+            };
+        }
     }
 }

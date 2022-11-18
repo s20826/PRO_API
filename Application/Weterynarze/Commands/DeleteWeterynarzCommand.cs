@@ -1,4 +1,5 @@
 ﻿using Application.Common.Exceptions;
+using Application.DTO.Responses;
 using Application.Interfaces;
 using MediatR;
 using System.Linq;
@@ -16,10 +17,12 @@ namespace Application.Weterynarze.Commands
     {
         private readonly IKlinikaContext context;
         private readonly IHash hash;
-        public DeleteWeterynarzCommandHandle(IKlinikaContext klinikaContext, IHash _hash)
+        private readonly ICache<GetWeterynarzListResponse> cache;
+        public DeleteWeterynarzCommandHandle(IKlinikaContext klinikaContext, IHash _hash, ICache<GetWeterynarzListResponse> _cache)
         {
             context = klinikaContext;
             hash = _hash;
+            cache = _cache;
         }
 
         public async Task<int> Handle(DeleteWeterynarzCommand req, CancellationToken cancellationToken)
@@ -40,7 +43,10 @@ namespace Application.Weterynarze.Commands
                 context.GodzinyPracies.RemoveRange(x);
             }
 
-            return await context.SaveChangesAsync(cancellationToken);
+            int result = await context.SaveChangesAsync(cancellationToken);
+            cache.Remove();
+
+            return result;
         }
     }
 }

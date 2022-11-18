@@ -1,7 +1,9 @@
 ﻿using Application.DTO.Request;
+using Application.DTO.Responses;
 using Application.Interfaces;
 using Domain.Models;
 using MediatR;
+using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,10 +22,12 @@ namespace Application.Pacjenci.Commands
     {
         private readonly IKlinikaContext context;
         private readonly IHash hash;
-        public CreatePacjentCommandHandle(IKlinikaContext klinikaContext, IHash ihash)
+        private readonly ICache<GetPacjentListResponse> cache;
+        public CreatePacjentCommandHandle(IKlinikaContext klinikaContext, IHash ihash, ICache<GetPacjentListResponse> _cache)
         {
             context = klinikaContext;
             hash = ihash;
+            cache = _cache;
         }
 
         public async Task<int> Handle(CreatePacjentCommand req, CancellationToken cancellationToken)
@@ -42,7 +46,10 @@ namespace Application.Pacjenci.Commands
                 Ubezplodnienie = req.request.Ubezplodnienie
             });
 
-            return await context.SaveChangesAsync(cancellationToken);
+            int result = await context.SaveChangesAsync(cancellationToken);
+            cache.Remove();
+
+            return result;
         }
     }
 }

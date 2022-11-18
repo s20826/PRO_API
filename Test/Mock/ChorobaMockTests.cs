@@ -1,5 +1,6 @@
 ﻿using Application.Choroby.Commands;
 using Application.DTO.Requests;
+using Application.DTO.Responses;
 using Application.Interfaces;
 using HashidsNet;
 using Infrastructure.Services;
@@ -31,7 +32,7 @@ namespace Test.Mock
         public async Task CreateChorobaShouldBeCorrectTest()
         {
             var before = mockContext.Object.Chorobas.Count();
-            var handler = new CreateChorobaCommandHandler(mockContext.Object, hash);
+            var handler = new CreateChorobaCommandHandler(mockContext.Object, hash, new MemoryMockCache<GetChorobaResponse>());
 
             var command = new CreateChorobaCommand()
             {
@@ -49,7 +50,7 @@ namespace Test.Mock
         [Test]
         public async Task UpdateChorobaShouldBeCorrectTest()
         {
-            var handler = new UpdateChorobaCommandHandler(mockContext.Object, hash);
+            var handler = new UpdateChorobaCommandHandler(mockContext.Object, hash, new MemoryMockCache<GetChorobaResponse>());
 
             var command = new UpdateChorobaCommand()
             {
@@ -68,7 +69,7 @@ namespace Test.Mock
         [Test]
         public void UpdateChorobaShouldThrowAnExceptionTest()
         {
-            var handler = new UpdateChorobaCommandHandler(mockContext.Object, hash);
+            var handler = new UpdateChorobaCommandHandler(mockContext.Object, hash, new MemoryMockCache<GetChorobaResponse>());
 
             var command = new UpdateChorobaCommand()
             {
@@ -87,7 +88,7 @@ namespace Test.Mock
         public async Task DeleteChorobaShouldBeCorrectTest()
         {
             var before = mockContext.Object.Chorobas.Count();
-            var handler = new DeleteChorobaCommandHandler(mockContext.Object, hash);
+            var handler = new DeleteChorobaCommandHandler(mockContext.Object, hash, new MemoryMockCache<GetChorobaResponse>());
 
             var command = new DeleteChorobaCommand()
             {
@@ -103,7 +104,7 @@ namespace Test.Mock
         [Test]
         public void DeleteChorobaShouldThrowAnExceptionTest()
         {
-            var handler = new DeleteChorobaCommandHandler(mockContext.Object, hash);
+            var handler = new DeleteChorobaCommandHandler(mockContext.Object, hash, new MemoryMockCache<GetChorobaResponse>());
 
             var command = new DeleteChorobaCommand()
             {

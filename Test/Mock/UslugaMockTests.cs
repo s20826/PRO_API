@@ -1,4 +1,5 @@
 ﻿using Application.DTO.Requests;
+using Application.DTO.Responses;
 using Application.Interfaces;
 using Application.Uslugi.Commands;
 using HashidsNet;
@@ -31,7 +32,7 @@ namespace Test.Mock
         public async Task CreateUslugaShouldBeCorrectTest()
         {
             var before = mockContext.Object.Uslugas.Count();
-            var handler = new CreateUslugaCommandHandler(mockContext.Object, hash);
+            var handler = new CreateUslugaCommandHandler(mockContext.Object, hash, new MemoryMockCache<GetUslugaResponse>());
 
             var command = new CreateUslugaCommand()
             {
@@ -53,7 +54,7 @@ namespace Test.Mock
         [Test]
         public async Task UpdateUslugaShouldBeCorrectTest()
         {
-            var handler = new UpdateUslugaCommandHandler(mockContext.Object, hash);
+            var handler = new UpdateUslugaCommandHandler(mockContext.Object, hash, new MemoryMockCache<GetUslugaResponse>());
 
             var command = new UpdateUslugaCommand()
             {
@@ -75,7 +76,7 @@ namespace Test.Mock
         [Test]
         public void UpdateUslugaShouldThrowAnExceptionTest()
         {
-            var handler = new UpdateUslugaCommandHandler(mockContext.Object, hash);
+            var handler = new UpdateUslugaCommandHandler(mockContext.Object, hash, new MemoryMockCache<GetUslugaResponse>());
 
             var command = new UpdateUslugaCommand()
             {
@@ -97,7 +98,7 @@ namespace Test.Mock
         public async Task DeleteUslugaShouldBeCorrectTest()
         {
             var before = mockContext.Object.Uslugas.Count();
-            var handler = new DeleteUslugaCommandHandler(mockContext.Object, hash);
+            var handler = new DeleteUslugaCommandHandler(mockContext.Object, hash, new MemoryMockCache<GetUslugaResponse>());
 
             var command = new DeleteUslugaCommand()
             {
@@ -113,7 +114,7 @@ namespace Test.Mock
         [Test]
         public void DeleteUslugaShouldThrowAnExceptionTest()
         {
-            var handler = new DeleteUslugaCommandHandler(mockContext.Object, hash);
+            var handler = new DeleteUslugaCommandHandler(mockContext.Object, hash, new MemoryMockCache<GetUslugaResponse>());
 
             var command = new DeleteUslugaCommand()
             {

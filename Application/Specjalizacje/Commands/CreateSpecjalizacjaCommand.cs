@@ -1,4 +1,5 @@
 ﻿using Application.DTO.Request;
+using Application.DTO.Responses;
 using Application.Interfaces;
 using Domain.Models;
 using MediatR;
@@ -20,10 +21,12 @@ namespace Application.Specjalizacje.Commands
     {
         private readonly IKlinikaContext context;
         private readonly IHash hash;
-        public CreateSpecjalizacjaCommandHandle(IKlinikaContext klinikaContext, IHash _hash)
+        private readonly ICache<GetSpecjalizacjaResponse> cache;
+        public CreateSpecjalizacjaCommandHandle(IKlinikaContext klinikaContext, IHash ihash, ICache<GetSpecjalizacjaResponse> _cache)
         {
             context = klinikaContext;
-            hash = _hash;
+            hash = ihash;
+            cache = _cache;
         }
 
         public async Task<int> Handle(CreateSpecjalizacjaCommand req, CancellationToken cancellationToken)
@@ -35,7 +38,10 @@ namespace Application.Specjalizacje.Commands
                 Opis = req.request.Opis
             });
 
-            return await context.SaveChangesAsync(cancellationToken);
+            int result = await context.SaveChangesAsync(cancellationToken);
+            cache.Remove();
+
+            return result;
         }
     }
 }

@@ -1,7 +1,10 @@
-﻿using Application.Interfaces;
+﻿using Application.DTO.Responses;
+using Application.Interfaces;
 using Application.Pacjenci.Commands;
 using HashidsNet;
 using Infrastructure.Services;
+using Infrastructure.Services.Caching;
+using Microsoft.Extensions.Caching.Memory;
 using Moq;
 using NUnit.Framework;
 using System;
@@ -28,7 +31,7 @@ namespace Test.Mock
         [Test]
         public async Task CreatePacjentShouldBeCorrectTest()
         {
-            var handler = new CreatePacjentCommandHandle(mockContext.Object, hash);
+            var handler = new CreatePacjentCommandHandle(mockContext.Object, hash, new MemoryMockCache<GetPacjentListResponse>());
 
             CreatePacjentCommand command = new CreatePacjentCommand()
             {
@@ -56,7 +59,7 @@ namespace Test.Mock
         [Test]
         public async Task UpdatePacjentShouldBeCorrectTest()
         {
-            var handler = new UpdatePacjentCommandHandle(mockContext.Object, hash);
+            var handler = new UpdatePacjentCommandHandle(mockContext.Object, hash, new MemoryMockCache<GetPacjentListResponse>());
 
             UpdatePacjentCommand command = new UpdatePacjentCommand()
             {
@@ -85,7 +88,7 @@ namespace Test.Mock
         [Test]
         public void UpdatePacjentShouldThrowAnExceptionTest()
         {
-            var handler = new UpdatePacjentCommandHandle(mockContext.Object, hash);
+            var handler = new UpdatePacjentCommandHandle(mockContext.Object, hash, new MemoryMockCache<GetPacjentListResponse>());
 
             UpdatePacjentCommand command = new UpdatePacjentCommand()
             {
@@ -113,7 +116,7 @@ namespace Test.Mock
         public async Task DeletePacjentShouldBeCorrectTest()
         {
             var before = mockContext.Object.Pacjents.Count();
-            var handler = new DeletePacjentCommandHandle(mockContext.Object, hash);
+            var handler = new DeletePacjentCommandHandle(mockContext.Object, hash, new MemoryMockCache<GetPacjentListResponse>());
 
             DeletePacjentCommand command = new DeletePacjentCommand()
             {
@@ -128,7 +131,7 @@ namespace Test.Mock
         [Test]
         public void DeletePacjentShouldThrowAnExceptionTest()
         {
-            var handler = new DeletePacjentCommandHandle(mockContext.Object, hash);
+            var handler = new DeletePacjentCommandHandle(mockContext.Object, hash, new MemoryMockCache<GetPacjentListResponse>());
 
             DeletePacjentCommand command = new DeletePacjentCommand()
             {

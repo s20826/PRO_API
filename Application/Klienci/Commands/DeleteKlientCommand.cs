@@ -1,4 +1,5 @@
 ﻿using Application.Common.Exceptions;
+using Application.DTO.Responses;
 using Application.Interfaces;
 using MediatR;
 using System.Linq;
@@ -16,10 +17,12 @@ namespace Application.Klienci.Commands
     {
         private readonly IKlinikaContext context;
         private readonly IHash hash;
-        public DeleteKlientCommandHandle(IKlinikaContext klinikaContext, IHash _hash)
+        private readonly ICache<GetKlientListResponse> cache;
+        public DeleteKlientCommandHandle(IKlinikaContext klinikaContext, IHash _hash, ICache<GetKlientListResponse> _cache)
         {
             context = klinikaContext;
             hash = _hash;
+            cache = _cache;
         }
 
         public async Task<int> Handle(DeleteKlientCommand req, CancellationToken cancellationToken)
@@ -34,7 +37,10 @@ namespace Application.Klienci.Commands
             osoba.Email = "";
             osoba.NumerTelefonu = "";
 
-            return await context.SaveChangesAsync(cancellationToken);
+            int result = await context.SaveChangesAsync(cancellationToken);
+            cache.Remove();
+
+            return result;
         }
     }
 }

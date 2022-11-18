@@ -1,4 +1,5 @@
 ﻿using Application.DTO;
+using Application.DTO.Responses;
 using Application.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Configuration;
@@ -23,12 +24,14 @@ namespace Application.Klienci.Commands
         private readonly IPasswordRepository passwordRepository;
         private readonly IConfiguration configuration;
         private readonly IEmailSender emailSender;
-        public CreateKlientCommandHandler(IKlinikaContext klinikaContext, IPasswordRepository password, IConfiguration config, IEmailSender sender)
+        private readonly ICache<GetKlientListResponse> cache;
+        public CreateKlientCommandHandler(IKlinikaContext klinikaContext, IPasswordRepository password, IConfiguration config, IEmailSender sender, ICache<GetKlientListResponse> _cache)
         {
             context = klinikaContext;
             passwordRepository = password;
             configuration = config;
             emailSender = sender;
+            cache = _cache;
         }
 
         public async Task<int> Handle(CreateKlientCommand req, CancellationToken cancellationToken)
@@ -46,12 +49,12 @@ namespace Application.Klienci.Commands
             string hashedPassword = passwordRepository.HashPassword(salt, req.request.Haslo, int.Parse(configuration["PasswordIterations"]));
             string saltBase64 = Convert.ToBase64String(salt);
 
+            var query = "exec DodajKlienta @imie, @nazwisko, @numerTel, @email, @login, @haslo, @salt";
+
             SqlConnection connection = new SqlConnection(configuration.GetConnectionString("KlinikaDatabase"));
             await connection.OpenAsync();
-            SqlTransaction trans = connection.BeginTransaction();
-
-            var query = "exec DodajKlienta @imie, @nazwisko, @numerTel, @email, @login, @haslo, @salt";
-            SqlCommand command = new SqlCommand(query, connection, trans);
+            //SqlTransaction trans = connection.BeginTransaction();
+            SqlCommand command = new SqlCommand(query, connection);
             command.Parameters.AddWithValue("@imie", req.request.Imie);
             command.Parameters.AddWithValue("@nazwisko", req.request.Nazwisko);
             command.Parameters.AddWithValue("@numerTel", req.request.NumerTelefonu);
@@ -60,20 +63,11 @@ namespace Application.Klienci.Commands
             command.Parameters.AddWithValue("@haslo", hashedPassword);
             command.Parameters.AddWithValue("@salt", saltBase64);
 
-
-            if (command.ExecuteNonQuery() == 2)
-            {
-                trans.Commit();
-                await connection.CloseAsync();
-                await emailSender.SendCreateAccountEmail(req.request.Email);
-
-                return 0;
-            }
-            else
-            {
-                trans.Rollback();
-                throw new Exception("Error");
-            }
+            command.ExecuteScalar();
+            await connection.CloseAsync();
+            await emailSender.SendCreateAccountEmail(req.request.Email);
+            cache.Remove();
+            return 0;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using Application.DTO.Responses;
+using Application.Interfaces;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -18,10 +19,12 @@ namespace Application.Pacjenci.Commands
     {
         private readonly IKlinikaContext context;
         private readonly IHash hash;
-        public DeletePacjentCommandHandle(IKlinikaContext klinikaContext, IHash _hash)
+        private readonly ICache<GetPacjentListResponse> cache;
+        public DeletePacjentCommandHandle(IKlinikaContext klinikaContext, IHash ihash, ICache<GetPacjentListResponse> _cache)
         {
             context = klinikaContext;
-            hash = _hash;
+            hash = ihash;
+            cache = _cache;
         }
 
         public async Task<int> Handle(DeletePacjentCommand req, CancellationToken cancellationToken)
@@ -31,7 +34,11 @@ namespace Application.Pacjenci.Commands
             var pacjent = context.Pacjents.Where(x => x.IdPacjent == id).First();
 
             context.Pacjents.Remove(pacjent);
-            return await context.SaveChangesAsync(cancellationToken);
+
+            int result = await context.SaveChangesAsync(cancellationToken);
+            cache.Remove();
+
+            return result;
         }
     }
 }

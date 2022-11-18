@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using Application.DTO.Responses;
+using Application.Interfaces;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -18,10 +19,12 @@ namespace Application.Uslugi.Commands
     {
         private readonly IKlinikaContext context;
         private readonly IHash hash;
-        public DeleteUslugaCommandHandler(IKlinikaContext klinikaContext, IHash _hash)
+        private readonly ICache<GetUslugaResponse> cache;
+        public DeleteUslugaCommandHandler(IKlinikaContext klinikaContext, IHash ihash, ICache<GetUslugaResponse> _cache)
         {
             context = klinikaContext;
-            hash = _hash;
+            hash = ihash;
+            cache = _cache;
         }
 
         public async Task<int> Handle(DeleteUslugaCommand req, CancellationToken cancellationToken)
@@ -31,7 +34,10 @@ namespace Application.Uslugi.Commands
             context.WizytaUslugas.RemoveRange(context.WizytaUslugas.Where(x => x.IdUsluga.Equals(id)).ToList());
             context.Uslugas.Remove(context.Uslugas.Where(x => x.IdUsluga.Equals(id)).First());
 
-            return await context.SaveChangesAsync(cancellationToken);
+            int result = await context.SaveChangesAsync(cancellationToken);
+            cache.Remove();
+
+            return result;
         }
     }
 }

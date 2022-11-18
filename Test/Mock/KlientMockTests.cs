@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using Application.DTO.Responses;
+using Application.Interfaces;
 using Application.Klienci.Commands;
 using HashidsNet;
 using Infrastructure.Services;
@@ -35,35 +36,11 @@ namespace Test.Mock
                 .Build();
         }
 
-        /*[Test]
-        public async Task CreateKlientShouldBeCorrectTest()
-        {
-            var handler = new CreateKlientCommandHandler(mockContext.Object, new PasswordService(), configuration);
-
-            CreateKlientCommand command = new CreateKlientCommand()
-            {
-                request = new Application.DTO.KlientCreateRequest
-                {
-                    Imie = "aaa",
-                    Nazwisko = "bbb",
-                    NumerTelefonu = "777888999",
-                    Email = "aaa.bbb@gmail.com",
-                    NazwaUzytkownika = "NewUsername",
-                    Haslo = "Password1",
-                    Haslo2 = "Password1"
-                }
-            };
-
-            var result = await handler.Handle(command, CancellationToken.None);
-            mockContext.Verify(m => m.SaveChangesAsync(CancellationToken.None), Times.Once());
-            Assert.AreEqual(2, mockContext.Object.Klients.Count());
-        }*/
-
 
         [Test]
         public async Task DeleteKlientShouldBeCorrectTest()
         {
-            var handler = new DeleteKlientCommandHandle(mockContext.Object, hash);
+            var handler = new DeleteKlientCommandHandle(mockContext.Object, hash, new MemoryMockCache<GetKlientListResponse>());
 
             DeleteKlientCommand command = new DeleteKlientCommand()
             {
@@ -79,7 +56,7 @@ namespace Test.Mock
         [Test]
         public void DeleteKlientShouldThrowAnExceptionTest()
         {
-            var handler = new DeleteKlientCommandHandle(mockContext.Object, hash);
+            var handler = new DeleteKlientCommandHandle(mockContext.Object, hash, new MemoryMockCache<GetKlientListResponse>());
 
             DeleteKlientCommand command = new DeleteKlientCommand()
             {

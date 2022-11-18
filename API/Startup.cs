@@ -70,6 +70,8 @@ namespace PRO_API
             services.AddDbContext<KlinikaContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("KlinikaDatabase")));
 
+            services.AddMemoryCache();
+
             var emailConfig = Configuration
                 .GetSection("EmailConfiguration")
                 .Get<EmailConfiguration>();

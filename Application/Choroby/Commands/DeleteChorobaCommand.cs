@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using Application.DTO.Responses;
+using Application.Interfaces;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -18,10 +19,12 @@ namespace Application.Choroby.Commands
     {
         private readonly IKlinikaContext context;
         private readonly IHash hash;
-        public DeleteChorobaCommandHandler(IKlinikaContext klinikaContext, IHash _hash)
+        private readonly ICache<GetChorobaResponse> cache;
+        public DeleteChorobaCommandHandler(IKlinikaContext klinikaContext, IHash ihash, ICache<GetChorobaResponse> _cache)
         {
             context = klinikaContext;
-            hash = _hash;
+            hash = ihash;
+            cache = _cache;
         }
 
         public async Task<int> Handle(DeleteChorobaCommand req, CancellationToken cancellationToken)
@@ -32,7 +35,10 @@ namespace Application.Choroby.Commands
             context.WizytaChorobas.RemoveRange(context.WizytaChorobas.Where(x => x.IdChoroba.Equals(id)).ToList());
             context.Chorobas.Remove(context.Chorobas.Where(x => x.IdChoroba.Equals(id)).First());
 
-            return await context.SaveChangesAsync(cancellationToken);
+            int result = await context.SaveChangesAsync(cancellationToken);
+            cache.Remove();
+
+            return result;
         }
     }
 }

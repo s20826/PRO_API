@@ -19,22 +19,31 @@ namespace Application.Specjalizacje.Queries
     {
         private readonly IKlinikaContext context;
         private readonly IHash hash;
-        public SpecjalizacjaListQueryHandle(IKlinikaContext klinikaContext, IHash _hash)
+        private readonly ICache<GetSpecjalizacjaResponse> cache;
+        public SpecjalizacjaListQueryHandle(IKlinikaContext klinikaContext, IHash _hash, ICache<GetSpecjalizacjaResponse> _cache)
         {
             context = klinikaContext;
             hash = _hash;
+            cache = _cache;
         }
 
         public async Task<List<GetSpecjalizacjaResponse>> Handle(SpecjalizacjaListQuery req, CancellationToken cancellationToken)
         {
-            return (from x in context.Specjalizacjas
-                    orderby x.Nazwa
-                    select new GetSpecjalizacjaResponse()
-                    {
-                        IdSpecjalizacja = hash.Encode(x.IdSpecjalizacja),
-                        Nazwa = x.Nazwa,
-                        Opis = x.Opis
-                    }).ToList();
+            List<GetSpecjalizacjaResponse> data = cache.GetFromCache();
+
+            if (data is null)
+            {
+                data = (from x in context.Specjalizacjas
+                        orderby x.Nazwa
+                        select new GetSpecjalizacjaResponse()
+                        {
+                            IdSpecjalizacja = hash.Encode(x.IdSpecjalizacja),
+                            Nazwa = x.Nazwa,
+                            Opis = x.Opis
+                        }).ToList();
+            }
+
+            return data;
         }
     }
 }

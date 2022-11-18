@@ -15,19 +15,25 @@ namespace Application.Weterynarze.Queries
 
     }
 
-    public class GetWeterynarzListQueryHandle : IRequestHandler<WeterynarzListQuery, List<GetWeterynarzListResponse>>
+    public class WeterynarzListQueryHandler : IRequestHandler<WeterynarzListQuery, List<GetWeterynarzListResponse>>
     {
         private readonly IKlinikaContext context;
         private readonly IHash hash;
-        public GetWeterynarzListQueryHandle(IKlinikaContext klinikaContext, IHash _hash)
+        private readonly ICache<GetWeterynarzListResponse> cache;
+        public WeterynarzListQueryHandler(IKlinikaContext klinikaContext, IHash _hash, ICache<GetWeterynarzListResponse> _cache)
         {
             context = klinikaContext;
             hash = _hash;
+            cache = _cache;
         }
 
         public async Task<List<GetWeterynarzListResponse>> Handle(WeterynarzListQuery req, CancellationToken cancellationToken)
         {
-            var results =
+            List<GetWeterynarzListResponse> data = cache.GetFromCache();
+
+            if (data is null)
+            {
+                data =
                 (from x in context.Osobas
                  join y in context.Weterynarzs on x.IdOsoba equals y.IdOsoba into ps
                  from p in ps
@@ -40,8 +46,9 @@ namespace Application.Weterynarze.Queries
                      Email = x.Email,
                      DataZatrudnienia = p.DataZatrudnienia
                  }).ToList();
+            }
 
-            return results;
+            return data;
         }
     }
 }

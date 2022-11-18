@@ -17,25 +17,34 @@ namespace Application.Uslugi.Queries
     {
         private readonly IKlinikaContext context;
         private readonly IHash hash;
-        public UslugaListQueryHandler(IKlinikaContext klinikaContext, IHash _hash)
+        private readonly ICache<GetUslugaResponse> cache;
+        public UslugaListQueryHandler(IKlinikaContext klinikaContext, IHash _hash, ICache<GetUslugaResponse> _cache)
         {
             context = klinikaContext;
             hash = _hash;
+            cache = _cache;
         }
 
         public async Task<List<GetUslugaResponse>> Handle(UslugaListQuery req, CancellationToken cancellationToken)
         {
-            return (from x in context.Uslugas
-                    orderby x.NazwaUslugi
-                    select new GetUslugaResponse()
-                    {
-                        ID_Usluga = hash.Encode(x.IdUsluga),
-                        NazwaUslugi = x.NazwaUslugi,
-                        Opis = x.Opis,
-                        Cena = x.Cena,
-                        Narkoza = x.Narkoza,
-                        Dolegliwosc = x.Dolegliwosc
-                    }).ToList();
+            List<GetUslugaResponse> data = cache.GetFromCache();
+
+            if (data is null)
+            {
+                data = (from x in context.Uslugas
+                        orderby x.NazwaUslugi
+                        select new GetUslugaResponse()
+                        {
+                            ID_Usluga = hash.Encode(x.IdUsluga),
+                            NazwaUslugi = x.NazwaUslugi,
+                            Opis = x.Opis,
+                            Cena = x.Cena,
+                            Narkoza = x.Narkoza,
+                            Dolegliwosc = x.Dolegliwosc
+                        }).ToList();
+            }
+
+            return data;
         }
     }
 }

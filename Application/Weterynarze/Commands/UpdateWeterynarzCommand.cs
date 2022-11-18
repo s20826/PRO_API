@@ -1,4 +1,5 @@
 ﻿using Application.DTO;
+using Application.DTO.Responses;
 using Application.Interfaces;
 using MediatR;
 using System;
@@ -18,10 +19,12 @@ namespace Application.Weterynarze.Commands
     {
         private readonly IKlinikaContext context;
         private readonly IHash hash;
-        public UpdateWeterynarzCommandHandle(IKlinikaContext klinikaContext, IHash _hash)
+        private readonly ICache<GetWeterynarzListResponse> cache;
+        public UpdateWeterynarzCommandHandle(IKlinikaContext klinikaContext, IHash _hash, ICache<GetWeterynarzListResponse> _cache)
         {
             context = klinikaContext;
             hash = _hash;
+            cache = _cache;
         }
 
         public async Task<int> Handle(UpdateWeterynarzCommand req, CancellationToken cancellationToken)
@@ -40,7 +43,10 @@ namespace Application.Weterynarze.Commands
             weterynarz.Pensja = req.request.Pensja;
             weterynarz.DataZatrudnienia = req.request.DataZatrudnienia;
 
-            return await context.SaveChangesAsync(cancellationToken);
+            int result = await context.SaveChangesAsync(cancellationToken);
+            cache.Remove();
+
+            return result;
         }
     }
 }

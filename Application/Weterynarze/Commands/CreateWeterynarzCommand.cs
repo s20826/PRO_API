@@ -1,4 +1,5 @@
 ﻿using Application.DTO;
+using Application.DTO.Responses;
 using Application.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Configuration;
@@ -26,18 +27,20 @@ namespace Application.Weterynarze.Commands
         private readonly IConfiguration configuration;
         private readonly IHash hash;
         private readonly IEmailSender emailSender;
-        public CreateWeterynarzCommandHandle(IKlinikaContext klinikaContext, IPasswordRepository password, IConfiguration config, IHash _hash, IEmailSender sender)
+        private readonly ICache<GetWeterynarzListResponse> cache;
+        public CreateWeterynarzCommandHandle(IKlinikaContext klinikaContext, IPasswordRepository password, IConfiguration config, IHash _hash, IEmailSender sender, ICache<GetWeterynarzListResponse> _cache)
         {
             context = klinikaContext;
             passwordRepository = password;
             configuration = config;
             hash = _hash;
             emailSender = sender;
+            cache = _cache;
         }
 
         public async Task<string> Handle(CreateWeterynarzCommand req, CancellationToken cancellationToken)
         {
-            var generatedLogin = "PetMed" + (context.Weterynarzs.Last().IdOsoba + 1);
+            var generatedLogin = "PetMed" + (context.Weterynarzs.Max(x => x.IdOsoba) + 1);
 
             if (context.Osobas.Where(x => x.NazwaUzytkownika.Equals(generatedLogin)).Any())
             {
@@ -66,11 +69,11 @@ namespace Application.Weterynarze.Commands
             command.Parameters.AddWithValue("@dataZatrudnienia", req.request.DataZatrudnienia);
             command.Parameters.AddWithValue("@salt", saltBase64);
 
-            //int resultID = Convert.ToInt32(command.ExecuteScalar());
+            int resultID = Convert.ToInt32(command.ExecuteScalar());
             await connection.CloseAsync();
             await emailSender.SendHasloEmail(req.request.Email, generatedPassword);
-
-            return hash.Encode(Convert.ToInt32(command.ExecuteScalar()));
+            cache.Remove();
+            return hash.Encode(resultID);
         }
     }
 }

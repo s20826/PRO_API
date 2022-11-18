@@ -1,6 +1,9 @@
-﻿using Application.Interfaces;
+﻿using Application.DTO.Responses;
+using Application.Interfaces;
+using Domain.Models;
 using Infrastructure.Models;
 using Infrastructure.Services;
+using Infrastructure.Services.Caching;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Infrastructure
@@ -16,6 +19,13 @@ namespace Infrastructure
             services.AddScoped<ILoginRepository, LoginService>();
             services.AddScoped<IHarmonogramRepository, HarmonogramService>();
             services.AddScoped<IEmailSender, EmailSender>();
+
+            services.AddScoped<ICache<GetPacjentListResponse>, PacjentCache>();
+            services.AddScoped<ICache<GetChorobaResponse>, ChorobaCache>();
+            services.AddScoped<ICache<GetSpecjalizacjaResponse>, SpecjalizacjaCache>();
+            services.AddScoped<ICache<GetKlientListResponse>, KlientCache>();
+            services.AddScoped<ICache<GetUslugaResponse>, UslugaCache>();
+            services.AddScoped<ICache<GetWeterynarzListResponse>, WeterynarzCache>();
 
             services.AddScoped<IKlinikaContext, KlinikaContext>();
 

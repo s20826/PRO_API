@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using Application.DTO.Responses;
+using Application.Interfaces;
 using Application.Weterynarze.Commands;
 using HashidsNet;
 using Infrastructure.Services;
@@ -39,7 +40,7 @@ namespace Test.Mock
         [Test]
         public async Task UpdateWeterynarzShouldBeCorrectTest()
         {
-            var handler = new UpdateWeterynarzCommandHandle(mockContext.Object, hash);
+            var handler = new UpdateWeterynarzCommandHandle(mockContext.Object, hash, new MemoryMockCache<GetWeterynarzListResponse>());
 
             UpdateWeterynarzCommand command = new UpdateWeterynarzCommand()
             {
@@ -63,7 +64,7 @@ namespace Test.Mock
         [Test]
         public void UpdateWeterynarzShouldThrowAnExceptionTest()
         {
-            var handler = new UpdateWeterynarzCommandHandle(mockContext.Object, hash);
+            var handler = new UpdateWeterynarzCommandHandle(mockContext.Object, hash, new MemoryMockCache<GetWeterynarzListResponse>());
 
             UpdateWeterynarzCommand command = new UpdateWeterynarzCommand()
             {
@@ -85,7 +86,7 @@ namespace Test.Mock
         [Test]
         public async Task DeleteWeterynarzShouldBeCorrectTest()
         {
-            var handler = new DeleteWeterynarzCommandHandle(mockContext.Object, hash);
+            var handler = new DeleteWeterynarzCommandHandle(mockContext.Object, hash, new MemoryMockCache<GetWeterynarzListResponse>());
 
             DeleteWeterynarzCommand command = new DeleteWeterynarzCommand()
             {
@@ -102,7 +103,7 @@ namespace Test.Mock
         [Test]
         public void DeleteWeterynarzShouldThrowAnExceptionTest()
         {
-            var handler = new DeleteWeterynarzCommandHandle(mockContext.Object, hash);
+            var handler = new DeleteWeterynarzCommandHandle(mockContext.Object, hash, new MemoryMockCache<GetWeterynarzListResponse>());
 
             DeleteWeterynarzCommand command = new DeleteWeterynarzCommand()
             {

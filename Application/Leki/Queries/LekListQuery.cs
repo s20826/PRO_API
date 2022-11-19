@@ -30,7 +30,7 @@ namespace Application.Leki.Queries
 
         public async Task<List<GetLekListResponse>> Handle(LekListQuery req, CancellationToken cancellationToken)
         {
-            var query = "SELECT l.ID_lek, l.Nazwa, SUM(ISNULL(ilosc, 0)) AS Ilosc, l.Jednostka_Miary FROM Lek l " +
+            var query = "SELECT l.ID_lek, l.Nazwa, SUM(ISNULL(ilosc, 0)) AS Ilosc, l.Jednostka_Miary, l.Producent FROM Lek l " +
                 "LEFT join LeK_w_magazynie m on m.ID_lek = l.ID_lek " +
                 "GROUP BY Nazwa, Jednostka_Miary, l.ID_lek " +
                 "ORDER BY Nazwa";
@@ -49,7 +49,8 @@ namespace Application.Leki.Queries
                     IdLek = hash.Encode(int.Parse(reader["ID_lek"].ToString())),
                     Nazwa = reader["Nazwa"].ToString(),
                     Ilosc = int.Parse(reader["Ilosc"].ToString()),
-                    JednostkaMiary = reader["Jednostka_Miary"].ToString()
+                    JednostkaMiary = reader["Jednostka_Miary"].ToString(),
+                    Producent = reader["Producent"].ToString()
                 });
             }
 

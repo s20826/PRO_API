@@ -6,5 +6,8 @@
         public string Nazwa { get; set; }
         public int Ilosc { get; set; }
         public string JednostkaMiary { get; set; }
+        public string Producent { get; set; }
+
+
     }
 }

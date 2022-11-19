@@ -13,7 +13,7 @@ namespace PRO_API.Controllers
     public class ChorobaLekController : ApiControllerBase
     {
         [Authorize(Roles = "admin,weterynarz")]
-        [HttpGet("{ID_weterynarz}")]
+        [HttpGet("{ID_lek}")]
         public async Task<IActionResult> GetChorobaLek(string ID_lek, CancellationToken token)
         {
             try

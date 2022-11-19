@@ -12,7 +12,7 @@ namespace PRO_API.Controllers
 {
     public class WizytaController : ApiControllerBase
     {
-        [Authorize(Roles = "admin,weterynarz")]
+        //[Authorize(Roles = "admin,weterynarz")]
         [HttpGet]
         public async Task<IActionResult> GetWizytaList(CancellationToken token)
         {
@@ -232,7 +232,7 @@ namespace PRO_API.Controllers
             }
         }
 
-        [Authorize(Roles = "admin")]
+        //[Authorize(Roles = "admin")]
         [HttpDelete("admin/{ID_wizyta}")]
         public async Task<IActionResult> DeleteWizytaByKlinika(string ID_wizyta, CancellationToken token)    //admin anuluje wizytę, status wizyty ustawiony jako anulowany przez klinike
         {
@@ -242,23 +242,6 @@ namespace PRO_API.Controllers
                 {
                     ID_wizyta = ID_wizyta
                 }, token));
-            }
-            catch (Exception)
-            {
-                return BadRequest();
-            }
-        }
-
-        //[Authorize(Roles = "admin")]
-        [HttpDelete("system")]
-        public async Task<IActionResult> DeleteWizytaBySystem()    //system usuwa wszystkie anulowane wizyty
-        {
-            try
-            {
-                return Ok(await Mediator.Send(new DeleteWizytaSystemCommand
-                {
-
-                }));
             }
             catch (Exception)
             {

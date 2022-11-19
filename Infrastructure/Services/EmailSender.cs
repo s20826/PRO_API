@@ -19,6 +19,39 @@ namespace Infrastructure.Services
             _emailConfig = emailConfig;
         }
 
+        public async Task SendPrzypomnienieEmail(string to, DateTime data, string weterynarz)
+        {
+            var culture = new System.Globalization.CultureInfo("pl-PL");
+            var day = culture.DateTimeFormat.GetDayName(DateTime.Today.DayOfWeek);
+            string termin = data.ToShortDateString() + " (" + day + ") " + data.ToShortTimeString();
+
+            var body = string.Format(
+               "<h2>" +
+               "Przypominamy o wizycie w klinice PetMed" +
+               "</h2>" +
+               "<p style='font - family: Arial, Helvetica, sans - serif;'>" +
+               "Termin: " +
+               "{0}" +
+               "</p>" +
+               "Weterynarz: " +
+               "{1}" +
+               "</p>" +
+               "</br>" +
+               "<p style='font - family: Arial, Helvetica, sans - serif;'>" +
+               "Klinika PetMed" +
+               "</p>" +
+               "<p style='font - family: Arial, Helvetica, sans - serif;'>" +
+               "222 444 555" +
+               "</p>", termin, weterynarz);
+
+            var email = CreateEmail(to, "Przypomnienie o wizycie");
+            var bodyBuilder = new BodyBuilder { HtmlBody = body };
+            email.Body = bodyBuilder.ToMessageBody();
+
+            await Send(email);
+        }
+
+
         public async Task SendHasloEmail(string to, string createdPassword)
         {
             var body = string.Format(

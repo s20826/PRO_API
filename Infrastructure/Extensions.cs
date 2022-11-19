@@ -27,6 +27,8 @@ namespace Infrastructure
             services.AddScoped<ICache<GetUslugaResponse>, UslugaCache>();
             services.AddScoped<ICache<GetWeterynarzListResponse>, WeterynarzCache>();
 
+            services.AddTransient<ISchedule, ScheduleSerive>();
+
             services.AddScoped<IKlinikaContext, KlinikaContext>();
 
             return services;

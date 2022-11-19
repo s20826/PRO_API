@@ -2,6 +2,8 @@ using Application;
 using Application.Interfaces;
 using Domain;
 using FluentValidation;
+using Hangfire;
+using Hangfire.MemoryStorage;
 using HashidsNet;
 using Infrastructure;
 using Infrastructure.Models;
@@ -72,16 +74,23 @@ namespace PRO_API
 
             services.AddMemoryCache();
 
+            services.AddHangfire(configuration => configuration.UseMemoryStorage());
+                
+            /*.UseSqlServerStorage(Configuration.GetConnectionString("HangfireConnection"), new SqlServerStorageOptions
+            {
+                CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+                SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+                QueuePollInterval = TimeSpan.Zero,
+                UseRecommendedIsolationLevel = true,
+                DisableGlobalLocks = true
+            }));*/
+
+            services.AddHangfireServer();
+
             var emailConfig = Configuration
                 .GetSection("EmailConfiguration")
                 .Get<EmailConfiguration>();
             services.AddSingleton(emailConfig);
-
-            /*services.Configure<FormOptions>(o => {
-                o.ValueLengthLimit = int.MaxValue;
-                o.MultipartBodyLengthLimit = int.MaxValue;
-                o.MemoryBufferThreshold = int.MaxValue;
-            });*/
 
             services.AddControllers().AddNewtonsoftJson(Configuration => Configuration.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddInfrastructure()
@@ -106,7 +115,6 @@ namespace PRO_API
                 };
 
                 c.AddSecurityDefinition("Bearer", securitySchema);
-
                 var securityRequirement = new OpenApiSecurityRequirement
                 {
                     { securitySchema, new[] { "Bearer" } }
@@ -126,15 +134,15 @@ namespace PRO_API
             options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
                 .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver
                 = new DefaultContractResolver());
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IRecurringJobManager recurringJobManager, IWebHostEnvironment env)
         {
             app.UseMiddleware<LogErrorMiddleware>();
             app.UseMiddleware<LogActivityMiddleware>();
             app.UseMiddleware<AuthMiddleware>();
+            
 
             //Enable CORS
             app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
@@ -156,7 +164,13 @@ namespace PRO_API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHangfireDashboard();
             });
+
+            //recurringJobManager.AddOrUpdate<ScheduleSerive>("send email", service => service.SendEmail1("hangfire@test.com"), "* * * * *");
+
+            //co 6 miesi¹cy, pierwszego dnia miesi¹ca
+            recurringJobManager.AddOrUpdate<ScheduleSerive>("delete cancelled appointments", service => service.DeleteWizytaSystemAsync(), "0 4 1 */6 *");
         }
     }
 }

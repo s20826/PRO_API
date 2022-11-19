@@ -33,16 +33,17 @@ namespace PRO_API.Controllers
         {
             try
             {
-                return Ok(await Mediator.Send(new AddSpecjalizacjaWeterynarzCommand
+                await Mediator.Send(new AddSpecjalizacjaWeterynarzCommand
                 {
                     ID_specjalizacja = ID_specjalizacja,
                     ID_weterynarz = ID_weterynarz
-                }, token));
+                }, token);
             }
             catch (Exception)
             {
                 return NotFound();
             }
+            return NoContent();
         }
 
         [Authorize(Roles = "admin")]
@@ -51,16 +52,17 @@ namespace PRO_API.Controllers
         {
             try
             {
-                return Ok(await Mediator.Send(new RemoveSpecjalizacjaWeterynarzCommand
+                await Mediator.Send(new RemoveSpecjalizacjaWeterynarzCommand
                 {
                     ID_specjalizacja = ID_specjalizacja,
                     ID_weterynarz = ID_weterynarz
-                }, token));
+                }, token);
             }
             catch (Exception)
             {
                 return NotFound();
             }
+            return NoContent();
         }
     }
 }

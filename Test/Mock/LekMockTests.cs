@@ -36,8 +36,7 @@ namespace Test.Mock
                 request = new LekRequest
                 {
                     Nazwa = "aaa",
-                    JednostkaMiary = "ml",
-                    Choroby = Array.Empty<string>()
+                    JednostkaMiary = "ml"
                 }
             };
 
@@ -58,8 +57,7 @@ namespace Test.Mock
                 request = new LekRequest
                 {
                     Nazwa = "newNazwa",
-                    JednostkaMiary = "ml",
-                    Choroby = Array.Empty<string>()
+                    JednostkaMiary = "ml"
                 }
             };
 

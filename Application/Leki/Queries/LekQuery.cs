@@ -12,11 +12,11 @@ namespace Application.Leki.Queries
         public string ID_lek { get; set; }
     }
 
-    public class GetLekQueryHandle : IRequestHandler<LekQuery, object>
+    public class LekQueryHandler : IRequestHandler<LekQuery, object>
     {
         private readonly IKlinikaContext context;
         private readonly IHash hash;
-        public GetLekQueryHandle(IKlinikaContext klinikaContext, IHash _hash)
+        public LekQueryHandler(IKlinikaContext klinikaContext, IHash _hash)
         {
             context = klinikaContext;
             hash = _hash;
@@ -34,7 +34,7 @@ namespace Application.Leki.Queries
                     Nazwa = t.Nazwa,
                     JednostkaMiary = t.JednostkaMiary,
                     Producent = t.Producent,
-                    Choroby = Enumerable.Empty<string>().ToList(),
+                    Choroby = Enumerable.Empty<object>().ToList(),
                     LekList = Enumerable.Empty<GetStanLekuResponse>().ToList()
                 };
             }

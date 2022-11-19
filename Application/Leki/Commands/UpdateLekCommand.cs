@@ -29,24 +29,10 @@ namespace Application.Leki.Commands
         {
             int id = hash.Decode(req.ID_lek);
 
-            context.ChorobaLeks.RemoveRange(context.ChorobaLeks.Where(x => x.IdLek.Equals(id)).ToList());
             var lek = context.Leks.Where(x => x.IdLek.Equals(id)).First();
             lek.Nazwa = req.request.Nazwa;
             lek.JednostkaMiary = req.request.JednostkaMiary;
             lek.Producent = req.request.Producent;
-
-            List<string> list = new List<string>(req.request.Choroby);
-            if (list.Count > 0)
-            {
-                foreach (string a in list)
-                {
-                    context.ChorobaLeks.Add(new ChorobaLek
-                    {
-                        IdChoroba = hash.Decode(a),
-                        IdLek = id
-                    });
-                }
-            }
 
             return await context.SaveChangesAsync(cancellationToken);
         }

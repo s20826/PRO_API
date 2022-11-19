@@ -32,7 +32,7 @@ namespace Application.Leki.Queries
         {
             var query = "SELECT l.ID_lek, l.Nazwa, SUM(ISNULL(ilosc, 0)) AS Ilosc, l.Jednostka_Miary, l.Producent FROM Lek l " +
                 "LEFT join LeK_w_magazynie m on m.ID_lek = l.ID_lek " +
-                "GROUP BY Nazwa, Jednostka_Miary, l.ID_lek " +
+                "GROUP BY Nazwa, Jednostka_Miary, l.ID_lek, l.Producent " +
                 "ORDER BY Nazwa";
 
             SqlConnection connection = new SqlConnection(configuration.GetConnectionString("KlinikaDatabase"));

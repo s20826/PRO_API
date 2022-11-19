@@ -48,7 +48,7 @@ namespace PRO_API.Controllers
                 await Mediator.Send(new CreateLekCommand
                 {
                     request = request
-                }, token);
+                }, token));
             }
             catch (Exception)
             {

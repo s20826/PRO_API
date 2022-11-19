@@ -193,6 +193,11 @@ namespace Test
                 {
                     IdChoroba = 1,
                     Nazwa = "ból brzucha"
+                },
+                new Choroba
+                {
+                    IdChoroba = 2,
+                    Nazwa = "ból głowa"
                 }
             };
         }
@@ -202,7 +207,11 @@ namespace Test
         {
             return new List<ChorobaLek>
             {
-
+                new ChorobaLek
+                {
+                    IdChoroba = 1,
+                    IdLek = 1
+                }
             };
         }
 

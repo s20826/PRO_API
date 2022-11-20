@@ -45,7 +45,7 @@ namespace PRO_API.Controllers
         {
             try
             {
-                await Mediator.Send(new CreateLekCommand
+                return Ok(await Mediator.Send(new CreateLekCommand
                 {
                     request = request
                 }, token));
@@ -54,7 +54,6 @@ namespace PRO_API.Controllers
             {
                 return BadRequest();
             }
-            return NoContent();
         }
 
 

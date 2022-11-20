@@ -1,4 +1,5 @@
-﻿using Application.Recepty.Queries;
+﻿using Application.Recepty.Commands;
+using Application.Recepty.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -37,6 +38,40 @@ namespace PRO_API.Controllers
                 return Ok(await Mediator.Send(new ReceptaKlientQuery
                 {
                     ID_klient = GetUserId()
+                }, token));
+            }
+            catch (Exception)
+            {
+                return NotFound();
+            }
+        }
+
+        [Authorize(Roles = "klient,weterynarz,admin")]
+        [HttpGet("details/{ID_Recepta}")]
+        public async Task<IActionResult> GetReceptaDetails(string ID_Recepta, CancellationToken token)
+        {
+            try
+            {
+                return Ok(await Mediator.Send(new ReceptaDetailsQuery
+                {
+                    ID_recepta = ID_Recepta
+                }, token));
+            }
+            catch (Exception)
+            {
+                return NotFound();
+            }
+        }
+
+        [Authorize(Roles = "weterynarz,admin")]
+        [HttpPost("{ID_Recepta}")]
+        public async Task<IActionResult> AddRecepta(string ID_Wizyta, CancellationToken token)
+        {
+            try
+            {
+                return Ok(await Mediator.Send(new CreateReceptaCommand
+                {
+                    ID_wizyta = ID_Wizyta
                 }, token));
             }
             catch (Exception)

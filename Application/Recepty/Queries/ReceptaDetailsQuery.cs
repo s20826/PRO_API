@@ -10,34 +10,34 @@ using System.Threading.Tasks;
 
 namespace Application.Recepty.Queries
 {
-    public class ReceptaKlientQuery : IRequest<List<GetReceptaResponse>>
+    public class ReceptaDetailsQuery : IRequest<GetReceptaResponse>
     {
-        public string ID_klient { get; set; }
+        public string ID_recepta { get; set; }
     }
 
-    public class ReceptaKlientQueryHandler : IRequestHandler<ReceptaKlientQuery, List<GetReceptaResponse>>
+    public class ReceptaDetailsQueryHandler : IRequestHandler<ReceptaDetailsQuery, GetReceptaResponse>
     {
         private readonly IKlinikaContext context;
         private readonly IHash hash;
-        public ReceptaKlientQueryHandler(IKlinikaContext klinikaContext, IHash _hash)
+        public ReceptaDetailsQueryHandler(IKlinikaContext klinikaContext, IHash _hash)
         {
             context = klinikaContext;
             hash = _hash;
         }
 
-        public async Task<List<GetReceptaResponse>> Handle(ReceptaKlientQuery req, CancellationToken cancellationToken)
+        public async Task<GetReceptaResponse> Handle(ReceptaDetailsQuery req, CancellationToken cancellationToken)
         {
-            int id = hash.Decode(req.ID_klient);
+            int id = hash.Decode(req.ID_recepta);
 
             return (from x in context.Recepta
                     join s in context.Wizyta on x.IdWizyta equals s.IdWizyta
-                    where s.IdOsoba == id
+                    where s.IdWizyta == id
                     select new GetReceptaResponse()
                     {
                         ID_Recepta = hash.Encode(x.IdWizyta),
                         Zalecenia = x.Zalecenia,
-                        WizytaData = context.Harmonograms.Where(x => x.IdWizyta.Equals(x.IdWizyta)).Any() ? context.Harmonograms.Where(x => x.IdWizyta.Equals(x.IdWizyta)).Min(y => y.DataRozpoczecia) : null,
-                    }).ToList();
+                        WizytaData = context.Harmonograms.Where(x => x.IdWizyta.Equals(x.IdWizyta)).Any() ? context.Harmonograms.Where(x => x.IdWizyta.Equals(x.IdWizyta)).Min(y => y.DataRozpoczecia) : null
+                    }).First();
         }
     }
 }

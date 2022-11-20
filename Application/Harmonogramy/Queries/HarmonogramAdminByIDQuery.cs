@@ -46,8 +46,8 @@ namespace Application.Harmonogramy.Queries
                      Data = x.DataRozpoczecia,
                      IdKlient = x.IdWizyta != null ? hash.Encode(t.IdOsoba) : null,
                      Klient = x.IdWizyta != null ? context.Osobas.Where(k => k.IdOsoba == t.IdOsoba).Select(k => k.Imie + " " + k.Nazwisko).First() : null,
-                     IdPacjent = x.IdWizyta != null ? hash.Encode((int)t.IdPacjent) : null,
-                     Pacjent = x.IdWizyta != null ? context.Pacjents.Where(p => p.IdPacjent == t.IdPacjent).Select(p => p.Nazwa).First() : null,
+                     IdPacjent = t.IdPacjent != null ? hash.Encode((int)t.IdPacjent) : null,
+                     Pacjent = t.IdPacjent != null ? context.Pacjents.Where(p => p.IdPacjent == t.IdPacjent).Select(p => p.Nazwa).First() : null,
                      CzyZajete = x.IdWizyta != null
                  }).ToList();
 

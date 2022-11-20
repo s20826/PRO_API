@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace Application.Leki.Commands
 {
-    public class CreateLekCommand : IRequest<int>
+    public class CreateLekCommand : IRequest<string>
     {
         public LekRequest request { get; set; }
     }
 
-    public class CreateLekCommandHandler : IRequestHandler<CreateLekCommand, int>
+    public class CreateLekCommandHandler : IRequestHandler<CreateLekCommand, string>
     {
         private readonly IKlinikaContext context;
         private readonly IHash hash;
@@ -23,16 +23,17 @@ namespace Application.Leki.Commands
             hash = _hash;
         }
 
-        public async Task<int> Handle(CreateLekCommand req, CancellationToken cancellationToken)
+        public async Task<string> Handle(CreateLekCommand req, CancellationToken cancellationToken)
         {
-            context.Leks.Add(new Lek
+            var result = context.Leks.Add(new Lek
             {
                 Nazwa = req.request.Nazwa,
                 JednostkaMiary = req.request.JednostkaMiary,
                 Producent = req.request.Producent
             });
-            
-            return await context.SaveChangesAsync(cancellationToken);
+
+            await context.SaveChangesAsync(cancellationToken);
+            return hash.Encode(result.Entity.IdLek);
         }
     }
 }

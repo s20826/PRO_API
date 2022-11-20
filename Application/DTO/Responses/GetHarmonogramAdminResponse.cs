@@ -16,6 +16,7 @@ namespace Application.DTO.Responses
         public string? IdPacjent { get; set; }
         public string? Pacjent { get; set; }
         public bool CzyZajete { get; set; }
+        public int Dzien { get; set; }
         public DateTime Data { get; set; }
     }
 }

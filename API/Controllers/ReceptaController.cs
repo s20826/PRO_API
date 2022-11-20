@@ -100,7 +100,7 @@ namespace PRO_API.Controllers
         }
 
         [Authorize(Roles = "weterynarz,admin")]
-        [HttpPut("{ID_Recepta}")]
+        [HttpDelete("{ID_Recepta}")]
         public async Task<IActionResult> DeleteRecepta(string ID_Recepta, CancellationToken token)
         {
             try

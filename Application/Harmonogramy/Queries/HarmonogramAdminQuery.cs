@@ -39,6 +39,7 @@ namespace Application.Harmonogramy.Queries
                      IdHarmonogram = hash.Encode(x.IdHarmonogram),
                      IdWeterynarz = hash.Encode(x.WeterynarzIdOsoba),
                      Weterynarz = w.Imie + " " + w.Nazwisko,
+                     Dzien = ((int)x.DataRozpoczecia.DayOfWeek),
                      Data = x.DataRozpoczecia,
                      IdKlient = x.IdWizyta != null ? hash.Encode(t.IdOsoba) : null,
                      Klient = x.IdWizyta != null ? context.Osobas.Where(k => k.IdOsoba == t.IdOsoba).Select(k => k.Imie + " " + k.Nazwisko).First() : null,

@@ -46,7 +46,7 @@ namespace PRO_API.Controllers
             }
         }
 
-        [Authorize(Roles = "admin,weterynarz")]
+        //[Authorize(Roles = "admin,weterynarz")]
         [HttpGet("{ID_klient}")]
         public async Task<IActionResult> GetWizytaKlient(string ID_klient, CancellationToken token)
         {

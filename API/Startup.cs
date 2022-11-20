@@ -167,7 +167,8 @@ namespace PRO_API
                 endpoints.MapHangfireDashboard();
             });
 
-            //recurringJobManager.AddOrUpdate<ScheduleSerive>("send email", service => service.SendEmail1("hangfire@test.com"), "* * * * *");
+            
+            recurringJobManager.AddOrUpdate<ScheduleSerive>("send email", service => service.SendPrzypomnienieEmail(), "0 8 * * *");
 
             //co 6 miesi¹cy, pierwszego dnia miesi¹ca
             recurringJobManager.AddOrUpdate<ScheduleSerive>("delete cancelled appointments", service => service.DeleteWizytaSystemAsync(), "0 4 1 */6 *");

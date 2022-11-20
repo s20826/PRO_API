@@ -45,11 +45,11 @@ namespace Application.Wizyty.Queries
                         Pacjent = g.Key.IdPacjent != null ? g.Key.Nazwa : null,
                         IdKlient = req.ID_klient,
                         Klient = g.Key.Imie + " " + g.Key.Nazwisko,
-                        IdWeterynarz = g.Key.WeterynarzIdOsoba != null ? hash.Encode(g.Key.WeterynarzIdOsoba) : null,
-                        Weterynarz = g.Key.WeterynarzIdOsoba != null ? context.Osobas.Where(i => i.IdOsoba.Equals(g.Key.WeterynarzIdOsoba)).Select(i => i.Imie + " " + i.Nazwisko).First() : null,
+                        IdWeterynarz = g.Key.WeterynarzIdOsoba != 0 ? hash.Encode(g.Key.WeterynarzIdOsoba) : null,
+                        Weterynarz = g.Key.WeterynarzIdOsoba != 0 ? context.Osobas.Where(i => i.IdOsoba.Equals(g.Key.WeterynarzIdOsoba)).Select(i => i.Imie + " " + i.Nazwisko).First() : null,
                         Status = g.Key.Status,
                         CzyOplacona = g.Key.CzyOplacona,
-                        Data = g.Key.WeterynarzIdOsoba != null ? context.Harmonograms.Where(x => x.IdWizyta.Equals(g.Key.IdWizyta)).OrderBy(x => x.DataRozpoczecia).Select(x => x.DataRozpoczecia).First() : null
+                        Data = g.Key.WeterynarzIdOsoba != 0 ? context.Harmonograms.Where(x => x.IdWizyta.Equals(g.Key.IdWizyta)).OrderBy(x => x.DataRozpoczecia).Select(x => x.DataRozpoczecia).First() : null
                     }).ToList().OrderByDescending(x => x.Data).ToList();
         }
     }

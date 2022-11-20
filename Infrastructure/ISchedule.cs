@@ -4,7 +4,7 @@ namespace Infrastructure
 {
     public interface ISchedule
     {
-        void SendPrzypomnienieEmail(string to);
+        void SendPrzypomnienieEmail();
 
         Task DeleteWizytaSystemAsync();
     }

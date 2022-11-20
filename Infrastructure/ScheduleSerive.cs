@@ -22,10 +22,26 @@ namespace Infrastructure
             emailSender = sender;
         }
 
-        public void SendPrzypomnienieEmail(string to)
+        public void SendPrzypomnienieEmail()
         {
-            emailSender.SendPrzypomnienieEmail(to, DateTime.Now, "aaaa bbbb");
-            logger.LogInformation("Email sent to " + to + " at: " + DateTime.Now.ToString());
+            var helperList = from x in context.Wizyta
+                             join y in context.Harmonograms on x.IdWizyta equals y.IdWizyta
+                             join k in context.Osobas on x.IdOsoba equals k.IdOsoba
+                             where x.Status == WizytaStatus.Zaplanowana.ToString()
+                             group x by new { x.IdWizyta, x.IdOsoba, y.WeterynarzIdOsoba, k.Email }
+                              into g
+                             select new
+                             {
+                                 Email = g.Key.Email,
+                                 Weterynarz = g.Key.WeterynarzIdOsoba != 0 ? context.Osobas.Where(i => i.IdOsoba.Equals(g.Key.WeterynarzIdOsoba)).Select(i => i.Imie + " " + i.Nazwisko).First() : null,
+                                 Data = context.Harmonograms.Where(x => x.IdWizyta.Equals(g.Key.IdWizyta)).Min(x => x.DataRozpoczecia)
+                             };
+
+            foreach (var a in helperList)
+            {
+                emailSender.SendPrzypomnienieEmail(a.Email, a.Data, a.Weterynarz);
+                logger.LogInformation("Email sent to " + a.Email + " at: " + DateTime.Now.ToString());
+            }
         }
 
         public async Task DeleteWizytaSystemAsync()

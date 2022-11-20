@@ -64,14 +64,50 @@ namespace PRO_API.Controllers
         }
 
         [Authorize(Roles = "weterynarz,admin")]
-        [HttpPost("{ID_Recepta}")]
-        public async Task<IActionResult> AddRecepta(string ID_Wizyta, CancellationToken token)
+        [HttpPost]
+        public async Task<IActionResult> AddRecepta(string ID_Wizyta, string Zalecenia, CancellationToken token)
         {
             try
             {
                 return Ok(await Mediator.Send(new CreateReceptaCommand
                 {
-                    ID_wizyta = ID_Wizyta
+                    ID_wizyta = ID_Wizyta,
+                    Zalecenia = Zalecenia
+                }, token));
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
+
+        [Authorize(Roles = "weterynarz,admin")]
+        [HttpPut("{ID_Recepta}")]
+        public async Task<IActionResult> UpdateRecepta(string ID_Recepta, string Zalecenia, CancellationToken token)
+        {
+            try
+            {
+                return Ok(await Mediator.Send(new UpdateReceptaCommand
+                {
+                    ID_recepta = ID_Recepta,
+                    Zalecenia = Zalecenia
+                }, token));
+            }
+            catch (Exception)
+            {
+                return NotFound();
+            }
+        }
+
+        [Authorize(Roles = "weterynarz,admin")]
+        [HttpPut("{ID_Recepta}")]
+        public async Task<IActionResult> DeleteRecepta(string ID_Recepta, CancellationToken token)
+        {
+            try
+            {
+                return Ok(await Mediator.Send(new DeleteReceptaCommand
+                {
+                    ID_recepta = ID_Recepta
                 }, token));
             }
             catch (Exception)

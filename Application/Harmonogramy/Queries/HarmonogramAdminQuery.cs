@@ -31,9 +31,11 @@ namespace Application.Harmonogramy.Queries
 
             var results =
                 (from x in context.Harmonograms
-                 join z in context.Wizyta on x.IdWizyta equals z.IdWizyta into wizyta from t in wizyta.DefaultIfEmpty()
+                 join z in context.Wizyta on x.IdWizyta equals z.IdWizyta into wizyta
+                 from t in wizyta.DefaultIfEmpty()
                  join w in context.Osobas on x.WeterynarzIdOsoba equals w.IdOsoba
-                 where x.DataRozpoczecia.Date > StartDate && x.DataZakonczenia.Date < EndDate
+                 where x.DataRozpoczecia.Date >= StartDate && x.DataZakonczenia.Date <= EndDate
+                 orderby x.DataRozpoczecia
                  select new GetHarmonogramAdminResponse()
                  {
                      IdHarmonogram = hash.Encode(x.IdHarmonogram),

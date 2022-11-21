@@ -36,13 +36,12 @@ namespace Application.Harmonogramy.Queries
                 (from x in context.Harmonograms
                  join z in context.Wizyta on x.IdWizyta equals z.IdWizyta into wizyta
                  from t in wizyta.DefaultIfEmpty()
-                 join w in context.Osobas on x.WeterynarzIdOsoba equals w.IdOsoba
                  where x.DataRozpoczecia.Date >= StartDate && x.DataZakonczenia.Date <= EndDate && x.WeterynarzIdOsoba == id
                  select new GetHarmonogramAdminResponse()
                  {
                      IdHarmonogram = hash.Encode(x.IdHarmonogram),
-                     IdWeterynarz = req.ID_osoba,
-                     Weterynarz = w.Imie + " " + w.Nazwisko,
+                     //IdWeterynarz = req.ID_osoba,
+                     //Weterynarz = w.Imie + " " + w.Nazwisko,
                      Data = x.DataRozpoczecia,
                      Dzien = ((int)x.DataRozpoczecia.DayOfWeek),
                      IdKlient = x.IdWizyta != null ? hash.Encode(t.IdOsoba) : null,

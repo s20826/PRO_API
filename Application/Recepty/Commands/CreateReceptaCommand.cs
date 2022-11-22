@@ -15,11 +15,11 @@ namespace Application.Recepty.Commands
         public string Zalecenia { get; set; }
     }
 
-    public class ReceptaDetailsQueryHandler : IRequestHandler<CreateReceptaCommand, int>
+    public class CreateReceptaCommandHandler : IRequestHandler<CreateReceptaCommand, int>
     {
         private readonly IKlinikaContext context;
         private readonly IHash hash;
-        public ReceptaDetailsQueryHandler(IKlinikaContext klinikaContext, IHash _hash)
+        public CreateReceptaCommandHandler(IKlinikaContext klinikaContext, IHash _hash)
         {
             context = klinikaContext;
             hash = _hash;

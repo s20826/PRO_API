@@ -36,7 +36,8 @@ namespace Test.Mock
                 request = new LekRequest
                 {
                     Nazwa = "aaa",
-                    JednostkaMiary = "ml"
+                    JednostkaMiary = "ml",
+                    Producent = "..."
                 }
             };
 

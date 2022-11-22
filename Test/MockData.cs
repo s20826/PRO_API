@@ -353,5 +353,17 @@ namespace Test
                 }
             };
         }
+
+        public static List<Receptum> GetReceptaList()
+        {
+            return new List<Receptum>
+            {
+                new Receptum
+                {
+                    IdWizyta = 1,
+                    Zalecenia = "long text"
+                }
+            };
+        }
     }
 }

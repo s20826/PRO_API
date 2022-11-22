@@ -33,7 +33,7 @@ namespace Application.Leki.Commands
             });
 
             await context.SaveChangesAsync(cancellationToken);
-            return hash.Encode(result.Entity.IdLek);
+            return result != null ? hash.Encode(result.Entity.IdLek) : "";
         }
     }
 }

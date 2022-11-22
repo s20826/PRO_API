@@ -29,7 +29,7 @@ namespace Application.Recepty.Commands
         {
             int id = hash.Decode(req.ID_recepta);
 
-            var recepta = context.Recepta.Where(x => x.IdWizyta.Equals(req.ID_recepta)).First();
+            var recepta = context.Recepta.Where(x => x.IdWizyta.Equals(id)).First();
             recepta.Zalecenia = req.Zalecenia;
 
             return await context.SaveChangesAsync(cancellationToken);

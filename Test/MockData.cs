@@ -365,5 +365,18 @@ namespace Test
                 }
             };
         }
+
+        public static List<ReceptaLek> GetReceptaLekList()
+        {
+            return new List<ReceptaLek>
+            {
+                new ReceptaLek
+                {
+                    IdWizyta = 1,
+                    IdLek = 1,
+                    Ilosc = 5
+                }
+            };
+        }
     }
 }

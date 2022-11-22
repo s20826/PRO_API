@@ -7,5 +7,7 @@ namespace Infrastructure
         void SendPrzypomnienieEmail();
 
         Task DeleteWizytaSystemAsync();
+
+        void SendSzczepienieEmail();
     }
 }

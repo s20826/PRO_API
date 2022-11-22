@@ -75,7 +75,8 @@ namespace PRO_API
             services.AddMemoryCache();
 
             services.AddHangfire(configuration => configuration.UseMemoryStorage());
-                
+            services.AddHangfireServer();
+
             /*.UseSqlServerStorage(Configuration.GetConnectionString("HangfireConnection"), new SqlServerStorageOptions
             {
                 CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
@@ -85,7 +86,6 @@ namespace PRO_API
                 DisableGlobalLocks = true
             }));*/
 
-            services.AddHangfireServer();
 
             var emailConfig = Configuration
                 .GetSection("EmailConfiguration")
@@ -167,8 +167,11 @@ namespace PRO_API
                 endpoints.MapHangfireDashboard();
             });
 
-            
-            recurringJobManager.AddOrUpdate<ScheduleSerive>("send email", service => service.SendPrzypomnienieEmail(), "0 8 * * *");
+            //wyœlij Email z przypomnieniem o wizycie dzieñ przed wizyt¹, uruchamiane raz dziennie o 8:00
+            recurringJobManager.AddOrUpdate<ScheduleSerive>("send wizyta email", service => service.SendPrzypomnienieEmail(), "0 8 * * *");
+
+            //wyœlij Email z przypomnieniem o nastêpnym obowi¹zkowym szczepieniu, uruchamiane co 2 tygodnie o 9:00
+            recurringJobManager.AddOrUpdate<ScheduleSerive>("send szczepienie email", service => service.SendSzczepienieEmail(), "0 9 */14 * *");
 
             //co 6 miesi¹cy, pierwszego dnia miesi¹ca
             recurringJobManager.AddOrUpdate<ScheduleSerive>("delete cancelled appointments", service => service.DeleteWizytaSystemAsync(), "0 4 1 */6 *");

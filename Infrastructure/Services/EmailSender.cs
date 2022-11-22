@@ -19,6 +19,39 @@ namespace Infrastructure.Services
             _emailConfig = emailConfig;
         }
 
+        public async Task SendSzczepienieEmail(string to, DateTime data, string pacjent)
+        {
+            var culture = new System.Globalization.CultureInfo("pl-PL");
+            var day = culture.DateTimeFormat.GetDayName(DateTime.Today.DayOfWeek);
+            string termin = data.ToShortDateString() + " (" + day + ") " + data.ToShortTimeString();
+
+            var body = string.Format(
+               "<h2>" +
+               "Przypominamy o wykonaniu szczepienia" +
+               "</h2>" +
+               "<p style='font - family: Arial, Helvetica, sans - serif;'>" +
+               "Data ważności szczepienia: " +
+               "{0}" +
+               "</p>" +
+               "Pacjent: " +
+               "{1}" +
+               "</p>" +
+               "</br>" +
+               "<p style='font - family: Arial, Helvetica, sans - serif;'>" +
+               "Klinika PetMed" +
+               "</p>" +
+               "<p style='font - family: Arial, Helvetica, sans - serif;'>" +
+               "222 444 555" +
+               "</p>", termin, pacjent);
+
+            var email = CreateEmail(to, "Przypomnienie o szczepieniu");
+            var bodyBuilder = new BodyBuilder { HtmlBody = body };
+            email.Body = bodyBuilder.ToMessageBody();
+
+            await Send(email);
+        }
+
+
         public async Task SendPrzypomnienieEmail(string to, DateTime data, string weterynarz)
         {
             var culture = new System.Globalization.CultureInfo("pl-PL");
@@ -180,9 +213,6 @@ namespace Infrastructure.Services
             {
                 try
                 {
-                    ///await client.ConnectAsync(_emailConfig.SmtpServer, _emailConfig.Port, true);
-                    //client.AuthenticationMechanisms.Remove("XOAUTH2");
-
                     client.ServerCertificateValidationCallback = (s, c, h, e) => true;
                     client.Connect(_emailConfig.SmtpServer, _emailConfig.Port, SecureSocketOptions.Auto);
                     await client.AuthenticateAsync(_emailConfig.UserName, _emailConfig.Password);
@@ -190,7 +220,7 @@ namespace Infrastructure.Services
                 }
                 catch (Exception e)
                 {
-                    throw new Exception(_emailConfig.Password);
+                    throw new Exception(e.Message);
                 }
                 finally
                 {

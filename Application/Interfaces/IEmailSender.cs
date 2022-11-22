@@ -14,5 +14,7 @@ namespace Application.Interfaces
         Task SendCreateAccountEmail(string to);
 
         Task SendPrzypomnienieEmail(string to, DateTime data, string weterynarz);
+
+        Task SendSzczepienieEmail(string to, DateTime data, string pacjent);
     }
 }

@@ -39,8 +39,11 @@ namespace Infrastructure
 
             foreach (var a in helperList)
             {
-                emailSender.SendPrzypomnienieEmail(a.Email, a.Data, a.Weterynarz);
-                logger.LogInformation("Email sent to " + a.Email + " at: " + DateTime.Now.ToString());
+                if(a.Data.Date == DateTime.Now.Date.AddDays(1))
+                {
+                    emailSender.SendPrzypomnienieEmail(a.Email, a.Data, a.Weterynarz);
+                    logger.LogInformation("Email sent to " + a.Email + " at: " + DateTime.Now.ToString());
+                }
             }
         }
 
@@ -54,6 +57,30 @@ namespace Infrastructure
 
             var result = await context.SaveChangesAsync(new CancellationToken());
             logger.LogInformation("Records deleted: " + result);
+        }
+
+        public void SendSzczepienieEmail()
+        {
+            var helperList = from x in context.Szczepienies
+                             join y in context.Pacjents on x.IdPacjent equals y.IdPacjent
+                             join k in context.Klients on y.IdOsoba equals k.IdOsoba
+                             join o in context.Osobas on k.IdOsoba equals o.IdOsoba
+                             where x.DataWaznosci < DateTime.Now.AddMonths(1) && x.DataWaznosci > DateTime.Now
+                             select new
+                             {
+                                 Email = o.Email,
+                                 DataWaznosci = x.DataWaznosci,
+                                 Pacjent = y.Nazwa
+                             };
+
+            foreach (var a in helperList)
+            {
+                if(a.DataWaznosci != null)
+                {
+                    emailSender.SendPrzypomnienieEmail(a.Email, (DateTime)a.DataWaznosci, a.Pacjent);
+                    logger.LogInformation("Email sent to " + a.Email + " at: " + DateTime.Now.ToString());
+                }
+            }
         }
     }
 }

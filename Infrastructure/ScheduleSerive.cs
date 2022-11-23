@@ -39,7 +39,7 @@ namespace Infrastructure
 
             foreach (var a in helperList)
             {
-                if(a.Data.Date == DateTime.Now.Date.AddDays(1))
+                if (a.Data.Date == DateTime.Now.Date.AddDays(1))
                 {
                     emailSender.SendPrzypomnienieEmail(a.Email, a.Data, a.Weterynarz);
                     logger.LogInformation("Email sent to " + a.Email + " at: " + DateTime.Now.ToString());
@@ -75,11 +75,8 @@ namespace Infrastructure
 
             foreach (var a in helperList)
             {
-                if(a.DataWaznosci != null)
-                {
-                    emailSender.SendPrzypomnienieEmail(a.Email, (DateTime)a.DataWaznosci, a.Pacjent);
-                    logger.LogInformation("Email sent to " + a.Email + " at: " + DateTime.Now.ToString());
-                }
+                emailSender.SendPrzypomnienieEmail(a.Email, (DateTime)a.DataWaznosci, a.Pacjent);
+                logger.LogInformation("Email sent to " + a.Email + " at: " + DateTime.Now.ToString());
             }
         }
     }

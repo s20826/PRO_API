@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Infrastructure
+namespace Application.Interfaces
 {
     public interface ISchedule
     {

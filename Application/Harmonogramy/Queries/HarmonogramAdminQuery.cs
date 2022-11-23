@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace Application.Harmonogramy.Queries
 {
-    public class HarmonogramAdminQuery : IRequest<List<GetHarmonogramAdminResponse>>
+    public class HarmonogramAdminQuery : IRequest<object>
     {
         public DateTime Date { get; set; }
     }
 
-    public class HarmonogramAdminQueryHandle : IRequestHandler<HarmonogramAdminQuery, List<GetHarmonogramAdminResponse>>
+    public class HarmonogramAdminQueryHandle : IRequestHandler<HarmonogramAdminQuery, object>
     {
         private readonly IKlinikaContext context;
         private readonly IHash hash;
@@ -24,7 +24,7 @@ namespace Application.Harmonogramy.Queries
             hash = _hash;
         }
 
-        public async Task<List<GetHarmonogramAdminResponse>> Handle(HarmonogramAdminQuery req, CancellationToken cancellationToken)
+        public async Task<object> Handle(HarmonogramAdminQuery req, CancellationToken cancellationToken)
         {
             var StartDate = req.Date.AddDays(-(int)req.Date.DayOfWeek);
             var EndDate = req.Date.AddDays(7 - (int)req.Date.DayOfWeek + 1);
@@ -50,7 +50,12 @@ namespace Application.Harmonogramy.Queries
                      CzyZajete = x.IdWizyta != null
                  }).ToList();
 
-            return results;
+            return new 
+            {
+                Start = StartDate,
+                End = EndDate,
+                harmonogramy = results
+            };
         }
     }
 }

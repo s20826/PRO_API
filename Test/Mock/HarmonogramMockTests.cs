@@ -59,7 +59,7 @@ namespace Test.Mock
         }
 
         [Test]
-        public void CreateHarmonogramShouldThrowAnExceptionTest2()
+        public void CreateHarmonogramShouldNotThrowAnExceptionTest2()
         {
             var before = mockContext.Object.Harmonograms.Count();
             var handler = new CreateHarmonogramDefaultCommandHandler(mockContext.Object, hash, harmonogramService);
@@ -69,7 +69,7 @@ namespace Test.Mock
                 Data = new DateTime(2022, 10, 27)
             };
 
-            Assert.ThrowsAsync<Exception>(async () => await handler.Handle(command, CancellationToken.None));
+            Assert.DoesNotThrowAsync(async () => await handler.Handle(command, CancellationToken.None));
         }
 
         [Test]

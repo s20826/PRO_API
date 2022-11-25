@@ -30,16 +30,14 @@ namespace Application.Harmonogramy.Commands
 
         public async Task<object> Handle(CreateHarmonogramDefaultCommand req, CancellationToken cancellationToken)
         {
-            if(context.Harmonograms.Where(x => x.DataRozpoczecia.Date.Equals(req.Data)).Any())
-            {
-                throw new Exception("Harmonogram już istnieje");
-            }
-
             var weterynarze = context.Weterynarzs.ToList();
 
             foreach (Weterynarz w in weterynarze)
             {
-                harmonogramService.CreateWeterynarzHarmonograms(context, req.Data, w.IdOsoba);
+                if (!context.Harmonograms.Where(x => x.DataRozpoczecia.Date.Equals(req.Data) && x.WeterynarzIdOsoba == w.IdOsoba).Any())
+                {
+                    harmonogramService.CreateWeterynarzHarmonograms(context, req.Data, w.IdOsoba);
+                }
             }
 
             return await context.SaveChangesAsync(cancellationToken);

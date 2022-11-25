@@ -10,7 +10,7 @@ namespace PRO_API.Controllers
 {
     public class HarmonogramController : ApiControllerBase
     {
-        //ustawia harmonogramy na podany dzień dla wszystkich weterynarzy według ich godzin pracy
+        //ustawia harmonogramy (według ich godzin pracy) tylko tym weterynarzom którzy danego dnia nie mają ustawionego harmonogramu
         //[Authorize(Roles = "admin")]
         [HttpPost("day")]
         public async Task<IActionResult> AddHarmonogramsForADay(DateTime date, CancellationToken token)
@@ -29,17 +29,17 @@ namespace PRO_API.Controllers
         }
 
 
-        //ustawia harmonogramy na podany dzień dla wszystkich weterynarzy według ich godzin pracy
+        //ustawia harmonogramy weterynarzowi na podany dzień według godzin pracy
         //[Authorize(Roles = "admin")]
-        [HttpPost("day/{ID_weterynarz}")]
-        public async Task<IActionResult> AddWeterynarzHarmonogramForADay(DateTime date, string ID_weterynarz, CancellationToken token)
+        [HttpPost("day/{ID_osoba}")]
+        public async Task<IActionResult> AddWeterynarzHarmonogramForADay(DateTime date, string ID_osoba, CancellationToken token)
         {
             try
             {
                 return Ok(await Mediator.Send(new CreateHarmonogramByIDCommand
                 {
                     Data = date,
-                    ID_weterynarz = ID_weterynarz
+                    ID_weterynarz = ID_osoba
                 }, token));
             }
             catch (Exception e)
@@ -49,7 +49,7 @@ namespace PRO_API.Controllers
         }
 
 
-        //usuwa harmonogramy na podany dzień wszystkim weterynarzom
+        //usuwa harmonogramy na podany dzień wszystkim weterynarzom przy okazji anulując wizyty tego dnia
         //[Authorize(Roles = "admin")]
         [HttpDelete("day")]
         public async Task<IActionResult> DeleteHarmonogramsForADay(DateTime date, CancellationToken token)
@@ -58,6 +58,25 @@ namespace PRO_API.Controllers
             {
                 return Ok(await Mediator.Send(new DeleteHarmonogramCommand
                 {
+                    Data = date
+                }, token));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        
+        //[Authorize(Roles = "admin")]
+        [HttpDelete("day/{ID_osoba}")]
+        public async Task<IActionResult> DeleteWeterynarzHarmonogramForADay(DateTime date, string ID_osoba, CancellationToken token)
+        {
+            try
+            {
+                return Ok(await Mediator.Send(new DeleteHarmonogramByIdCommand
+                {
+                    ID_osoba = ID_osoba,
                     Data = date
                 }, token));
             }

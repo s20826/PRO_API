@@ -2,6 +2,7 @@
 using Domain;
 using Domain.Enums;
 using Domain.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,12 @@ namespace Infrastructure.Services
 {
     public class HarmonogramService : IHarmonogramRepository
     {
+        /*private readonly IEmailSender emailSender;
+        public HarmonogramService(IEmailSender sender)
+        {
+            emailSender = sender;
+        }*/
+
         public int HarmonogramCount(GodzinyPracy godziny)
         {
             var result = godziny.GodzinaZakonczenia.Subtract(godziny.GodzinaRozpoczecia);
@@ -59,6 +66,12 @@ namespace Infrastructure.Services
 
                 context.Harmonograms.Remove(h);
             }
+
+            /*var grouped = harmonograms.Where(x => x.IdWizyta.HasValue).GroupBy(x => x.IdWizyta);
+            foreach (Harmonogram h in grouped)
+            {
+                new EmailSender().SendAnulujWizyteEmail(h.IdWizytaNavigation.)
+            }*/
         }
     }
 }

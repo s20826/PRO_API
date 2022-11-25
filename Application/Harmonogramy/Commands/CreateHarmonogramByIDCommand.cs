@@ -31,7 +31,7 @@ namespace Application.Harmonogramy.Commands
 
             if (context.Harmonograms.Where(x => x.DataRozpoczecia.Date.Equals(req.Data) && x.WeterynarzIdOsoba.Equals(id)).Any())
             {
-                throw new Exception("Harmonogram już istnieje");
+                throw new Exception("Harmonogram na ten dzień już istnieje");
             }
 
             harmonogramService.CreateWeterynarzHarmonograms(context, req.Data, id);

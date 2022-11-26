@@ -1,6 +1,7 @@
 ﻿using Application.DTO.Requests;
 using Application.Interfaces;
 using Domain.Enums;
+using Domain.Models;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -35,11 +36,25 @@ namespace Application.GodzinaPracy.Commands
             {
                 throw new Exception("Ten pracownik nie ma ustawionych godzin pracy.");
             }
+
             foreach (GodzinyPracyRequest request in req.requestList)
             {
-                var dzien = list.Where(x => x.DzienTygodnia == request.DzienTygodnia).First();
-                dzien.GodzinaRozpoczecia = request.GodzinaRozpoczecia;
-                dzien.GodzinaZakonczenia = request.GodzinaZakonczenia;
+                var dzien = list.Where(x => x.DzienTygodnia == request.DzienTygodnia).FirstOrDefault();
+                if(dzien == null)
+                {
+                    context.GodzinyPracies.Add(new GodzinyPracy
+                    {
+                        DzienTygodnia = request.DzienTygodnia,
+                        GodzinaRozpoczecia = request.GodzinaRozpoczecia,
+                        GodzinaZakonczenia = request.GodzinaZakonczenia,
+                        IdOsoba = id
+                    });
+                } 
+                else
+                {
+                    dzien.GodzinaRozpoczecia = request.GodzinaRozpoczecia;
+                    dzien.GodzinaZakonczenia = request.GodzinaZakonczenia;
+                }
             }
 
             return await context.SaveChangesAsync(cancellationToken);

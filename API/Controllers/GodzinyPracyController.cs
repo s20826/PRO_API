@@ -83,7 +83,7 @@ namespace PRO_API.Controllers
         }
 
         [Authorize(Roles = "admin")]
-        [HttpPut("{ID_osoba}")]
+        [HttpPut("list/{ID_osoba}")]
         public async Task<IActionResult> UpdateGodzinyPracy(string ID_osoba, List<GodzinyPracyRequest> requests, CancellationToken token)
         {
             try
@@ -92,6 +92,26 @@ namespace PRO_API.Controllers
                 {
                     ID_osoba = ID_osoba,
                     requestList = requests
+                }, token);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
+            return NoContent();
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPut("{ID_osoba}")]
+        public async Task<IActionResult> UpdateGodzinyPracy(string ID_osoba, GodzinyPracyRequest request, CancellationToken token)
+        {
+            try
+            {
+                await Mediator.Send(new UpdateGodzinyPracyCommand
+                {
+                    ID_osoba = ID_osoba,
+                    requestList = new List<GodzinyPracyRequest>() { request }
                 }, token);
             }
             catch (Exception e)

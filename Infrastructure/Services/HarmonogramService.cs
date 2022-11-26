@@ -13,11 +13,11 @@ namespace Infrastructure.Services
 {
     public class HarmonogramService : IHarmonogramRepository
     {
-        /*private readonly IEmailSender emailSender;
+        private readonly IEmailSender _emailSender;
         public HarmonogramService(IEmailSender sender)
         {
-            emailSender = sender;
-        }*/
+            _emailSender = sender;
+        }
 
         public int HarmonogramCount(GodzinyPracy godziny)
         {
@@ -54,24 +54,23 @@ namespace Infrastructure.Services
             }
         }
 
-        public void DeleteHarmonograms(List<Harmonogram> harmonograms, IKlinikaContext context)
+        public async Task DeleteHarmonograms(List<Harmonogram> harmonograms, IKlinikaContext context)
         {
-            foreach (Harmonogram h in harmonograms)
-            {
-                if (h.IdWizyta.HasValue)
-                {
-                    var x = context.Wizyta.Where(x => x.IdWizyta.Equals(h.IdWizyta)).First();
-                    x.Status = WizytaStatus.AnulowanaKlinika.ToString();
-                }
+            var grouped = harmonograms.Where(x => x.IdWizyta.HasValue).GroupBy(x => x.IdWizyta).ToList();
+            var wizyty = context.Wizyta.Where(x => grouped.Select(x => x.Key.Value).Contains(x.IdWizyta)).ToList();
 
-                context.Harmonograms.Remove(h);
+            foreach (var g in wizyty)
+            {
+                var startDate = harmonograms.Where(x => x.IdWizyta == g.IdWizyta).OrderBy(x => x.DataRozpoczecia).First().DataRozpoczecia;
+                var email = context.Osobas.Where(x => x.IdOsoba == g.IdOsoba).First().Email;
+                g.Status = WizytaStatus.AnulowanaKlinika.ToString();
+                await _emailSender.SendAnulujWizyteEmail(email, startDate);
             }
 
-            /*var grouped = harmonograms.Where(x => x.IdWizyta.HasValue).GroupBy(x => x.IdWizyta);
-            foreach (Harmonogram h in grouped)
+            foreach (Harmonogram h in harmonograms)
             {
-                new EmailSender().SendAnulujWizyteEmail(h.IdWizytaNavigation.)
-            }*/
+                context.Harmonograms.Remove(h);
+            }
         }
     }
 }

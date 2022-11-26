@@ -29,8 +29,8 @@ namespace Application.Harmonogramy.Queries
         public async Task<object> Handle(HarmonogramWeterynarzQuery req, CancellationToken cancellationToken)
         {
             int id = hash.Decode(req.ID_osoba);
-            var StartDate = req.Date.AddDays(-(int)req.Date.DayOfWeek);
-            var EndDate = req.Date.AddDays(7 - (int)req.Date.DayOfWeek + 1);
+            var StartDate = req.Date.AddDays(-((int)req.Date.DayOfWeek - 1));
+            var EndDate = req.Date.AddDays(7 - (int)req.Date.DayOfWeek);
 
             var results =
                 (from x in context.Harmonograms

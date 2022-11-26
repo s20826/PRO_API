@@ -26,8 +26,8 @@ namespace Application.Harmonogramy.Queries
 
         public async Task<object> Handle(HarmonogramAdminQuery req, CancellationToken cancellationToken)
         {
-            var StartDate = req.Date.AddDays(-(int)req.Date.DayOfWeek);
-            var EndDate = req.Date.AddDays(7 - (int)req.Date.DayOfWeek + 1);
+            var StartDate = req.Date.AddDays(-((int)req.Date.DayOfWeek - 1));
+            var EndDate = req.Date.AddDays(7 - (int)req.Date.DayOfWeek);
 
             var results =
                 (from x in context.Harmonograms

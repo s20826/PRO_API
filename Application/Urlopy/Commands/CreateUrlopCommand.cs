@@ -41,7 +41,7 @@ namespace Application.Urlopy.Commands
             });
 
             var harmonograms = context.Harmonograms.Where(x => x.DataRozpoczecia.Date.Equals(req.request.Data.Date) && x.WeterynarzIdOsoba.Equals(id)).ToList();
-            harmonogramService.DeleteHarmonograms(harmonograms, context);
+            await harmonogramService.DeleteHarmonograms(harmonograms, context);
 
             return await context.SaveChangesAsync(cancellationToken);
         }

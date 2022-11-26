@@ -1,6 +1,7 @@
 ﻿using Domain.Models;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Application.Interfaces
 {
@@ -8,7 +9,7 @@ namespace Application.Interfaces
     {
         int HarmonogramCount(GodzinyPracy godziny);
 
-        void DeleteHarmonograms(List<Harmonogram> harmonograms, IKlinikaContext context);
+        Task DeleteHarmonograms(List<Harmonogram> harmonograms, IKlinikaContext context);
 
         void CreateWeterynarzHarmonograms(IKlinikaContext context, DateTime date, int id);
     }

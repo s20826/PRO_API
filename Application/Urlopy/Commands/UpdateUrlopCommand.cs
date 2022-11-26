@@ -35,7 +35,7 @@ namespace Application.Urlopy.Commands
 
             var urlop = context.Urlops.Where(x => x.IdUrlop.Equals(urlopID)).First();
 
-            harmonogramService.DeleteHarmonograms(
+            await harmonogramService.DeleteHarmonograms(
                 context.Harmonograms.Where(x => x.DataRozpoczecia.Date.Equals(req.request.Data) && x.WeterynarzIdOsoba.Equals(weterynarzID)).ToList(),
                 context);
 

@@ -18,12 +18,14 @@ namespace Test.Mock
     {
         private Mock<IKlinikaContext> mockContext;
         public HashService hash;
+        private HarmonogramService harmonogramService;
 
         [SetUp]
         public void SetUp()
         {
             mockContext = MockKlinikaContext.GetMockDbContext();
             hash = new HashService(new Hashids("zscfhulp36", 7));
+            harmonogramService = new HarmonogramService(new MockEmailSender());
         }
 
 
@@ -31,7 +33,7 @@ namespace Test.Mock
         public async Task CreateUrlopShouldBeCorrectTest()
         {
             var before = mockContext.Object.Urlops.Count();
-            var handler = new CreateUrlopCommandHandler(mockContext.Object, hash, new HarmonogramService());
+            var handler = new CreateUrlopCommandHandler(mockContext.Object, hash, harmonogramService);
 
             var command = new CreateUrlopCommand()
             {
@@ -50,7 +52,7 @@ namespace Test.Mock
         [Test]
         public void CreateUrlopShouldThrowAnExceptionTest()
         {
-            var handler = new CreateUrlopCommandHandler(mockContext.Object, hash, new HarmonogramService());
+            var handler = new CreateUrlopCommandHandler(mockContext.Object, hash, harmonogramService);
 
             var command = new CreateUrlopCommand()
             {
@@ -68,7 +70,7 @@ namespace Test.Mock
         [Test]
         public async Task UpdateUrlopShouldBeCorrectTest()
         {
-            var handler = new UpdateUrlopCommandHandler(mockContext.Object, hash, new HarmonogramService());
+            var handler = new UpdateUrlopCommandHandler(mockContext.Object, hash, harmonogramService);
 
             var command = new UpdateUrlopCommand()
             {
@@ -89,7 +91,7 @@ namespace Test.Mock
         public async Task DeleteUrlopShouldBeCorrectTest()
         {
             var before = mockContext.Object.Urlops.Count();
-            var handler = new DeleteUrlopCommandHandler(mockContext.Object, hash, new HarmonogramService());
+            var handler = new DeleteUrlopCommandHandler(mockContext.Object, hash, harmonogramService);
 
             var command = new DeleteUrlopCommand()
             {
@@ -105,7 +107,7 @@ namespace Test.Mock
         [Test]
         public void DeleteUrlopShouldThrowAnExceptionTest()
         {
-            var handler = new DeleteUrlopCommandHandler(mockContext.Object, hash, new HarmonogramService());
+            var handler = new DeleteUrlopCommandHandler(mockContext.Object, hash, harmonogramService);
 
             var command = new DeleteUrlopCommand()
             {

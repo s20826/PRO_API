@@ -37,7 +37,7 @@ namespace Application.Harmonogramy.Commands
                 throw new Exception("Harmonogram nie istnieje w dniu: " + req.Data);
             }
 
-            harmonogramService.DeleteHarmonograms(harmonograms, context);
+            await harmonogramService.DeleteHarmonograms(harmonograms, context);
 
             return await context.SaveChangesAsync(cancellationToken);
         }

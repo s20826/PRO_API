@@ -25,7 +25,7 @@ namespace Test.Mock
         {
             mockContext = MockKlinikaContext.GetMockDbContext();
             hash = new HashService(new Hashids("zscfhulp36", 7));
-            harmonogramService = new HarmonogramService();
+            harmonogramService = new HarmonogramService(new MockEmailSender());
         }
 
 
@@ -77,7 +77,7 @@ namespace Test.Mock
         {
             var before = mockContext.Object.Harmonograms.Count();
             var before2 = mockContext.Object.Wizyta.Where(x => x.Status == WizytaStatus.AnulowanaKlinika.ToString()).Count();
-            var handler = new DeleteHarmonogramCommandHandler(mockContext.Object, hash, new HarmonogramService());
+            var handler = new DeleteHarmonogramCommandHandler(mockContext.Object, hash, harmonogramService);
 
             var command = new DeleteHarmonogramCommand()
             {

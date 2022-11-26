@@ -15,10 +15,11 @@ namespace Test.Services
     public class HarmonogramServiceTests
     {
         private Mock<IKlinikaContext> mockContext;
-
+        private IEmailSender emailSender;
         [SetUp]
         public void SetUp()
         {
+            emailSender = new MockEmailSender();
             mockContext = MockKlinikaContext.GetMockDbContext();
         }
 
@@ -51,7 +52,7 @@ namespace Test.Services
         [TestCaseSource("GetGodzinyPracy1")]
         public void HarmonogramCountShouldBeCorrectTest(GodzinyPracy a)
         {
-            var result = new HarmonogramService().HarmonogramCount(a);
+            var result = new HarmonogramService(emailSender).HarmonogramCount(a);
             Assert.AreEqual(result, 6);
         }
 
@@ -59,14 +60,14 @@ namespace Test.Services
         [TestCaseSource("GetGodzinyPracy2")]
         public void HarmonogramCountThrowsAnExceptionTest(GodzinyPracy a)
         {
-            Assert.Throws<Exception>(() => new HarmonogramService().HarmonogramCount(a));
+            Assert.Throws<Exception>(() => new HarmonogramService(emailSender).HarmonogramCount(a));
         }
 
         [Test]
         public void HarmonogramCreateShouldBeCorrectTest()
         {
             var before = mockContext.Object.Harmonograms.Count();
-            new HarmonogramService().CreateWeterynarzHarmonograms(mockContext.Object, new DateTime(2022,11,9), 2);
+            new HarmonogramService(emailSender).CreateWeterynarzHarmonograms(mockContext.Object, new DateTime(2022,11,9), 2);
             Assert.AreEqual(before + 6, mockContext.Object.Harmonograms.Count());
         }
 
@@ -74,14 +75,14 @@ namespace Test.Services
         public void HarmonogramCreateShouldBeNullTest()
         {
             var before = mockContext.Object.Harmonograms.Count();
-            new HarmonogramService().CreateWeterynarzHarmonograms(mockContext.Object, new DateTime(2022,11,16), 2);
+            new HarmonogramService(emailSender).CreateWeterynarzHarmonograms(mockContext.Object, new DateTime(2022,11,16), 2);
             Assert.AreEqual(before, mockContext.Object.Harmonograms.Count());
         }
 
         [Test]
-        public void HarmonogramDeleteShouldBeCorrectTest()
+        public async Task HarmonogramDeleteShouldBeCorrectTest()
         {
-            new HarmonogramService().DeleteHarmonograms(mockContext.Object.Harmonograms.ToList(), mockContext.Object);
+            await new HarmonogramService(emailSender).DeleteHarmonograms(mockContext.Object.Harmonograms.ToList(), mockContext.Object);
             Assert.AreEqual(0, mockContext.Object.Harmonograms.Count());
             Assert.AreEqual(WizytaStatus.AnulowanaKlinika.ToString(), mockContext.Object.Wizyta.Where(x => x.IdWizyta == 1).First().Status);
         }

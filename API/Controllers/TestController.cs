@@ -26,13 +26,13 @@ namespace PRO_API.Controllers
         }
 
         [HttpGet("hashid/{id}")]
-        public async Task<IActionResult> GetHashedID(int id)
+        public IActionResult GetHashedID(int id)
         {
             return Ok(hashids.Encode(id));
         }
 
         [HttpGet("accounts")]
-        public async Task<IActionResult> GetAccounts()
+        public IActionResult GetAccounts()
         {
             return Ok(context.Osobas.ToList());
         }

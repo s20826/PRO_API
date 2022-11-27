@@ -2,6 +2,7 @@
 using Application.DTO.Responses;
 using Application.Interfaces;
 using MediatR;
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,11 +19,13 @@ namespace Application.Weterynarze.Commands
         private readonly IKlinikaContext context;
         private readonly IHash hash;
         private readonly ICache<GetWeterynarzListResponse> cache;
-        public DeleteWeterynarzCommandHandle(IKlinikaContext klinikaContext, IHash _hash, ICache<GetWeterynarzListResponse> _cache)
+        private readonly IHarmonogramRepository harmonogram;
+        public DeleteWeterynarzCommandHandle(IKlinikaContext klinikaContext, IHash _hash, ICache<GetWeterynarzListResponse> _cache, IHarmonogramRepository _harmonogram)
         {
             context = klinikaContext;
             hash = _hash;
             cache = _cache;
+            harmonogram = _harmonogram;
         }
 
         public async Task<int> Handle(DeleteWeterynarzCommand req, CancellationToken cancellationToken)
@@ -41,6 +44,12 @@ namespace Application.Weterynarze.Commands
             if (x.Any())
             {
                 context.GodzinyPracies.RemoveRange(x);
+            }
+
+            var harmonograms = context.Harmonograms.Where(x => x.WeterynarzIdOsoba == id && x.DataRozpoczecia > DateTime.Now).ToList();
+            if(harmonograms.Any()) 
+            {
+                await harmonogram.DeleteHarmonograms(harmonograms, context);
             }
 
             int result = await context.SaveChangesAsync(cancellationToken);

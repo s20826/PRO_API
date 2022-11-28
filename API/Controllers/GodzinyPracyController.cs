@@ -30,6 +30,23 @@ namespace PRO_API.Controllers
             }
         }
 
+        [Authorize(Roles = "weterynarz")]
+        [HttpGet("{ID_osoba}")]
+        public async Task<IActionResult> GetGodzinyPracyWeterynarz(CancellationToken token)
+        {
+            try
+            {
+                return Ok(await Mediator.Send(new GodzinyPracyQuery
+                {
+                    ID_osoba = GetUserId()
+                }, token));
+            }
+            catch (Exception)
+            {
+                return NotFound();
+            }
+        }
+
         //[Authorize(Roles = "admin")]
         [HttpGet("list/{ID_osoba}")]
         public async Task<IActionResult> GetGodzinyPracy(string ID_osoba, CancellationToken token)

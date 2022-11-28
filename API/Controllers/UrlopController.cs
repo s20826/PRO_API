@@ -23,16 +23,6 @@ namespace PRO_API.Controllers
             }, token));
         }
 
-        [Authorize(Roles = "weterynarz")]
-        [HttpGet("moje_urlopy")]
-        public async Task<IActionResult> GetUrlopList2(CancellationToken token)
-        {
-            return Ok(await Mediator.Send(new UrlopWeterynarzQuery
-            {
-                ID_weterynarz = GetUserId()
-            }, token));
-        }
-
         [Authorize(Roles = "admin")]
         [HttpGet("{ID_weterynarz}")]
         public async Task<IActionResult> GetWeterynarzUrlopList(string ID_weterynarz, CancellationToken token)

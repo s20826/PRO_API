@@ -20,14 +20,12 @@ namespace Test.Mock
         private Mock<IKlinikaContext> mockContext;
         public HashService hash;
         public IConfiguration configuration;
-        private HarmonogramService harmonogramService;
 
         [SetUp]
         public void SetUp()
         {
             mockContext = MockKlinikaContext.GetMockDbContext();
             hash = new HashService(new Hashids("zscfhulp36", 7));
-            harmonogramService = new HarmonogramService(new MockEmailSender());
             var inMemorySettings = new Dictionary<string, string> {
                 {"SecretKey", "q4Ze7tyWVopasdfghjkPnr6uvpapajwEz3m18nqu6cA41qaz2wsx3edc4rfvplijygrdwa2137xd2OChybfthvFcdf"},
                 {"PasswordIterations", "150000"}
@@ -88,7 +86,7 @@ namespace Test.Mock
         [Test]
         public async Task DeleteWeterynarzShouldBeCorrectTest()
         {
-            var handler = new DeleteWeterynarzCommandHandle(mockContext.Object, hash, new MemoryMockCache<GetWeterynarzListResponse>(), harmonogramService);
+            var handler = new DeleteWeterynarzCommandHandle(mockContext.Object, hash, new MemoryMockCache<GetWeterynarzListResponse>());
 
             DeleteWeterynarzCommand command = new DeleteWeterynarzCommand()
             {
@@ -105,7 +103,7 @@ namespace Test.Mock
         [Test]
         public void DeleteWeterynarzShouldThrowAnExceptionTest()
         {
-            var handler = new DeleteWeterynarzCommandHandle(mockContext.Object, hash, new MemoryMockCache<GetWeterynarzListResponse>(), harmonogramService);
+            var handler = new DeleteWeterynarzCommandHandle(mockContext.Object, hash, new MemoryMockCache<GetWeterynarzListResponse>());
 
             DeleteWeterynarzCommand command = new DeleteWeterynarzCommand()
             {

@@ -31,7 +31,7 @@ namespace PRO_API.Controllers
         }
 
         [Authorize(Roles = "weterynarz")]
-        [HttpGet("{ID_osoba}")]
+        [HttpGet("moje_godziny")]
         public async Task<IActionResult> GetGodzinyPracyWeterynarz(CancellationToken token)
         {
             try

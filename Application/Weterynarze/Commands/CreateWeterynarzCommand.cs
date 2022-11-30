@@ -15,12 +15,12 @@ using System.Threading.Tasks;
 
 namespace Application.Weterynarze.Commands
 {
-    public class CreateWeterynarzCommand : IRequest<string>
+    public class CreateWeterynarzCommand : IRequest<object>
     {
         public WeterynarzCreateRequest request { get; set; }
     }
 
-    public class CreateWeterynarzCommandHandle : IRequestHandler<CreateWeterynarzCommand, string>
+    public class CreateWeterynarzCommandHandle : IRequestHandler<CreateWeterynarzCommand, object>
     {
         private readonly IKlinikaContext context;
         private readonly IPasswordRepository passwordRepository;
@@ -38,7 +38,7 @@ namespace Application.Weterynarze.Commands
             cache = _cache;
         }
 
-        public async Task<string> Handle(CreateWeterynarzCommand req, CancellationToken cancellationToken)
+        public async Task<object> Handle(CreateWeterynarzCommand req, CancellationToken cancellationToken)
         {
             var generatedLogin = "PetMed" + (context.Weterynarzs.Max(x => x.IdOsoba) + 1);
 
@@ -73,7 +73,10 @@ namespace Application.Weterynarze.Commands
             await connection.CloseAsync();
             await emailSender.SendHasloEmail(req.request.Email, generatedPassword);
             cache.Remove();
-            return hash.Encode(resultID);
+            return new 
+            { 
+                ID = hash.Encode(resultID) 
+            };
         }
     }
 }

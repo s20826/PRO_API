@@ -13,7 +13,7 @@ namespace PRO_API.Controllers
 {
     public class UrlopController : ApiControllerBase
     {
-        [Authorize(Roles = "admin")]
+      //  [Authorize(Roles = "admin")]
         [HttpGet]
         public async Task<IActionResult> GetUrlopList(CancellationToken token)
         {
@@ -23,7 +23,7 @@ namespace PRO_API.Controllers
             }, token));
         }
 
-        [Authorize(Roles = "weterynarz")]
+       // [Authorize(Roles = "weterynarz")]
         [HttpGet("moje_urlopy")]
         public async Task<IActionResult> GetUrlopList2(CancellationToken token)
         {
@@ -33,7 +33,7 @@ namespace PRO_API.Controllers
             }, token));
         }
 
-        [Authorize(Roles = "admin")]
+     //   [Authorize(Roles = "admin")]
         [HttpGet("{ID_weterynarz}")]
         public async Task<IActionResult> GetWeterynarzUrlopList(string ID_weterynarz, CancellationToken token)
         {
@@ -50,7 +50,7 @@ namespace PRO_API.Controllers
             }
         }
 
-        [Authorize(Roles = "admin")]
+       // [Authorize(Roles = "admin")]
         [HttpGet("details/{ID_urlop}")]
         public async Task<IActionResult> GetUrlopDetails(string ID_urlop, CancellationToken token)
         {
@@ -61,13 +61,13 @@ namespace PRO_API.Controllers
                     ID_urlop = ID_urlop
                 }, token));
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return NotFound();
+                return NotFound(e);
             }
         }
 
-        [Authorize(Roles = "admin")]
+       // [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<IActionResult> AddUrlop(UrlopRequest request, CancellationToken token)
         {
@@ -84,7 +84,7 @@ namespace PRO_API.Controllers
             }
         }
 
-        [Authorize(Roles = "admin")]
+        //[Authorize(Roles = "admin")]
         [HttpPut("{ID_urlop}")]
         public async Task<IActionResult> UpdateUrlop(string ID_urlop, UrlopRequest request, CancellationToken token)
         {
@@ -96,15 +96,15 @@ namespace PRO_API.Controllers
                     request = request
                 }, token);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return NotFound();
+                return NotFound(e);
             }
 
             return NoContent();
         }
 
-        [Authorize(Roles = "admin")]
+       // [Authorize(Roles = "admin")]
         [HttpDelete("{ID_urlop}")]
         public async Task<IActionResult> DeleteUrlop(string ID_urlop, CancellationToken token)
         {

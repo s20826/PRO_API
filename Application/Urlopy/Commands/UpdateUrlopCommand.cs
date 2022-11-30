@@ -36,11 +36,11 @@ namespace Application.Urlopy.Commands
             var urlop = context.Urlops.Where(x => x.IdUrlop.Equals(urlopID)).First();
 
             await harmonogramService.DeleteHarmonograms(
-                context.Harmonograms.Where(x => x.DataRozpoczecia.Date.Equals(req.request.Data) && x.WeterynarzIdOsoba.Equals(weterynarzID)).ToList(),
+                context.Harmonograms.Where(x => x.DataRozpoczecia.Date.Equals(req.request.Dzien) && x.WeterynarzIdOsoba.Equals(weterynarzID)).ToList(),
                 context);
 
             urlop.IdOsoba = hash.Decode(req.request.ID_weterynarz);
-            urlop.Dzien = req.request.Data;
+            urlop.Dzien = req.request.Dzien;
 
             return await context.SaveChangesAsync(cancellationToken);
         }

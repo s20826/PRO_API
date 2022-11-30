@@ -9,7 +9,7 @@ namespace Application.Urlopy.Commands
         {
             RuleFor(x => x.request.ID_weterynarz).NotEmpty();
 
-            RuleFor(x => x.request.Data).GreaterThanOrEqualTo(DateTime.Now.Date);
+            RuleFor(x => x.request.Dzien).GreaterThanOrEqualTo(DateTime.Now.Date);
         }
     }
 }

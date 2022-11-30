@@ -13,7 +13,7 @@ namespace PRO_API.Controllers
 {
     public class UrlopController : ApiControllerBase
     {
-        [Authorize(Roles = "admin")]
+        //[Authorize(Roles = "admin")]
         [HttpGet]
         public async Task<IActionResult> GetUrlopList(CancellationToken token)
         {
@@ -50,7 +50,7 @@ namespace PRO_API.Controllers
             }
         }
 
-        [Authorize(Roles = "admin")]
+        //[Authorize(Roles = "admin")]
         [HttpGet("details/{ID_urlop}")]
         public async Task<IActionResult> GetUrlopDetails(string ID_urlop, CancellationToken token)
         {

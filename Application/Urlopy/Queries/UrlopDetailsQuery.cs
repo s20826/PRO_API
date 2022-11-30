@@ -30,7 +30,8 @@ namespace Application.Urlopy.Queries
             int id = hash.Decode(req.ID_urlop);
 
             return (from x in context.Urlops
-                 join y in context.Osobas on x.IdOsoba equals y.IdOsoba
+                 join w in context.Osobas on x.IdOsoba equals w.IdOsoba
+                 join y in context.Osobas on w.IdOsoba equals y.IdOsoba
                  where x.IdOsoba == id
                  select new GetUrlopResponse()
                  {

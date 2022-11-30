@@ -29,7 +29,7 @@ namespace Application.Urlopy.Commands
         {
             int id = hash.Decode(req.request.ID_weterynarz);
 
-            if(context.Urlops.Where(x => x.Dzien.Date.Equals(req.request.Data) && x.IdOsoba.Equals(id)).Any())
+            if(context.Urlops.Where(x => x.Dzien.Date.Equals(req.request.Dzien) && x.IdOsoba.Equals(id)).Any())
             {
                 throw new Exception("Taki urlop już istnieje");
             }
@@ -37,10 +37,10 @@ namespace Application.Urlopy.Commands
             context.Urlops.Add(new Domain.Models.Urlop
             {
                 IdOsoba = id,
-                Dzien = req.request.Data
+                Dzien = req.request.Dzien
             });
 
-            var harmonograms = context.Harmonograms.Where(x => x.DataRozpoczecia.Date.Equals(req.request.Data.Date) && x.WeterynarzIdOsoba.Equals(id)).ToList();
+            var harmonograms = context.Harmonograms.Where(x => x.DataRozpoczecia.Date.Equals(req.request.Dzien.Date) && x.WeterynarzIdOsoba.Equals(id)).ToList();
             await harmonogramService.DeleteHarmonograms(harmonograms, context);
 
             return await context.SaveChangesAsync(cancellationToken);

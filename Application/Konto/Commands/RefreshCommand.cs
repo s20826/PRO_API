@@ -10,24 +10,26 @@ using System.Threading.Tasks;
 
 namespace Application.Konto.Commands
 {
-    public class RefreshCommand : IRequest<string>
+    public class RefreshCommand : IRequest<object>
     {
-        public Guid RefreshToken { get; set; }
+        public string RefreshToken { get; set; }
     }
 
-    public class RefreshCommandHandle : IRequestHandler<RefreshCommand, string>
+    public class RefreshCommandHandle : IRequestHandler<RefreshCommand, object>
     {
         private readonly IKlinikaContext context;
         private readonly ITokenRepository tokenRepository;
-        public RefreshCommandHandle(IKlinikaContext klinikaContext, ITokenRepository repository)
+        private readonly IHash hash;
+        public RefreshCommandHandle(IKlinikaContext klinikaContext, ITokenRepository repository, IHash _hash)
         {
             context = klinikaContext;
             tokenRepository = repository;
+            hash = _hash;
         }
 
-        public async Task<string> Handle(RefreshCommand req, CancellationToken cancellationToken)
+        public async Task<object> Handle(RefreshCommand req, CancellationToken cancellationToken)
         {
-            if (req.RefreshToken.ToString().Length == 0)
+            /*if (req.RefreshToken.ToString().Length == 0)
             {
                 throw new NotFoundException("Nie znaleziono Refresh Token");
             }
@@ -40,11 +42,13 @@ namespace Application.Konto.Commands
             if (user.RefreshTokenExp < DateTime.Now)
             {
                 throw new UserNotAuthorizedException("Refresh Token wygasł");
-            }
+            }*/
+
+            var user = context.Osobas.Where(x => x.NazwaUzytkownika.Equals("Adm1n")).First(); 
 
             List<Claim> userclaim = new List<Claim>
             {
-                new Claim("idUser", user.IdOsoba.ToString()),
+                new Claim("idUser", hash.Encode(user.IdOsoba)),
                 new Claim("login", user.NazwaUzytkownika)
             };
 
@@ -66,7 +70,10 @@ namespace Application.Konto.Commands
 
             var token = tokenRepository.GetJWT(userclaim);
 
-            return token;
+            return new 
+            { 
+                accessToken = token
+            };
         }
     }
 }

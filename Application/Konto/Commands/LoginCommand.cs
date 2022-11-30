@@ -78,7 +78,7 @@ namespace Application.Konto.Commands
 
             var refreshToken = Guid.NewGuid().ToString();
             user.RefreshToken = refreshToken;
-            user.RefreshTokenExp = DateTime.Now.AddDays(3);
+            user.RefreshTokenExp = DateTime.Now.AddDays(1);
             await context.SaveChangesAsync(cancellationToken);
 
             return new LoginTokens()

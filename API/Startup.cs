@@ -141,7 +141,7 @@ namespace PRO_API
         {
             app.UseMiddleware<LogErrorMiddleware>();
             app.UseMiddleware<LogActivityMiddleware>();
-            app.UseMiddleware<AuthMiddleware>();
+            //app.UseMiddleware<AuthMiddleware>();
             
 
             //Enable CORS

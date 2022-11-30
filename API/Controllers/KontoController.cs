@@ -54,14 +54,21 @@ namespace PRO_API.Controllers
         }
 
 
-        [AllowAnonymous]
-        [HttpPost("refreshToken")]
-        public async Task<IActionResult> GetToken(Guid refreshToken, CancellationToken token)
+        
+        [HttpPost("refresh")]
+        public async Task<IActionResult> GetToken(string refreshToken, CancellationToken token)
         {
-            return Ok(await Mediator.Send(new RefreshCommand
+            try
             {
-                RefreshToken = refreshToken
-            }, token));
+                return Ok(await Mediator.Send(new RefreshCommand
+                {
+                    RefreshToken = refreshToken
+                }, token));
+            }
+            catch (Exception w)
+            {
+                return BadRequest(w);
+            }
         }
 
 

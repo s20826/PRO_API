@@ -36,7 +36,7 @@ namespace Application.Urlopy.Queries
                  select new GetUrlopResponse()
                  {
                      IdUrlop = req.ID_urlop,
-                     IdOsoba = hash.Encode(x.IdOsoba),
+                     ID_Weterynarz = hash.Encode(x.IdOsoba),
                      Weterynarz = y.Imie + " " + y.Nazwisko,
                      Dzien = x.Dzien
                  }).First();

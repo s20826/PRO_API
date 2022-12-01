@@ -1,4 +1,5 @@
 ﻿using Application.Common.Exceptions;
+using Application.DTO.Requests;
 using Application.Interfaces;
 using MediatR;
 using System;
@@ -12,15 +13,15 @@ namespace Application.Konto.Commands
 {
     public class RefreshCommand : IRequest<object>
     {
-        public string RefreshToken { get; set; }
+        public RefreshTokenRequest request { get; set; }
     }
 
-    public class RefreshCommandHandle : IRequestHandler<RefreshCommand, object>
+    public class RefreshCommandHandler : IRequestHandler<RefreshCommand, object>
     {
         private readonly IKlinikaContext context;
         private readonly ITokenRepository tokenRepository;
         private readonly IHash hash;
-        public RefreshCommandHandle(IKlinikaContext klinikaContext, ITokenRepository repository, IHash _hash)
+        public RefreshCommandHandler(IKlinikaContext klinikaContext, ITokenRepository repository, IHash _hash)
         {
             context = klinikaContext;
             tokenRepository = repository;
@@ -29,11 +30,7 @@ namespace Application.Konto.Commands
 
         public async Task<object> Handle(RefreshCommand req, CancellationToken cancellationToken)
         {
-            /*if (req.RefreshToken.ToString().Length == 0)
-            {
-                throw new NotFoundException("Nie znaleziono Refresh Token");
-            }
-            var user = context.Osobas.SingleOrDefault(x => x.RefreshToken == req.RefreshToken.ToString());
+            var user = context.Osobas.SingleOrDefault(x => x.RefreshToken.Equals(req.request.RefreshToken));
             if (user == null)
             {
                 throw new NotFoundException("Nie znaleziono Refresh Token");
@@ -42,9 +39,7 @@ namespace Application.Konto.Commands
             if (user.RefreshTokenExp < DateTime.Now)
             {
                 throw new UserNotAuthorizedException("Refresh Token wygasł");
-            }*/
-
-            var user = context.Osobas.Where(x => x.NazwaUzytkownika.Equals("Adm1n")).First(); 
+            }
 
             List<Claim> userclaim = new List<Claim>
             {

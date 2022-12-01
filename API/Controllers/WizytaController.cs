@@ -12,7 +12,7 @@ namespace PRO_API.Controllers
 {
     public class WizytaController : ApiControllerBase
     {
-        //[Authorize(Roles = "admin,weterynarz")]
+        [Authorize(Roles = "admin,weterynarz")]
         [HttpGet]
         public async Task<IActionResult> GetWizytaList(CancellationToken token)
         {

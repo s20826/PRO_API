@@ -24,7 +24,7 @@ namespace PRO_API.Controllers
         }
 
         [Authorize(Roles = "admin")]
-        [HttpGet("{ID_usluga}")]
+        [HttpGet("details/{ID_usluga}")]
         public async Task<IActionResult> GetUslugaDetails(string ID_usluga, CancellationToken token)
         {
             try

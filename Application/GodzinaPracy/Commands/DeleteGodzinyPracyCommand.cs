@@ -30,13 +30,13 @@ namespace Application.GodzinaPracy.Commands
         public async Task<int> Handle(DeleteGodzinyPracyCommand req, CancellationToken cancellationToken)
         {
             int id = hash.Decode(req.ID_osoba);
-            var list = context.GodzinyPracies.Where(x => x.IdOsoba == id).ToList();
-            if (!list.Any())
+            var godzinyPracy = context.GodzinyPracies.Where(x => x.DzienTygodnia == req.dzien && x.IdOsoba == id).FirstOrDefault();
+            if (godzinyPracy == null)
             {
                 throw new Exception("Ten pracownik nie ma ustawionych godzin pracy.");
             }
 
-            context.GodzinyPracies.Remove(context.GodzinyPracies.Where(x => x.DzienTygodnia == req.dzien).First());
+            context.GodzinyPracies.Remove(godzinyPracy);
 
             return await context.SaveChangesAsync(cancellationToken);
         }

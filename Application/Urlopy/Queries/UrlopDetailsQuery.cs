@@ -32,7 +32,7 @@ namespace Application.Urlopy.Queries
             return (from x in context.Urlops
                  join w in context.Osobas on x.IdOsoba equals w.IdOsoba
                  join y in context.Osobas on w.IdOsoba equals y.IdOsoba
-                 where x.IdOsoba == id
+                 where x.IdUrlop == id
                  select new GetUrlopResponse()
                  {
                      IdUrlop = req.ID_urlop,

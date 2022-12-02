@@ -250,7 +250,7 @@ namespace Test
                     IdLek = 2,
                     CzyObowiazkowa = false,
                     Zastosowanie = "",
-                    OkresWaznosci = new DateTime(10, 10, 10)
+                    //OkresWaznosci = new DateTime(10, 10, 10)
                 }
             };
         }

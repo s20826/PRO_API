@@ -6,8 +6,6 @@ namespace Application.Szczepionki.Commands
     {
         public CreateSzczepionkaCommandValidator()
         {
-            RuleFor(x => x.request.Nazwa).MinimumLength(2).MaximumLength(100);
-
             RuleFor(x => x.request.Producent).MaximumLength(50);
 
             RuleFor(x => x.request.Zastosowanie).MinimumLength(2).MaximumLength(100);

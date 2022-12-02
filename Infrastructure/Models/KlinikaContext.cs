@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Application.Interfaces;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
@@ -115,6 +116,8 @@ namespace Infrastructure.Models
 
                 entity.ToTable("Godziny_pracy");
 
+                entity.HasIndex(e => e.IdOsoba, "Godziny_Pracy_Osoba_fk");
+
                 entity.Property(e => e.IdGodzinyPracy).HasColumnName("ID_godziny_pracy");
 
                 entity.Property(e => e.DzienTygodnia).HasColumnName("Dzien_tygodnia");
@@ -142,6 +145,12 @@ namespace Infrastructure.Models
                     .HasName("Harmonogram_pk");
 
                 entity.ToTable("Harmonogram");
+
+                entity.HasIndex(e => e.DataRozpoczecia, "Harmonogram_Data_Rozpoczecia_fk");
+
+                entity.HasIndex(e => e.WeterynarzIdOsoba, "Harmonogram_Weterynarz_fk");
+
+                entity.HasIndex(e => e.IdWizyta, "Harmonogram_Wizyta_fk");
 
                 entity.Property(e => e.IdHarmonogram).HasColumnName("ID_harmonogram");
 
@@ -254,6 +263,8 @@ namespace Infrastructure.Models
                     .HasName("Lek_w_magazynie_pk");
 
                 entity.ToTable("Lek_w_magazynie");
+
+                entity.HasIndex(e => e.IdLek, "Lek_fk");
 
                 entity.Property(e => e.IdStanLeku).HasColumnName("ID_stan_leku");
 
@@ -369,6 +380,8 @@ namespace Infrastructure.Models
 
                 entity.ToTable("Pacjent");
 
+                entity.HasIndex(e => e.IdOsoba, "Pacjent_Osoba_fk");
+
                 entity.Property(e => e.IdPacjent).HasColumnName("ID_pacjent");
 
                 entity.Property(e => e.DataUrodzenia)
@@ -418,6 +431,8 @@ namespace Infrastructure.Models
                     .HasName("Powiadomienie_pk");
 
                 entity.ToTable("Powiadomienie");
+
+                entity.HasIndex(e => e.IdOsoba, "Powiadomienie_Osoba_fk");
 
                 entity.Property(e => e.IdPowiadomienie).HasColumnName("ID_powiadomienie");
 
@@ -549,9 +564,7 @@ namespace Infrastructure.Models
 
                 entity.Property(e => e.CzyObowiazkowa).HasColumnName("Czy_obowiazkowa");
 
-                entity.Property(e => e.OkresWaznosci)
-                    .HasColumnType("date")
-                    .HasColumnName("Okres_waznosci");
+                entity.Property(e => e.OkresWaznosci).HasColumnName("Okres_waznosci");
 
                 entity.Property(e => e.Zastosowanie)
                     .IsRequired()
@@ -571,6 +584,8 @@ namespace Infrastructure.Models
                     .HasName("Urlop_pk");
 
                 entity.ToTable("Urlop");
+
+                entity.HasIndex(e => e.IdOsoba, "Urlop_Osoba_fk");
 
                 entity.Property(e => e.IdUrlop).HasColumnName("ID_urlop");
 
@@ -715,6 +730,12 @@ namespace Infrastructure.Models
             {
                 entity.HasKey(e => e.IdWizyta)
                     .HasName("Wizyta_pk");
+
+                entity.HasIndex(e => e.IdOsoba, "Wizyta_Osoba_fk");
+
+                entity.HasIndex(e => e.IdPacjent, "Wizyta_Pacjent_fk");
+
+                entity.HasIndex(e => e.IdZnizka, "Wizyta_Znizka_fk");
 
                 entity.Property(e => e.IdWizyta).HasColumnName("ID_wizyta");
 

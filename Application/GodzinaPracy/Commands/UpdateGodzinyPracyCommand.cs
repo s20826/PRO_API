@@ -40,7 +40,7 @@ namespace Application.GodzinaPracy.Commands
             foreach (GodzinyPracyRequest request in req.requestList)
             {
                 var dzien = list.Where(x => x.DzienTygodnia == request.DzienTygodnia).FirstOrDefault();
-                if(dzien == null)
+                /*if(dzien == null)
                 {
                     context.GodzinyPracies.Add(new GodzinyPracy
                     {
@@ -51,10 +51,10 @@ namespace Application.GodzinaPracy.Commands
                     });
                 } 
                 else
-                {
+                {*/
                     dzien.GodzinaRozpoczecia = request.GodzinaRozpoczecia;
                     dzien.GodzinaZakonczenia = request.GodzinaZakonczenia;
-                }
+                //}
             }
 
             return await context.SaveChangesAsync(cancellationToken);

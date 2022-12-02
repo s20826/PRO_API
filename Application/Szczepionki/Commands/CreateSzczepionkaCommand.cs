@@ -1,5 +1,6 @@
 ﻿using Application.DTO.Requests;
 using Application.Interfaces;
+using Domain;
 using Domain.Models;
 using MediatR;
 using System;
@@ -8,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace Application.Szczepionki.Commands
 {
@@ -28,22 +30,40 @@ namespace Application.Szczepionki.Commands
 
         public async Task<int> Handle(CreateSzczepionkaCommand req, CancellationToken cancellationToken)
         {
-            var lek = context.Leks.Add(new Lek
+            using (var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                Nazwa = req.request.Nazwa,
-                JednostkaMiary = "ml",
-                Producent = req.request.Producent
-            });
+                try
+                {
+                    var lek = context.Leks.Add(new Lek
+                    {
+                        Nazwa = "Szczepionka",
+                        JednostkaMiary = GlobalValues.SZCZEPIONKA_JEDNOSTKA,
+                        Producent = req.request.Producent
+                    });
 
-            context.Szczepionkas.Add(new Szczepionka
-            {
-                IdLek = lek.Entity.IdLek,
-                Zastosowanie = req.request.Zastosowanie,
-                CzyObowiazkowa = req.request.CzyObowiazkowa,
-                OkresWaznosci = req.request.OkresWaznosci
-            });
-            
-            return await context.SaveChangesAsync(cancellationToken);
+                    await context.SaveChangesAsync(cancellationToken);
+
+                    context.Szczepionkas.Add(new Szczepionka
+                    {
+                        IdLek = lek.Entity.IdLek,
+                        Zastosowanie = req.request.Zastosowanie,
+                        CzyObowiazkowa = req.request.CzyObowiazkowa,
+                        OkresWaznosci = req.request.OkresWaznosci.Value.Ticks
+                    });
+
+
+                    await context.SaveChangesAsync(cancellationToken);
+                    transaction.Complete();
+                }
+                catch (Exception)
+                {
+                    transaction.Dispose();
+                    throw new Exception();
+                }
+
+                transaction.Dispose();
+                return 0;
+            }
         }
     }
 }

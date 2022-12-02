@@ -37,11 +37,10 @@ namespace Test.Mock
                 ID_szczepionka = hash.Encode(2),
                 request = new SzczepionkaRequest
                 {
-                    Nazwa = "aaa",
                     CzyObowiazkowa = true,
                     Zastosowanie = "...",
                     Producent = "...",
-                    OkresWaznosci = new DateTime(1,1,1)
+                    OkresWaznosci = new TimeSpan(1,1,1)
                 }
             };
 
@@ -60,7 +59,6 @@ namespace Test.Mock
                 ID_szczepionka = hash.Encode(-1),
                 request = new SzczepionkaRequest
                 {
-                    Nazwa = "aaa",
                     CzyObowiazkowa = true,
                     Zastosowanie = "..."
                 }

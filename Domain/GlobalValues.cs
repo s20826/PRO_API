@@ -12,5 +12,6 @@ namespace Domain
         public readonly static int LICZBA_PROB = 12;
         public readonly static int GODZINY_BLOKADY = 1;
         public readonly static int DLUGOSC_WIZYTY = 30;
+        public readonly static string SZCZEPIONKA_JEDNOSTKA = "ml";
     }
 }

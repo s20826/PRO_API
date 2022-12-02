@@ -92,7 +92,7 @@ namespace Test.Mock
 
 
         [Test]
-        public void UpdateGodzinyPracyShouldThrowAnExceptionTest()
+        public void UpdateGodzinyPracyShouldNotChangeTest()
         {
             var handler = new UpdateGodzinyPracyCommandHandle(mockContext.Object, hash);
 
@@ -109,7 +109,7 @@ namespace Test.Mock
                 }
             };
 
-            Assert.ThrowsAsync<Exception>(async () => await handler.Handle(command, CancellationToken.None));
+            Assert.That(!mockContext.Object.GodzinyPracies.Where(x => x.DzienTygodnia == 6 && x.IdOsoba == 2).Any());
         }
 
 
@@ -142,7 +142,7 @@ namespace Test.Mock
                 dzien = 6
             };
 
-            Assert.ThrowsAsync<InvalidOperationException>(async () => await handler.Handle(command, CancellationToken.None));
+            Assert.ThrowsAsync<Exception>(async () => await handler.Handle(command, CancellationToken.None));
         }
     }
 }

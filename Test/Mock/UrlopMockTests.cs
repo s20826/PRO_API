@@ -40,7 +40,7 @@ namespace Test.Mock
                 request = new UrlopRequest
                 {
                     ID_weterynarz = hash.Encode(2),
-                    Data = new DateTime(2022,11,09)
+                    Dzien = new DateTime(2022,11,09)
                 }
             };
 
@@ -59,7 +59,7 @@ namespace Test.Mock
                 request = new UrlopRequest
                 {
                     ID_weterynarz = hash.Encode(2),
-                    Data = new DateTime(2022, 11, 16)
+                    Dzien = new DateTime(2022, 11, 16)
                 }
             };
 
@@ -78,7 +78,7 @@ namespace Test.Mock
                 request = new UrlopRequest
                 {
                     ID_weterynarz = hash.Encode(2),
-                    Data = new DateTime(2022, 11, 09)
+                    Dzien = new DateTime(2022, 11, 09)
                 }
             };
 

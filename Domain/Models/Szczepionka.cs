@@ -15,7 +15,7 @@ namespace Domain.Models
         public int IdLek { get; set; }
         public string Zastosowanie { get; set; }
         public bool CzyObowiazkowa { get; set; }
-        public DateTime? OkresWaznosci { get; set; }
+        public long? OkresWaznosci { get; set; }
 
         public virtual Lek IdLekNavigation { get; set; }
         public virtual ICollection<Szczepienie> Szczepienies { get; set; }

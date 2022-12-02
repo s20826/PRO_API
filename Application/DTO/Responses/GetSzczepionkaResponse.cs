@@ -8,6 +8,6 @@ namespace Application.DTO.Responses
         public string Nazwa { get; set; }
         public string Zastosowanie { get; set; }
         public bool CzyObowiazkowa { get; set; }
-        public DateTime? OkresWaznosci { get; set; }
+        public TimeSpan? OkresWaznosci { get; set; }
     }
 }

@@ -25,7 +25,7 @@ namespace PRO_API.Controllers
                 }, token));
             } catch (Exception)
             {
-                return BadRequest();
+                return NotFound();
             }
         }
 
@@ -42,7 +42,7 @@ namespace PRO_API.Controllers
                 }, token));
             } catch (Exception)
             {
-                return BadRequest();
+                return NotFound();
             }
         }
 
@@ -58,9 +58,9 @@ namespace PRO_API.Controllers
                     request = request
                 }, token));
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return BadRequest();
+                return BadRequest(e);
             }
         }
 

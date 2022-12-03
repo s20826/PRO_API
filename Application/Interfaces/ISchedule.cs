@@ -9,5 +9,7 @@ namespace Application.Interfaces
         Task DeleteWizytaSystemAsync();
 
         void SendSzczepienieEmail();
+
+        Task CreateHarmonogramsBySystem();
     }
 }

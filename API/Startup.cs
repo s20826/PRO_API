@@ -167,14 +167,17 @@ namespace PRO_API
                 endpoints.MapHangfireDashboard();
             });
 
+
+            recurringJobManager.AddOrUpdate<ScheduleService>("create harmonograms by system", service => service.CreateHarmonogramsBySystem(), "0 6 * * 1");
+
             //wyœlij Email z przypomnieniem o wizycie dzieñ przed wizyt¹, uruchamiane raz dziennie o 8:00
-            recurringJobManager.AddOrUpdate<ScheduleSerive>("send wizyta email", service => service.SendPrzypomnienieEmail(), "0 8 * * *");
+            recurringJobManager.AddOrUpdate<ScheduleService>("send wizyta email", service => service.SendPrzypomnienieEmail(), "0 8 * * *");
 
             //wyœlij Email z przypomnieniem o nastêpnym obowi¹zkowym szczepieniu, uruchamiane co 2 tygodnie o 9:00
-            recurringJobManager.AddOrUpdate<ScheduleSerive>("send szczepienie email", service => service.SendSzczepienieEmail(), "0 9 */14 * *");
+            recurringJobManager.AddOrUpdate<ScheduleService>("send szczepienie email", service => service.SendSzczepienieEmail(), "0 9 */14 * *");
 
             //co 6 miesi¹cy, pierwszego dnia miesi¹ca
-            recurringJobManager.AddOrUpdate<ScheduleSerive>("delete cancelled appointments", service => service.DeleteWizytaSystemAsync(), "0 4 1 */6 *");
+            recurringJobManager.AddOrUpdate<ScheduleService>("delete cancelled appointments", service => service.DeleteWizytaSystemAsync(), "0 4 1 */6 *");
         }
     }
 }

@@ -10,9 +10,47 @@ namespace PRO_API.Controllers
 {
     public class HarmonogramController : ApiControllerBase
     {
+        //ustawia harmonogramy (według godzin pracy) weterynarzom na tydzień do przodu względem ostatniego harmonogramu w systemie
+        //[Authorize(Roles = "admin")]
+        [HttpPost("auto")]
+        public async Task<IActionResult> AddHarmonogramsForAWeek(CancellationToken token)
+        {
+            try
+            {
+                return Ok(await Mediator.Send(new AutoCreateHarmonogramCommand
+                {
+
+                }, token));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+
+        //ustawia harmonogramy weterynarzom od dzisiejszej daty do daty ostatniego harmonogramu w systemie
+        //(może być użyty w przypadku nowych weterynarzy)
+        //[Authorize(Roles = "admin")]
+        [HttpPut("auto")]
+        public async Task<IActionResult> AddWeterynarzHarmonograms(CancellationToken token)
+        {
+            try
+            {
+                return Ok(await Mediator.Send(new UpdateHarmonogramCommand
+                {
+
+                }, token));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+
         //ustawia harmonogramy (według ich godzin pracy) tylko tym weterynarzom którzy danego dnia nie mają ustawionego harmonogramu
         //[Authorize(Roles = "admin")]
-        [HttpPost("day")]
+        /*[HttpPost("day")]
         public async Task<IActionResult> AddHarmonogramsForADay(DateTime date, CancellationToken token)
         {
             try
@@ -26,12 +64,12 @@ namespace PRO_API.Controllers
             {
                 return BadRequest(e.Message);
             }
-        }
+        }*/
 
 
         //ustawia harmonogramy weterynarzowi na podany dzień według godzin pracy
         //[Authorize(Roles = "admin")]
-        [HttpPost("day/{ID_osoba}")]
+        /*[HttpPost("day/{ID_osoba}")]
         public async Task<IActionResult> AddWeterynarzHarmonogramForADay(DateTime date, string ID_osoba, CancellationToken token)
         {
             try
@@ -46,12 +84,12 @@ namespace PRO_API.Controllers
             {
                 return BadRequest(e.Message);
             }
-        }
+        }*/
 
 
         //usuwa harmonogramy na podany dzień wszystkim weterynarzom przy okazji anulując wizyty tego dnia
         //[Authorize(Roles = "admin")]
-        [HttpDelete("day")]
+        /*[HttpDelete("day")]
         public async Task<IActionResult> DeleteHarmonogramsForADay(DateTime date, CancellationToken token)
         {
             try
@@ -65,7 +103,7 @@ namespace PRO_API.Controllers
             {
                 return BadRequest(e.Message);
             }
-        }
+        }*/
 
         
         //[Authorize(Roles = "admin")]
@@ -107,7 +145,7 @@ namespace PRO_API.Controllers
 
 
         //admin wyświetla harmonogram weterynarza
-        [Authorize(Roles = "admin")]
+        //[Authorize(Roles = "admin")]
         [HttpGet("klinika/{ID_osoba}")]
         public async Task<IActionResult> GetKlinikaAdminHarmonogram(string ID_osoba, DateTime Date, CancellationToken token)
         {
@@ -126,7 +164,7 @@ namespace PRO_API.Controllers
         }
 
 
-        [Authorize(Roles = "weterynarz,admin")]
+        //[Authorize(Roles = "weterynarz,admin")]
         [HttpGet("klinika")]
         public async Task<IActionResult> GetKlinikaHarmonogram(DateTime date, CancellationToken token)
         {

@@ -38,19 +38,22 @@ namespace Infrastructure.Services
             {
                 return;
             }
-            var godzinyPracy = context.GodzinyPracies.Where(x => x.DzienTygodnia == dzienRequest && x.IdOsoba.Equals(id)).First();
-            var count = HarmonogramCount(godzinyPracy);
-
-            for (int i = 0; i < count; i++)
+            var godzinyPracy = context.GodzinyPracies.Where(x => x.DzienTygodnia == dzienRequest && x.IdOsoba.Equals(id)).FirstOrDefault();
+            if(godzinyPracy != null)
             {
-                var s = godzinyPracy.GodzinaRozpoczecia;
-                context.Harmonograms.Add(new Harmonogram
+                var count = HarmonogramCount(godzinyPracy);
+
+                for (int i = 0; i < count; i++)
                 {
-                    IdWizyta = null,
-                    WeterynarzIdOsoba = id,
-                    DataRozpoczecia = date.Date + TimeSpan.FromMinutes((double)s.TotalMinutes + (i * GlobalValues.DLUGOSC_WIZYTY)),
-                    DataZakonczenia = date.Date + TimeSpan.FromMinutes((double)s.TotalMinutes + (i * GlobalValues.DLUGOSC_WIZYTY) + GlobalValues.DLUGOSC_WIZYTY)
-                });
+                    var s = godzinyPracy.GodzinaRozpoczecia;
+                    context.Harmonograms.Add(new Harmonogram
+                    {
+                        IdWizyta = null,
+                        WeterynarzIdOsoba = id,
+                        DataRozpoczecia = date.Date + TimeSpan.FromMinutes((double)s.TotalMinutes + (i * GlobalValues.DLUGOSC_WIZYTY)),
+                        DataZakonczenia = date.Date + TimeSpan.FromMinutes((double)s.TotalMinutes + (i * GlobalValues.DLUGOSC_WIZYTY) + GlobalValues.DLUGOSC_WIZYTY)
+                    });
+                }
             }
         }
 

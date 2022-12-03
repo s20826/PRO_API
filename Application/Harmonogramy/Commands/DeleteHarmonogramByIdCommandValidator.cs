@@ -11,7 +11,7 @@ namespace Application.Harmonogramy.Commands
     {
         public DeleteHarmonogramByIdCommandValidator()
         {
-            RuleFor(x => x.Data).GreaterThanOrEqualTo(DateTime.Now);
+            //RuleFor(x => x.Data).GreaterThanOrEqualTo(DateTime.Now);
 
             RuleFor(x => x.ID_osoba).NotEmpty();
         }

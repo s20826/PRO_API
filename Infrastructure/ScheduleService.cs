@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using Domain.Enums;
+using Domain.Models;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -10,16 +11,18 @@ using System.Threading.Tasks;
 
 namespace Infrastructure
 {
-    public class ScheduleSerive : ISchedule
+    public class ScheduleService : ISchedule
     {
-        private readonly ILogger<ScheduleSerive> logger;
+        private readonly ILogger<ScheduleService> logger;
         private readonly IKlinikaContext context;
         private readonly IEmailSender emailSender;
-        public ScheduleSerive(ILogger<ScheduleSerive> log, IKlinikaContext klinikaContext, IEmailSender sender)
+        private readonly IHarmonogramRepository harmonogram;
+        public ScheduleService(ILogger<ScheduleService> log, IKlinikaContext klinikaContext, IEmailSender sender, IHarmonogramRepository _harmonogram)
         {
             logger = log;
             context = klinikaContext;
             emailSender = sender;
+            harmonogram = _harmonogram;
         }
 
         public void SendPrzypomnienieEmail()
@@ -78,6 +81,26 @@ namespace Infrastructure
                 emailSender.SendPrzypomnienieEmail(a.Email, (DateTime)a.DataWaznosci, a.Pacjent);
                 logger.LogInformation("Email sent to " + a.Email + " at: " + DateTime.Now.ToString());
             }
+        }
+
+        public async Task CreateHarmonogramsBySystem()
+        {
+            var endOfCurrentHarmonograms = context.Harmonograms.Max(x => x.DataZakonczenia).Date;
+            if(endOfCurrentHarmonograms < DateTime.Now)
+            {
+                endOfCurrentHarmonograms = DateTime.Now.Date;
+            }
+
+            for (int i = 1; i <= 7; i++)
+            {
+                foreach(Weterynarz w in context.Weterynarzs)
+                {
+                    harmonogram.CreateWeterynarzHarmonograms(context, endOfCurrentHarmonograms.AddDays(i), w.IdOsoba);
+                }
+            }
+
+            var result = await context.SaveChangesAsync(new CancellationToken());
+            logger.LogInformation("Added harmonograms: " + result);
         }
     }
 }

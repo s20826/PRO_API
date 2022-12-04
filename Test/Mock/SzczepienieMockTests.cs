@@ -39,7 +39,7 @@ namespace Test.Mock
                 {
                     IdLek = hash.Encode(2),
                     IdPacjent = hash.Encode(1),
-                    DataWaznosci = DateTime.Now,
+                    Data = DateTime.Now,
                     Dawka = 10
                 }
             };
@@ -61,7 +61,7 @@ namespace Test.Mock
                 {
                     IdLek = hash.Encode(2),
                     IdPacjent = hash.Encode(1),
-                    DataWaznosci = DateTime.Now,
+                    Data = DateTime.Now,
                     Dawka = 10
                 }
             };
@@ -83,7 +83,7 @@ namespace Test.Mock
                 {
                     IdLek = hash.Encode(1),
                     IdPacjent = hash.Encode(1),
-                    DataWaznosci = DateTime.Now,
+                    Data = DateTime.Now,
                     Dawka = 10
                 }
             };

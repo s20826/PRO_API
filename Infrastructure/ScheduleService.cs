@@ -64,22 +64,30 @@ namespace Infrastructure
 
         public void SendSzczepienieEmail()
         {
-            var helperList = from x in context.Szczepienies
+            var helperList = (from x in context.Szczepienies
+                             join z in context.Szczepionkas on x.IdLek equals z.IdLek
                              join y in context.Pacjents on x.IdPacjent equals y.IdPacjent
                              join k in context.Klients on y.IdOsoba equals k.IdOsoba
                              join o in context.Osobas on k.IdOsoba equals o.IdOsoba
-                             where x.DataWaznosci < DateTime.Now.AddMonths(1) && x.DataWaznosci > DateTime.Now
                              select new
                              {
                                  Email = o.Email,
-                                 DataWaznosci = x.DataWaznosci,
+                                 Data = x.Data,
+                                 OkresWaznosci = z.OkresWaznosci,
                                  Pacjent = y.Nazwa
-                             };
+                             }).ToList();
 
             foreach (var a in helperList)
             {
-                emailSender.SendPrzypomnienieEmail(a.Email, (DateTime)a.DataWaznosci, a.Pacjent);
-                logger.LogInformation("Email sent to " + a.Email + " at: " + DateTime.Now.ToString());
+                if(a.OkresWaznosci != null)
+                {
+                    var dataWaznosci = a.Data.AddTicks((long)a.OkresWaznosci);
+                    if(dataWaznosci < DateTime.Now.AddMonths(1) && dataWaznosci > DateTime.Now)
+                    {
+                        emailSender.SendSzczepienieEmail(a.Email, (DateTime)dataWaznosci, a.Pacjent);
+                        logger.LogInformation("Email sent to " + a.Email + " at: " + DateTime.Now.ToString());
+                    }
+                }
             }
         }
 

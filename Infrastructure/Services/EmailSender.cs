@@ -23,7 +23,7 @@ namespace Infrastructure.Services
         {
             var culture = new System.Globalization.CultureInfo("pl-PL");
             var day = culture.DateTimeFormat.GetDayName(DateTime.Today.DayOfWeek);
-            string termin = data.ToShortDateString() + " (" + day + ") " + data.ToShortTimeString();
+            string termin = data.ToShortDateString();
 
             var body = string.Format(
                "<h2>" +

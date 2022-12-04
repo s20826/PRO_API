@@ -33,7 +33,7 @@ namespace Application.Szczepienia.Commands
             var szczepienie = context.Szczepienies.Where(x => x.IdSzczepienie.Equals(id)).First();
             szczepienie.IdLek = hash.Decode(req.request.IdLek);
             szczepienie.IdPacjent = hash.Decode(req.request.IdPacjent);
-            szczepienie.DataWaznosci = req.request.DataWaznosci;
+            szczepienie.Data = req.request.Data;
             szczepienie.Dawka = req.request.Dawka;
 
             return await context.SaveChangesAsync(cancellationToken);

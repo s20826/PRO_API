@@ -530,9 +530,7 @@ namespace Infrastructure.Models
 
                 entity.Property(e => e.IdSzczepienie).HasColumnName("ID_szczepienie");
 
-                entity.Property(e => e.DataWaznosci)
-                    .HasColumnType("date")
-                    .HasColumnName("Data_waznosci");
+                entity.Property(e => e.Data).HasColumnType("date");
 
                 entity.Property(e => e.IdLek).HasColumnName("ID_lek");
 

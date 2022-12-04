@@ -265,7 +265,7 @@ namespace Test
                     IdLek = 2,
                     IdPacjent = 1,
                     Dawka = 10,
-                    DataWaznosci = DateTime.Now.AddDays(1)
+                    Data = DateTime.Now
                 }
             };
         }

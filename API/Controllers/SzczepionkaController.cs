@@ -13,7 +13,7 @@ namespace PRO_API.Controllers
 {
     public class SzczepionkaController : ApiControllerBase
     {
-        [Authorize(Roles = "admin,weterynarz")]
+        //[Authorize(Roles = "admin,weterynarz")]
         [HttpGet]
         public async Task<IActionResult> GetSzczepionkaList(CancellationToken token)
         {
@@ -30,8 +30,8 @@ namespace PRO_API.Controllers
         }
 
 
-        [Authorize(Roles = "admin,weterynarz")]
-        [HttpGet("{ID_szczepionka}")]
+        //[Authorize(Roles = "admin,weterynarz")]
+        [HttpGet("details/{ID_szczepionka}")]
         public async Task<IActionResult> GetSzczepionkaDetails(string ID_szczepionka, CancellationToken token)
         {
             try
@@ -47,25 +47,27 @@ namespace PRO_API.Controllers
         }
 
 
-        [Authorize(Roles = "admin,weterynarz")]
+        //[Authorize(Roles = "admin,weterynarz")]
         [HttpPost]
         public async Task<IActionResult> AddSzczepionka(SzczepionkaRequest request, CancellationToken token)
         {
             try
             {
-                return Ok(await Mediator.Send(new CreateSzczepionkaCommand
+                await Mediator.Send(new CreateSzczepionkaCommand
                 {
                     request = request
-                }, token));
+                }, token);
             }
             catch (Exception e)
             {
-                return BadRequest(e);
+                return BadRequest(e.Message);
             }
+
+            return NoContent();
         }
 
 
-        [Authorize(Roles = "admin,weterynarz")]
+        //[Authorize(Roles = "admin,weterynarz")]
         [HttpPut("{ID_szczepionka}")]
         public async Task<IActionResult> UpdateSzczepionka(string ID_szczepionka, SzczepionkaRequest request, CancellationToken token)
         {
@@ -77,16 +79,16 @@ namespace PRO_API.Controllers
                     request = request
                 }, token);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return BadRequest();
+                return BadRequest(e.Message);
             }
 
             return NoContent();
         }
 
 
-        [Authorize(Roles = "admin,weterynarz")]
+        //[Authorize(Roles = "admin,weterynarz")]
         [HttpDelete("{ID_szczepionka}")]
         public async Task<IActionResult> DeleteSzczepionka(string ID_szczepionka, CancellationToken token)
         {

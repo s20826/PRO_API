@@ -40,7 +40,8 @@ namespace Application.Szczepienia.Queries
                         IdPacjent = req.ID_pacjent,
                         IdLek = hash.Encode(x.IdLek),
                         Nazwa = z.Nazwa,
-                        DataWaznosci = x.DataWaznosci,
+                        Data = x.Data,
+                        DataWaznosci = y.OkresWaznosci != null ? x.Data.AddTicks((long)y.OkresWaznosci): null,
                         Dawka = x.Dawka
                     }).ToList();
         }

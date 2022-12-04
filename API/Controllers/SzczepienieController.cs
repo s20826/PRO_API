@@ -13,7 +13,7 @@ namespace PRO_API.Controllers
 {
     public class SzczepienieController : ApiControllerBase
     {
-        [Authorize(Roles = "weterynarz,admin")]
+        //[Authorize(Roles = "weterynarz,admin")]
         [HttpGet("{ID_pacjent}")]
         public async Task<IActionResult> GetSzczepienie(string ID_pacjent, CancellationToken token)
         {
@@ -30,8 +30,8 @@ namespace PRO_API.Controllers
             }
         }
 
-        [Authorize(Roles = "weterynarz,admin")]
-        [HttpGet("{ID_szczepienie}")]
+        //[Authorize(Roles = "weterynarz,admin")]
+        [HttpGet("details/{ID_szczepienie}")]
         public async Task<IActionResult> GetSzczepienieDetails(string ID_szczepienie, CancellationToken token)
         {
             try
@@ -47,24 +47,26 @@ namespace PRO_API.Controllers
             }
         }
 
-        [Authorize(Roles = "weterynarz,admin")]
+        //[Authorize(Roles = "weterynarz,admin")]
         [HttpPost]
         public async Task<IActionResult> AddSzczepienie(SzczepienieRequest szczepienieRequest, CancellationToken token)
         {
             try
             {
-                return Ok(await Mediator.Send(new CreateSzczepienieCommand
+                await Mediator.Send(new CreateSzczepienieCommand
                 {
                     request = szczepienieRequest
-                }, token));
+                }, token);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return BadRequest();
+                return BadRequest(e.Message);
             }
+
+            return NoContent();
         }
 
-        [Authorize(Roles = "weterynarz,admin")]
+        //[Authorize(Roles = "weterynarz,admin")]
         [HttpPut("{ID_szczepienie}")]
         public async Task<IActionResult> UpdateSzczepienie(SzczepienieRequest szczepienieRequest, string ID_szczepienie, CancellationToken token)
         {
@@ -76,9 +78,9 @@ namespace PRO_API.Controllers
                     request = szczepienieRequest
                 }, token);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return BadRequest();
+                return BadRequest(e.Message);
             }
 
             return NoContent();

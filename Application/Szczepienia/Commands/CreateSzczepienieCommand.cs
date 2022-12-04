@@ -1,5 +1,6 @@
 ﻿using Application.DTO.Requests;
 using Application.Interfaces;
+using Domain.Models;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -30,11 +31,11 @@ namespace Application.Szczepienia.Commands
             int idLek = hash.Decode(req.request.IdLek);
             int idPacjent = hash.Decode(req.request.IdPacjent);
 
-            context.Szczepienies.Add(new Domain.Models.Szczepienie
+            context.Szczepienies.Add(new Szczepienie
             {
                 IdLek = idLek,
                 IdPacjent = idPacjent,
-                DataWaznosci = req.request.DataWaznosci,
+                Data = req.request.Data,
                 Dawka = req.request.Dawka
             });
 

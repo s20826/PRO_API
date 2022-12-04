@@ -12,6 +12,7 @@ namespace Application.DTO.Responses
         public string IdLek { get; set; }
         public string IdPacjent { get; set; }
         public string Nazwa { get; set; }
+        public DateTime Data { get; set; }
         public DateTime? DataWaznosci { get; set; }
         public int Dawka { get; set; }
     }

@@ -10,7 +10,7 @@ namespace Domain.Models
         public int IdSzczepienie { get; set; }
         public int IdLek { get; set; }
         public int IdPacjent { get; set; }
-        public DateTime? DataWaznosci { get; set; }
+        public DateTime Data { get; set; }
         public int Dawka { get; set; }
 
         public virtual Szczepionka IdLekNavigation { get; set; }

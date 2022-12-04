@@ -13,7 +13,7 @@ namespace Application.Szczepienia.Commands
 
             RuleFor(x => x.request.IdPacjent).NotEmpty();
 
-            RuleFor(x => x.request.DataWaznosci).GreaterThan(DateTime.Now);
+            RuleFor(x => x.request.Data).LessThanOrEqualTo(DateTime.Now);
 
             RuleFor(x => x.request.Dawka).GreaterThan(0).LessThan(1000);
         }

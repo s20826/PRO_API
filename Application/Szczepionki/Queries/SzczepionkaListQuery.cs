@@ -34,6 +34,7 @@ namespace Application.Szczepionki.Queries
                     {
                         ID_lek = hash.Encode(y.IdLek),
                         Nazwa = y.Nazwa,
+                        Producent = y.Producent,
                         CzyObowiazkowa = x.CzyObowiazkowa,
                         OkresWaznosci = x.OkresWaznosci != null ? TimeSpan.FromTicks((long)x.OkresWaznosci) : null,
                         Zastosowanie = x.Zastosowanie

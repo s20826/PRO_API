@@ -8,6 +8,8 @@ namespace Application.Szczepionki.Commands
         {
             RuleFor(x => x.ID_szczepionka).NotEmpty();
 
+            RuleFor(x => x.request.Nazwa).Length(2, 50);
+
             RuleFor(x => x.request.Producent).MaximumLength(50);
 
             RuleFor(x => x.request.Zastosowanie).MinimumLength(2).MaximumLength(100);

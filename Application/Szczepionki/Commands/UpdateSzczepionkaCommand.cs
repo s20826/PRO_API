@@ -30,6 +30,7 @@ namespace Application.Szczepionki.Commands
             var lek = context.Leks.Where(x => x.IdLek.Equals(id)).First();
             var szczepionka = context.Szczepionkas.Where(x => x.IdLek.Equals(id)).First();
 
+            lek.Nazwa = req.request.Nazwa;
             lek.Producent = req.request.Producent;
             szczepionka.Zastosowanie = req.request.Zastosowanie;
             szczepionka.OkresWaznosci = req.request.OkresWaznosci.Value.Ticks;

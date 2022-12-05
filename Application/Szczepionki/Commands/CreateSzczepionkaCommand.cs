@@ -36,7 +36,7 @@ namespace Application.Szczepionki.Commands
                 {
                     var lek = context.Leks.Add(new Lek
                     {
-                        Nazwa = "Szczepionka",
+                        Nazwa = req.request.Nazwa,
                         JednostkaMiary = GlobalValues.SZCZEPIONKA_JEDNOSTKA,
                         Producent = req.request.Producent
                     });

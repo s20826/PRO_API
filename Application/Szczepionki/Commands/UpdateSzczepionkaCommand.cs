@@ -1,6 +1,7 @@
 ﻿using Application.DTO.Requests;
 using Application.Interfaces;
 using MediatR;
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -33,8 +34,8 @@ namespace Application.Szczepionki.Commands
             lek.Nazwa = req.request.Nazwa;
             lek.Producent = req.request.Producent;
             szczepionka.Zastosowanie = req.request.Zastosowanie;
-            szczepionka.OkresWaznosci = req.request.OkresWaznosci.Value.Ticks;
-            szczepionka.CzyObowiazkowa = req.request.CzyObowiazkowa;
+            szczepionka.OkresWaznosci = req.request.OkresWaznosci;
+            szczepionka.CzyObowiazkowa = TimeSpan.FromDays((double)req.request.OkresWaznosci).Ticks;
 
             return await context.SaveChangesAsync(cancellationToken);
         }

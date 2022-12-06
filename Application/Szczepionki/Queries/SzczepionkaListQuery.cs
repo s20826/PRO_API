@@ -36,7 +36,7 @@ namespace Application.Szczepionki.Queries
                         Nazwa = y.Nazwa,
                         Producent = y.Producent,
                         CzyObowiazkowa = x.CzyObowiazkowa,
-                        OkresWaznosci = x.OkresWaznosci != null ? TimeSpan.FromTicks((long)x.OkresWaznosci) : null,
+                        OkresWaznosci = x.OkresWaznosci != null ? TimeSpan.FromTicks((long)x.OkresWaznosci).Days : null,
                         Zastosowanie = x.Zastosowanie
                     }).ToList();
         }

@@ -14,7 +14,7 @@ namespace Application.Szczepionki.Commands
 
             RuleFor(x => x.request.CzyObowiazkowa).NotEmpty();
 
-            RuleFor(x => x.request.OkresWaznosci);
+            RuleFor(x => x.request.OkresWaznosci).GreaterThan(0);
         }
     }
 }

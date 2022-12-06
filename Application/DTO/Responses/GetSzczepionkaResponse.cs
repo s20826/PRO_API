@@ -9,6 +9,6 @@ namespace Application.DTO.Responses
         public string? Producent { get; set; }
         public string Zastosowanie { get; set; }
         public bool CzyObowiazkowa { get; set; }
-        public TimeSpan? OkresWaznosci { get; set; }
+        public int? OkresWaznosci { get; set; }
     }
 }

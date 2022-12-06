@@ -48,7 +48,7 @@ namespace Application.Szczepionki.Commands
                         IdLek = lek.Entity.IdLek,
                         Zastosowanie = req.request.Zastosowanie,
                         CzyObowiazkowa = req.request.CzyObowiazkowa,
-                        OkresWaznosci = req.request.OkresWaznosci.Value.Ticks
+                        OkresWaznosci = TimeSpan.FromDays((double)req.request.OkresWaznosci).Ticks
                     });
 
 

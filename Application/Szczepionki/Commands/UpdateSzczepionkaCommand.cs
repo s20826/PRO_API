@@ -34,8 +34,8 @@ namespace Application.Szczepionki.Commands
             lek.Nazwa = req.request.Nazwa;
             lek.Producent = req.request.Producent;
             szczepionka.Zastosowanie = req.request.Zastosowanie;
-            szczepionka.OkresWaznosci = req.request.OkresWaznosci;
-            szczepionka.CzyObowiazkowa = TimeSpan.FromDays((double)req.request.OkresWaznosci).Ticks;
+            szczepionka.OkresWaznosci = TimeSpan.FromDays((double)req.request.OkresWaznosci).Ticks;
+            szczepionka.CzyObowiazkowa = req.request.CzyObowiazkowa;
 
             return await context.SaveChangesAsync(cancellationToken);
         }

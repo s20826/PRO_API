@@ -40,7 +40,7 @@ namespace Test.Mock
                     CzyObowiazkowa = true,
                     Zastosowanie = "...",
                     Producent = "...",
-                    OkresWaznosci = new TimeSpan(1,1,1)
+                    OkresWaznosci = new TimeSpan(1,1,1).Days
                 }
             };
 

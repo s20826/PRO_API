@@ -41,7 +41,8 @@ namespace Application.Szczepienia.Queries
                         IdLek = hash.Encode(x.IdLek),
                         Nazwa = z.Nazwa,
                         Data = x.Data,
-                        DataWaznosci = y.OkresWaznosci != null ? x.Data.AddTicks((long)y.OkresWaznosci): null,
+                        DataWaznosci = y.OkresWaznosci != null ? x.Data.AddTicks((long)y.OkresWaznosci) : null,
+                        Zastosowanie = y.Zastosowanie,
                         Dawka = x.Dawka
                     }).ToList();
         }

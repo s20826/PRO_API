@@ -14,6 +14,7 @@ namespace Application.DTO.Responses
         public string Nazwa { get; set; }
         public DateTime Data { get; set; }
         public DateTime? DataWaznosci { get; set; }
+        public string Zastosowanie { get; set; }
         public int Dawka { get; set; }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Application.ReceptaLeki.Queries;
+using System;
+using System.Collections.Generic;
 
 namespace Application.DTO.Responses
 {
@@ -7,5 +9,6 @@ namespace Application.DTO.Responses
         public string ID_Recepta { get; set; }
         public string Zalecenia { get; set; }
         public DateTime? WizytaData { get; set; }
+        public List<GetReceptaLekResponse> Leki { get; set; }
     }
 }

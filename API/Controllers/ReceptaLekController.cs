@@ -13,7 +13,7 @@ namespace PRO_API.Controllers
 {
     public class ReceptaLekController : ApiControllerBase
     {
-        [Authorize(Roles = "klient,weterynarz,admin")]
+        //[Authorize(Roles = "klient,weterynarz,admin")]
         [HttpGet("{ID_Recepta}")]
         public async Task<IActionResult> GetReceptaLek(string ID_Recepta, CancellationToken token)
         {

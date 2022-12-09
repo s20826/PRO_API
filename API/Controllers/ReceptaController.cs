@@ -1,4 +1,5 @@
-﻿using Application.Recepty.Commands;
+﻿using Application.DTO.Requests;
+using Application.Recepty.Commands;
 using Application.Recepty.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -65,37 +66,39 @@ namespace PRO_API.Controllers
 
         [Authorize(Roles = "weterynarz,admin")]
         [HttpPost]
-        public async Task<IActionResult> AddRecepta(string ID_Wizyta, string Zalecenia, CancellationToken token)
+        public async Task<IActionResult> AddRecepta(string ID_Wizyta, string Zalecenia, List<ReceptaLekRequest2> Leki, CancellationToken token)
         {
             try
             {
                 return Ok(await Mediator.Send(new CreateReceptaCommand
                 {
                     ID_wizyta = ID_Wizyta,
-                    Zalecenia = Zalecenia
+                    Zalecenia = Zalecenia,
+                    Leki = Leki
                 }, token));
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return BadRequest();
+                return BadRequest(e.Message);
             }
         }
 
         [Authorize(Roles = "weterynarz,admin")]
         [HttpPut("{ID_Recepta}")]
-        public async Task<IActionResult> UpdateRecepta(string ID_Recepta, string Zalecenia, CancellationToken token)
+        public async Task<IActionResult> UpdateRecepta(string ID_Recepta, string Zalecenia, List<ReceptaLekRequest2> Leki, CancellationToken token)
         {
             try
             {
                 return Ok(await Mediator.Send(new UpdateReceptaCommand
                 {
                     ID_recepta = ID_Recepta,
-                    Zalecenia = Zalecenia
+                    Zalecenia = Zalecenia,
+                    Leki = Leki
                 }, token));
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return NotFound();
+                return BadRequest(e.Message);
             }
         }
 

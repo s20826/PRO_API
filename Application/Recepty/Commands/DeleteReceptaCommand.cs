@@ -28,6 +28,7 @@ namespace Application.Recepty.Commands
         {
             int id = hash.Decode(req.ID_recepta);
 
+            context.ReceptaLeks.RemoveRange(context.ReceptaLeks.Where(x => x.IdWizyta.Equals(id)).ToList());
             context.Recepta.Remove(context.Recepta.Where(x => x.IdWizyta.Equals(id)).First());
             return await context.SaveChangesAsync(cancellationToken);
         }

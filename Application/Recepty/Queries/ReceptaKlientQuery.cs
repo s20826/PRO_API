@@ -1,5 +1,6 @@
 ﻿using Application.DTO.Responses;
 using Application.Interfaces;
+using Application.ReceptaLeki.Queries;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -31,11 +32,20 @@ namespace Application.Recepty.Queries
 
             return (from x in context.Recepta
                     join s in context.Wizyta on x.IdWizyta equals s.IdWizyta
+                    join y in context.ReceptaLeks on x.IdWizyta equals y.IdWizyta
                     where s.IdOsoba == id
                     select new GetReceptaResponse()
                     {
                         ID_Recepta = hash.Encode(x.IdWizyta),
                         Zalecenia = x.Zalecenia,
+                        Leki = x.ReceptaLeks.Select(x => new GetReceptaLekResponse
+                        {
+                            ID_Lek = hash.Encode(x.IdLek),
+                            Nazwa = x.IdLekNavigation.Nazwa,
+                            Ilosc = y.Ilosc,
+                            Producent = x.IdLekNavigation.Producent,
+                            JednostkaMiary = x.IdLekNavigation.JednostkaMiary
+                        }).ToList(),
                         WizytaData = context.Harmonograms.Where(x => x.IdWizyta.Equals(x.IdWizyta)).Any() ? context.Harmonograms.Where(x => x.IdWizyta.Equals(x.IdWizyta)).Min(y => y.DataRozpoczecia) : null,
                     }).ToList();
         }

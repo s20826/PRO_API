@@ -66,7 +66,7 @@ namespace PRO_API.Controllers
 
         [Authorize(Roles = "weterynarz,admin")]
         [HttpPost]
-        public async Task<IActionResult> AddRecepta(string ID_Wizyta, string Zalecenia, List<ReceptaLekRequest2> Leki, CancellationToken token)
+        public async Task<IActionResult> AddRecepta(string ID_Wizyta, string Zalecenia, CancellationToken token)
         {
             try
             {
@@ -74,7 +74,6 @@ namespace PRO_API.Controllers
                 {
                     ID_wizyta = ID_Wizyta,
                     Zalecenia = Zalecenia,
-                    Leki = Leki
                 }, token));
             }
             catch (Exception e)
@@ -85,15 +84,14 @@ namespace PRO_API.Controllers
 
         [Authorize(Roles = "weterynarz,admin")]
         [HttpPut("{ID_Recepta}")]
-        public async Task<IActionResult> UpdateRecepta(string ID_Recepta, string Zalecenia, List<ReceptaLekRequest2> Leki, CancellationToken token)
+        public async Task<IActionResult> UpdateRecepta(string ID_Recepta, string Zalecenia, CancellationToken token)
         {
             try
             {
                 return Ok(await Mediator.Send(new UpdateReceptaCommand
                 {
                     ID_recepta = ID_Recepta,
-                    Zalecenia = Zalecenia,
-                    Leki = Leki
+                    Zalecenia = Zalecenia
                 }, token));
             }
             catch (Exception e)

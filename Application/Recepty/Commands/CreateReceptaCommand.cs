@@ -16,7 +16,7 @@ namespace Application.Recepty.Commands
     {
         public string ID_wizyta { get; set; }
         public string Zalecenia { get; set; }
-        public List<ReceptaLekRequest2> Leki { get; set; }
+        //public List<ReceptaLekRequest2> Leki { get; set; }
     }
 
     public class CreateReceptaCommandHandler : IRequestHandler<CreateReceptaCommand, int>
@@ -33,39 +33,24 @@ namespace Application.Recepty.Commands
         {
             int id = hash.Decode(req.ID_wizyta);
 
-            using (var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            context.Recepta.Add(new Receptum
             {
-                try
+                IdWizyta = id,
+                Zalecenia = req.Zalecenia
+            });
+
+
+            /*foreach (var i in req.Leki)
+            {
+                context.ReceptaLeks.Add(new ReceptaLek
                 {
-                    context.Recepta.Add(new Receptum
-                    {
-                        IdWizyta = id,
-                        Zalecenia = req.Zalecenia
-                    });
+                    IdWizyta = id,
+                    IdLek = hash.Decode(i.ID_Lek),
+                    Ilosc = i.Ilosc,
+                });
+            }*/
 
-                    await context.SaveChangesAsync(cancellationToken);
-
-                    foreach (var i in req.Leki)
-                    {
-                        context.ReceptaLeks.Add(new ReceptaLek
-                        {
-                            IdWizyta = id,
-                            IdLek = hash.Decode(i.ID_Lek),
-                            Ilosc = i.Ilosc,
-                        });
-                    }
-
-                    await context.SaveChangesAsync(cancellationToken);
-                }
-                catch (Exception e)
-                {
-                    transaction.Dispose();
-                    throw new Exception(e.Message);
-                }
-
-                transaction.Dispose();
-                return 0;
-            }
+            return await context.SaveChangesAsync(cancellationToken);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace Application.Recepty.Commands
     {
         public string ID_recepta { get; set; }
         public string Zalecenia { get; set; }
-        public List<ReceptaLekRequest2> Leki { get; set; }
+        //public List<ReceptaLekRequest2> Leki { get; set; }
     }
 
     public class UpdateReceptaCommandHandler : IRequestHandler<UpdateReceptaCommand, int>
@@ -32,14 +32,12 @@ namespace Application.Recepty.Commands
         {
             int id = hash.Decode(req.ID_recepta);
 
-            //usunięcie starych leków
-            context.ReceptaLeks.RemoveRange(context.ReceptaLeks.Where(x => x.IdWizyta == id).ToList());
+            //context.ReceptaLeks.RemoveRange(context.ReceptaLeks.Where(x => x.IdWizyta == id).ToList());
 
             var recepta = context.Recepta.Where(x => x.IdWizyta.Equals(id)).First();
             recepta.Zalecenia = req.Zalecenia;
 
-            //dodanie listy dowych leków
-            foreach (var i in req.Leki)
+            /*foreach (var i in req.Leki)
             {
                 context.ReceptaLeks.Add(new ReceptaLek
                 {
@@ -47,7 +45,7 @@ namespace Application.Recepty.Commands
                     IdLek = hash.Decode(i.ID_Lek),
                     Ilosc = i.Ilosc,
                 });
-            }
+            }*/
 
             return await context.SaveChangesAsync(cancellationToken);
         }

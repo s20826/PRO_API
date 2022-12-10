@@ -491,7 +491,6 @@ namespace Infrastructure.Models
                     .HasColumnName("ID_wizyta");
 
                 entity.Property(e => e.Zalecenia)
-                    .IsRequired()
                     .HasMaxLength(300)
                     .IsUnicode(false);
 

@@ -18,27 +18,19 @@ namespace Test.Mock
     {
         private Mock<IKlinikaContext> mockContext;
         public HashService hash;
-        public IConfiguration configuration;
 
         [SetUp]
         public void SetUp()
         {
             mockContext = MockKlinikaContext.GetMockDbContext();
             hash = new HashService(new Hashids("zscfhulp36", 7));
-            var inMemorySettings = new Dictionary<string, string> {
-                {"SecretKey", "q4Ze7tyWVopasdfghjkPnr6uvpapajwEz3m18nqu6cA41qaz2wsx3edc4rfvplijygrdwa2137xd2OChybfthvFcdf"},
-                {"PasswordIterations", "150000"}
-            };
-
-            configuration = new ConfigurationBuilder()
-                .AddInMemoryCollection(inMemorySettings)
-                .Build();
         }
 
 
-        /*[Test]
-        public async Task CreateWeterynarzSpecjalizacjaShouldBeCorrectTest()
+        [Test]
+        public async Task AddWeterynarzSpecjalizacjaShouldBeCorrectTest()
         {
+            var before = mockContext.Object.WeterynarzSpecjalizacjas.Count();
             var handler = new AddSpecjalizacjaWeterynarzCommandHandle(mockContext.Object, hash);
 
             AddSpecjalizacjaWeterynarzCommand command = new AddSpecjalizacjaWeterynarzCommand()
@@ -49,9 +41,8 @@ namespace Test.Mock
 
             var result = await handler.Handle(command, CancellationToken.None);
             mockContext.Verify(m => m.SaveChangesAsync(CancellationToken.None), Times.Once());
-            Assert.AreEqual(2, mockContext.Object.WeterynarzSpecjalizacjas.Count());
-        }*/
-
+            Assert.AreEqual(before + 1, mockContext.Object.WeterynarzSpecjalizacjas.Count());
+        }
 
         [Test]
         public async Task RemoveWeterynarzSpecjalizacjaShouldBeCorrectTest()

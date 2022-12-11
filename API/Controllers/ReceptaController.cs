@@ -64,6 +64,23 @@ namespace PRO_API.Controllers
             }
         }
 
+        [Authorize(Roles = "klient,weterynarz,admin")]
+        [HttpGet("pacjent/{ID_Pacjent}")]
+        public async Task<IActionResult> GetReceptaPacjentList(string ID_Pacjent, CancellationToken token)
+        {
+            try
+            {
+                return Ok(await Mediator.Send(new ReceptaPacjentQuery
+                {
+                    ID_pacjent = ID_Pacjent
+                }, token));
+            }
+            catch (Exception)
+            {
+                return NotFound();
+            }
+        }
+
         [Authorize(Roles = "weterynarz,admin")]
         [HttpPost]
         public async Task<IActionResult> AddRecepta(string ID_Wizyta, string Zalecenia, CancellationToken token)

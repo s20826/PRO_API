@@ -32,7 +32,8 @@ namespace Application.Recepty.Queries
 
             return (from x in context.Recepta
                     join s in context.Wizyta on x.IdWizyta equals s.IdWizyta
-                    join y in context.ReceptaLeks on x.IdWizyta equals y.IdWizyta
+                    join l in context.ReceptaLeks on x.IdWizyta equals l.IdWizyta into receptaLek
+                    from y in receptaLek.DefaultIfEmpty()
                     where s.IdOsoba == id
                     select new GetReceptaResponse()
                     {

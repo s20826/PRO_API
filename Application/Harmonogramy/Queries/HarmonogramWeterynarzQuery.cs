@@ -46,7 +46,7 @@ namespace Application.Harmonogramy.Queries
                      IdPacjent = x.IdWizyta != null ? hash.Encode((int)t.IdPacjent) : null,
                      Pacjent = x.IdWizyta != null ? context.Pacjents.Where(p => p.IdPacjent == t.IdPacjent).Select(p => p.Nazwa).FirstOrDefault() : null,
                      CzyZajete = x.IdWizyta != null
-                 }).ToList();
+                 }).AsParallel().WithCancellation(cancellationToken).ToList();
 
             return new
             {

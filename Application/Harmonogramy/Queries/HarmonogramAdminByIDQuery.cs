@@ -49,7 +49,7 @@ namespace Application.Harmonogramy.Queries
                      IdPacjent = t.IdPacjent != null ? hash.Encode((int)t.IdPacjent) : null,
                      Pacjent = t.IdPacjent != null ? context.Pacjents.Where(p => p.IdPacjent == t.IdPacjent).Select(p => p.Nazwa).First() : null,
                      CzyZajete = x.IdWizyta != null
-                 }).ToList();
+                 }).AsParallel().WithCancellation(cancellationToken).ToList();
 
             return new
             {

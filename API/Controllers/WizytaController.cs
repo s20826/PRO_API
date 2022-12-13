@@ -46,7 +46,7 @@ namespace PRO_API.Controllers
             }
         }
 
-        //[Authorize(Roles = "admin,weterynarz")]
+        [Authorize(Roles = "admin,weterynarz")]
         [HttpGet("{ID_klient}")]
         public async Task<IActionResult> GetWizytaKlient(string ID_klient, CancellationToken token)
         {
@@ -186,10 +186,7 @@ namespace PRO_API.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(new
-                {
-                    massage = e.Message
-                });
+                return BadRequest(e.Message);
             }
         }
 
@@ -199,20 +196,19 @@ namespace PRO_API.Controllers
         {
             try
             {
-                return Ok(await Mediator.Send(new UpdateWizytaInfoCommand
+                await Mediator.Send(new UpdateWizytaInfoCommand
                 {
                     ID_wizyta = ID_wizyta,
                     ID_weterynarz = GetUserId(),
                     request = request
-                }, token));
+                }, token);
             }
             catch (Exception e)
             {
-                return BadRequest(new
-                {
-                    massage = e
-                });
+                return BadRequest(e.Message);
             }
+
+            return NoContent();
         }
 
         [Authorize]
@@ -226,27 +222,29 @@ namespace PRO_API.Controllers
                     ID_wizyta = ID_wizyta
                 }, token));
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return BadRequest();
+                return BadRequest(e.Message);
             }
         }
 
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         [HttpDelete("admin/{ID_wizyta}")]
         public async Task<IActionResult> DeleteWizytaByKlinika(string ID_wizyta, CancellationToken token)    //admin anuluje wizytę, status wizyty ustawiony jako anulowany przez klinike
         {
             try
             {
-                return Ok(await Mediator.Send(new DeleteWizytaAdminCommand
+                await Mediator.Send(new DeleteWizytaAdminCommand
                 {
                     ID_wizyta = ID_wizyta
-                }, token));
+                }, token);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return BadRequest();
+                return BadRequest(e.Message);
             }
+
+            return NoContent();
         }
     }
 }

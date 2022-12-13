@@ -45,7 +45,7 @@ namespace Application.Klienci.Queries
                             Nazwisko = p.Nazwisko,
                             NumerTelefonu = p.NumerTelefonu,
                             Email = p.Email
-                        }).ToList();
+                        }).AsParallel().WithCancellation(cancellationToken).ToList();
             }
 
             return data;

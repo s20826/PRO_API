@@ -42,7 +42,7 @@ namespace Application.Choroby.Queries
                             Nazwa = x.Nazwa,
                             NazwaLacinska = x.NazwaLacinska,
                             Opis = x.Opis
-                        }).ToList();
+                        }).AsParallel().WithCancellation(cancellationToken).ToList();
 
                 cache.AddToCache(data);
             }

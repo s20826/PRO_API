@@ -44,7 +44,7 @@ namespace Application.Wizyty.Commands
                 throw new UserNotAuthorizedException();
             }
 
-            List<Usluga> uslugas = new List<Usluga>();
+            /*List<Usluga> uslugas = new List<Usluga>();
 
             for(int i = 0; i < req.request.Uslugi.Length; i++)
             {
@@ -55,14 +55,14 @@ namespace Application.Wizyty.Commands
                 });
 
                 uslugas.Add(context.Uslugas.Where(x => x.IdUsluga.Equals(hash.Decode(req.request.Uslugi[i]))).First());
-            }
+            }*/
 
             wizyta.Opis = req.request.Opis;
             wizyta.IdPacjent = req.request.ID_Pacjent != null ? hash.Decode(req.request.ID_Pacjent) : null;
-            wizyta.Cena = wizytaRepository.GetWizytaCena(uslugas);
+            //wizyta.Cena = wizytaRepository.GetWizytaCena(uslugas);
             wizyta.Status = WizytaStatus.Zrealizowana.ToString();
 
-            var klientZnizkaList = context.KlientZnizkas.Where(x => x.IdOsoba.Equals(wizyta.IdOsoba) && x.CzyWykorzystana == false).ToList();
+            /*var klientZnizkaList = context.KlientZnizkas.Where(x => x.IdOsoba.Equals(wizyta.IdOsoba) && x.CzyWykorzystana == false).ToList();
             if (klientZnizkaList.Any())
             {
                 var klientZnizka = klientZnizkaList.First();
@@ -70,7 +70,7 @@ namespace Application.Wizyty.Commands
                 wizyta.IdZnizka = znizka.IdZnizka;
                 wizyta.CenaZnizka = wizyta.Cena * (1 - (znizka.ProcentZnizki / 100));
                 klientZnizka.CzyWykorzystana = true;
-            }
+            }*/
 
             return await context.SaveChangesAsync(cancellationToken);
         }

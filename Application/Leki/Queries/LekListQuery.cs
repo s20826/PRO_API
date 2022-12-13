@@ -39,7 +39,7 @@ namespace Application.Leki.Queries
             await connection.OpenAsync();
 
             SqlCommand command = new SqlCommand(query, connection);
-            SqlDataReader reader = await command.ExecuteReaderAsync();
+            SqlDataReader reader = await command.ExecuteReaderAsync(cancellationToken);
             var list = new List<GetLekListResponse>();
 
             while (reader.Read())

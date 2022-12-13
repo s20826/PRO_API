@@ -8,6 +8,8 @@ using Infrastructure.Models;
 using Application.Interfaces;
 using System.Net.Mail;
 using System.Net;
+using System.Threading;
+using Microsoft.Extensions.Logging;
 
 namespace PRO_API.Controllers
 {
@@ -17,12 +19,31 @@ namespace PRO_API.Controllers
         private readonly IHashids hashids;
         private readonly KlinikaContext context;
         private readonly IEmailSender _emailSender;
-        public TestController(IEmailSender emailSender, IConfiguration config, IHashids ihashids, KlinikaContext klinikaContext)
+        private readonly ILogger<TestController> logger;
+        public TestController(IEmailSender emailSender, IConfiguration config, IHashids ihashids, KlinikaContext klinikaContext, ILogger<TestController> _logger)
         {
             _emailSender = emailSender;
             configuration = config;
             hashids = ihashids;
             context = klinikaContext;
+            logger = _logger;
+        }
+
+        [HttpGet("cancellation")]
+        public async Task<IActionResult> CancellationTest(CancellationToken token)
+        {
+            try
+            {
+                var result = context.Osobas.AsParallel().WithCancellation(token).ToList();
+                await Task.Delay(3000, token);
+                return Ok(result);
+            }
+            catch (TaskCanceledException)
+            {
+                logger.LogWarning("success, task was cancelled");
+                return Ok();
+            }
+
         }
 
         [HttpGet("hashid/{id}")]

@@ -45,7 +45,7 @@ namespace Application.Weterynarze.Queries
                      NumerTelefonu = x.NumerTelefonu,
                      Email = x.Email,
                      DataZatrudnienia = p.DataZatrudnienia
-                 }).ToList();
+                 }).AsParallel().WithCancellation(cancellationToken).ToList();
             }
 
             return data;

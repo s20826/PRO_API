@@ -38,16 +38,38 @@ namespace PRO_API.Controllers
         {
             try
             {
-                return Ok(await Mediator.Send(new AddWizytaUslugaCommand
+                await Mediator.Send(new AddWizytaUslugaCommand
                 {
                     ID_wizyta = ID_wizyta,
                     ID_usluga = ID_usluga
-                }, token));
+                }, token);
             }
             catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
+
+            return NoContent();
+        }
+
+        [Authorize(Roles = "admin,weterynarz")]
+        [HttpDelete("{ID_wizyta}/{ID_usluga}")]
+        public async Task<IActionResult> RemoveWizytaUsluga(string ID_wizyta, string ID_usluga, CancellationToken token)
+        {
+            try
+            {
+                await Mediator.Send(new AddWizytaUslugaCommand
+                {
+                    ID_wizyta = ID_wizyta,
+                    ID_usluga = ID_usluga
+                }, token);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
+            return NoContent();
         }
     }
 }

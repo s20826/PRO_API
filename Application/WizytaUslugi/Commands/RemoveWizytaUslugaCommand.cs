@@ -1,6 +1,4 @@
-﻿using Application.DTO.Responses;
-using Application.Interfaces;
-using Application.WizytaUslugi.Queries;
+﻿using Application.Interfaces;
 using Domain.Enums;
 using Domain.Models;
 using MediatR;
@@ -15,25 +13,25 @@ using System.Transactions;
 
 namespace Application.WizytaUslugi.Commands
 {
-    public class AddWizytaUslugaCommand : IRequest<int>
+    public class RemoveWizytaUslugaCommand : IRequest<int>
     {
         public string ID_wizyta { get; set; }
         public string ID_usluga { get; set; }
     }
 
-    public class AddWizytaUslugaCommandHandler : IRequestHandler<AddWizytaUslugaCommand, int>
+    public class RemoveWizytaUslugaCommandHandler : IRequestHandler<RemoveWizytaUslugaCommand, int>
     {
         private readonly IKlinikaContext context;
         private readonly IHash hash;
         private readonly IWizytaRepository wizytaRepository;
-        public AddWizytaUslugaCommandHandler(IKlinikaContext klinikaContext, IHash _hash, IWizytaRepository _wizytaRepository)
+        public RemoveWizytaUslugaCommandHandler(IKlinikaContext klinikaContext, IHash _hash, IWizytaRepository _wizytaRepository)
         {
             context = klinikaContext;
             hash = _hash;
             wizytaRepository = _wizytaRepository;
         }
 
-        public async Task<int> Handle(AddWizytaUslugaCommand req, CancellationToken cancellationToken)
+        public async Task<int> Handle(RemoveWizytaUslugaCommand req, CancellationToken cancellationToken)
         {
             (int id1, int id2) = hash.Decode(req.ID_wizyta, req.ID_usluga);
 
@@ -41,21 +39,16 @@ namespace Application.WizytaUslugi.Commands
             {
                 try
                 {
-                    context.WizytaUslugas.Add(new WizytaUsluga
-                    {
-                        IdWizyta = id1,
-                        IdUsluga = id2
-                    });
-
+                    context.WizytaUslugas.Remove(context.WizytaUslugas.First(x => x.IdWizyta == id1 && x.IdUsluga == id2));
                     await context.SaveChangesAsync(cancellationToken);
 
                     var wizyta = context.Wizyta.Where(x => x.IdWizyta.Equals(id1)).Include(x => x.WizytaUslugas).ThenInclude(y => y.IdUslugaNavigation).First();
-                    
-                    if(wizyta.Status != WizytaStatus.Zaplanowana.ToString() && wizyta.Status != WizytaStatus.Zrealizowana.ToString())
+
+                    if (wizyta.Status != WizytaStatus.Zaplanowana.ToString() && wizyta.Status != WizytaStatus.Zrealizowana.ToString())
                     {
-                        throw new Exception("Nie można dodać usługi do anulowanej wizyty");
+                        throw new Exception("Nie można zmienić usług w anulowanej wizycie");
                     }
-                    
+
                     var uslugas = wizyta.WizytaUslugas.Select(x => x.IdUslugaNavigation).ToList();
                     wizyta.Cena = wizytaRepository.GetWizytaCena(uslugas);
 

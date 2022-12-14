@@ -237,6 +237,13 @@ namespace Test
                     NazwaUslugi = "UslugaName",
                     Narkoza = false,
                     Cena = 120
+                },
+                new Usluga
+                {
+                    IdUsluga = 2,
+                    NazwaUslugi = "UslugaName",
+                    Narkoza = true,
+                    Cena = 150
                 }
             };
         }

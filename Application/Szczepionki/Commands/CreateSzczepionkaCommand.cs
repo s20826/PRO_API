@@ -43,9 +43,11 @@ namespace Application.Szczepionki.Commands
 
                     await context.SaveChangesAsync(cancellationToken);
 
+                    var id = lek != null ? lek.Entity.IdLek : 0;
+
                     context.Szczepionkas.Add(new Szczepionka
                     {
-                        IdLek = lek.Entity.IdLek,
+                        IdLek = id,
                         Zastosowanie = req.request.Zastosowanie,
                         CzyObowiazkowa = req.request.CzyObowiazkowa,
                         OkresWaznosci = TimeSpan.FromDays((double)req.request.OkresWaznosci).Ticks

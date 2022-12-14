@@ -40,7 +40,7 @@ namespace Application.Specjalizacje.Queries
                             IdSpecjalizacja = hash.Encode(x.IdSpecjalizacja),
                             Nazwa = x.Nazwa,
                             Opis = x.Opis
-                        }).ToList();
+                        }).AsParallel().WithCancellation(cancellationToken).ToList();
             }
 
             return data;

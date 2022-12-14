@@ -1,6 +1,7 @@
 ﻿using Application.DTO.Requests;
 using Application.Interfaces;
 using Application.Szczepionki.Commands;
+using Application.WizytaUslugi.Commands;
 using HashidsNet;
 using Infrastructure.Services;
 using Moq;
@@ -24,6 +25,29 @@ namespace Test.Mock
         {
             mockContext = MockKlinikaContext.GetMockDbContext();
             hash = new HashService(new Hashids("zscfhulp36", 7));
+        }
+
+
+        [Test]
+        public async Task CreateSzczepionkaShouldBeCorrectTest()
+        {
+            var before = mockContext.Object.Szczepionkas.Count();
+            var handler = new CreateSzczepionkaCommandHandler(mockContext.Object, hash);
+
+            CreateSzczepionkaCommand command = new CreateSzczepionkaCommand()
+            {
+                request = new SzczepionkaRequest
+                {
+                    CzyObowiazkowa = true,
+                    Zastosowanie = "...",
+                    Producent = "...",
+                    OkresWaznosci = new TimeSpan(1, 1, 1).Days
+                }
+            };
+
+            var result = await handler.Handle(command, CancellationToken.None);
+            mockContext.Verify(m => m.SaveChangesAsync(CancellationToken.None), Times.Exactly(2));
+            Assert.AreEqual(before + 1, mockContext.Object.Szczepionkas.Count());
         }
 
 

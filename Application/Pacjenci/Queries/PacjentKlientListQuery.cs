@@ -46,7 +46,7 @@ namespace Application.Pacjenci.Queries
                  Rasa = x.Rasa,
                  Plec = x.Plec,
                  Agresywne = x.Agresywne
-             }).ToList();
+             }).AsParallel().WithCancellation(cancellationToken).ToList();
 
             return results;
         }

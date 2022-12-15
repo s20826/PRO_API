@@ -20,7 +20,6 @@ namespace Application.Interfaces
         public DbSet<KlientZnizka> KlientZnizkas { get; set; }
         public DbSet<Lek> Leks { get; set; }
         public DbSet<LekWMagazynie> LekWMagazynies { get; set; }
-        public DbSet<LekWizytum> LekWizyta { get; set; }
         public DbSet<Osoba> Osobas { get; }
         public DbSet<Pacjent> Pacjents { get; }
         public DbSet<Powiadomienie> Powiadomienies { get; set; }
@@ -33,6 +32,7 @@ namespace Application.Interfaces
         public DbSet<Usluga> Uslugas { get; set; }
         public DbSet<Weterynarz> Weterynarzs { get; set; }
         public DbSet<WeterynarzSpecjalizacja> WeterynarzSpecjalizacjas { get; set; }
+        public DbSet<WizytaLek> WizytaLeks { get; set; }
         public DbSet<WizytaChoroba> WizytaChorobas { get; set; }
         public DbSet<WizytaUsluga> WizytaUslugas { get; set; }
         public DbSet<Wizytum> Wizyta { get; set; }

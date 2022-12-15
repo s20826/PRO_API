@@ -11,12 +11,12 @@ using System.Threading.Tasks;
 
 namespace Application.WizytaUslugi.Queries
 {
-    public class WizytaUslugaKlinikaQuery : IRequest<List<GetUslugaResponse>>
+    public class WizytaUslugaKlinikaQuery : IRequest<List<GetLekListResponse>>
     {
         public string ID_wizyta { get; set; }
     }
 
-    public class WizytaUslugaKlinikaQueryHandler : IRequestHandler<WizytaUslugaKlinikaQuery, List<GetUslugaResponse>>
+    public class WizytaUslugaKlinikaQueryHandler : IRequestHandler<WizytaUslugaKlinikaQuery, List<GetLekListResponse>>
     {
         private readonly IKlinikaContext context;
         private readonly IHash hash;
@@ -26,22 +26,21 @@ namespace Application.WizytaUslugi.Queries
             hash = _hash;
         }
 
-        public async Task<List<GetUslugaResponse>> Handle(WizytaUslugaKlinikaQuery req, CancellationToken cancellationToken)
+        public async Task<List<GetLekListResponse>> Handle(WizytaUslugaKlinikaQuery req, CancellationToken cancellationToken)
         {
             int id = hash.Decode(req.ID_wizyta);
 
-            return (from x in context.Uslugas
-                    join y in context.WizytaUslugas on x.IdUsluga equals y.IdUsluga
-                    orderby x.NazwaUslugi
+            return (from x in context.Leks
+                    join y in context.WizytaLeks on x.IdLek equals y.IdLek
+                    orderby x.Nazwa
                     where y.IdWizyta == id
-                    select new GetUslugaResponse()
+                    select new GetLekListResponse()
                     {
-                        ID_Usluga = hash.Encode(x.IdUsluga),
-                        NazwaUslugi = x.NazwaUslugi,
-                        Opis = x.Opis,
-                        Cena = x.Cena,
-                        Narkoza = x.Narkoza,
-                        Dolegliwosc = x.Dolegliwosc
+                        IdLek = hash.Encode(x.IdLek),
+                        Nazwa = x.Nazwa,
+                        JednostkaMiary = x.JednostkaMiary,
+                        Producent = x.Producent,
+                        Ilosc = y.Ilosc
                     }).AsParallel().WithCancellation(cancellationToken).ToList();
         }
     }

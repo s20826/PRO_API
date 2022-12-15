@@ -58,7 +58,7 @@ namespace PRO_API.Controllers
         {
             try
             {
-                await Mediator.Send(new AddWizytaUslugaCommand
+                await Mediator.Send(new RemoveWizytaUslugaCommand
                 {
                     ID_wizyta = ID_wizyta,
                     ID_usluga = ID_usluga

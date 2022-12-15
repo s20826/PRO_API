@@ -215,18 +215,6 @@ namespace Test
             };
         }
 
-        public static List<WizytaUsluga> GetWizytaUslugaList()
-        {
-            return new List<WizytaUsluga>
-            {
-                new WizytaUsluga
-                {
-                    IdUsluga = 1,
-                    IdWizyta = 1
-                }
-            };
-        }
-
         public static List<Usluga> GetUslugaList()
         {
             return new List<Usluga>
@@ -357,6 +345,31 @@ namespace Test
                 {
                     IdWizyta = 1,
                     IdChoroba = 1
+                }
+            };
+        }
+
+        public static List<WizytaLek> GetWizytaLekList()
+        {
+            return new List<WizytaLek>
+            {
+                new WizytaLek
+                {
+                    IdWizyta = 1,
+                    IdLek = 1,
+                    Ilosc = 1
+                }
+            };
+        }
+
+        public static List<WizytaUsluga> GetWizytaUslugaList()
+        {
+            return new List<WizytaUsluga>
+            {
+                new WizytaUsluga
+                {
+                    IdUsluga = 1,
+                    IdWizyta = 1
                 }
             };
         }

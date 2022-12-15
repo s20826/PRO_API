@@ -11,8 +11,8 @@ namespace Domain.Models
         {
             ChorobaLeks = new HashSet<ChorobaLek>();
             LekWMagazynies = new HashSet<LekWMagazynie>();
-            LekWizyta = new HashSet<LekWizytum>();
             ReceptaLeks = new HashSet<ReceptaLek>();
+            WizytaLeks = new HashSet<WizytaLek>();
         }
 
         public int IdLek { get; set; }
@@ -23,7 +23,7 @@ namespace Domain.Models
         public virtual Szczepionka Szczepionka { get; set; }
         public virtual ICollection<ChorobaLek> ChorobaLeks { get; set; }
         public virtual ICollection<LekWMagazynie> LekWMagazynies { get; set; }
-        public virtual ICollection<LekWizytum> LekWizyta { get; set; }
         public virtual ICollection<ReceptaLek> ReceptaLeks { get; set; }
+        public virtual ICollection<WizytaLek> WizytaLeks { get; set; }
     }
 }

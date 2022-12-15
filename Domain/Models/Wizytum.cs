@@ -10,8 +10,8 @@ namespace Domain.Models
         public Wizytum()
         {
             Harmonograms = new HashSet<Harmonogram>();
-            LekWizyta = new HashSet<LekWizytum>();
             WizytaChorobas = new HashSet<WizytaChoroba>();
+            WizytaLeks = new HashSet<WizytaLek>();
             WizytaUslugas = new HashSet<WizytaUsluga>();
         }
 
@@ -25,14 +25,15 @@ namespace Domain.Models
         public decimal Cena { get; set; }
         public decimal? CenaZnizka { get; set; }
         public bool CzyOplacona { get; set; }
+        public bool? CzyZaakceptowanaCena { get; set; }
 
         public virtual Klient IdOsobaNavigation { get; set; }
         public virtual Pacjent IdPacjentNavigation { get; set; }
         public virtual Znizka IdZnizkaNavigation { get; set; }
         public virtual Receptum Receptum { get; set; }
         public virtual ICollection<Harmonogram> Harmonograms { get; set; }
-        public virtual ICollection<LekWizytum> LekWizyta { get; set; }
         public virtual ICollection<WizytaChoroba> WizytaChorobas { get; set; }
+        public virtual ICollection<WizytaLek> WizytaLeks { get; set; }
         public virtual ICollection<WizytaUsluga> WizytaUslugas { get; set; }
     }
 }

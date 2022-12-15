@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Domain.Models
 {
-    public partial class LekWizytum
+    public partial class WizytaLek
     {
         public int IdWizyta { get; set; }
         public int IdLek { get; set; }

@@ -28,7 +28,6 @@ namespace Infrastructure.Models
         public virtual DbSet<KlientZnizka> KlientZnizkas { get; set; }
         public virtual DbSet<Lek> Leks { get; set; }
         public virtual DbSet<LekWMagazynie> LekWMagazynies { get; set; }
-        public virtual DbSet<LekWizytum> LekWizyta { get; set; }
         public virtual DbSet<Osoba> Osobas { get; set; }
         public virtual DbSet<Pacjent> Pacjents { get; set; }
         public virtual DbSet<Powiadomienie> Powiadomienies { get; set; }
@@ -42,6 +41,7 @@ namespace Infrastructure.Models
         public virtual DbSet<Weterynarz> Weterynarzs { get; set; }
         public virtual DbSet<WeterynarzSpecjalizacja> WeterynarzSpecjalizacjas { get; set; }
         public virtual DbSet<WizytaChoroba> WizytaChorobas { get; set; }
+        public virtual DbSet<WizytaLek> WizytaLeks { get; set; }
         public virtual DbSet<WizytaUsluga> WizytaUslugas { get; set; }
         public virtual DbSet<Wizytum> Wizyta { get; set; }
         public virtual DbSet<Znizka> Znizkas { get; set; }
@@ -279,30 +279,6 @@ namespace Infrastructure.Models
                     .HasForeignKey(d => d.IdLek)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Lek_w_magazynie_Lek");
-            });
-
-            modelBuilder.Entity<LekWizytum>(entity =>
-            {
-                entity.HasKey(e => new { e.IdWizyta, e.IdLek })
-                    .HasName("Lek_wizyta_pk");
-
-                entity.ToTable("Lek_wizyta");
-
-                entity.Property(e => e.IdWizyta).HasColumnName("ID_wizyta");
-
-                entity.Property(e => e.IdLek).HasColumnName("ID_lek");
-
-                entity.HasOne(d => d.IdLekNavigation)
-                    .WithMany(p => p.LekWizyta)
-                    .HasForeignKey(d => d.IdLek)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Lek_wizyta_Lek");
-
-                entity.HasOne(d => d.IdWizytaNavigation)
-                    .WithMany(p => p.LekWizyta)
-                    .HasForeignKey(d => d.IdWizyta)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Lek_wizyta_Wizyta");
             });
 
             modelBuilder.Entity<Osoba>(entity =>
@@ -697,6 +673,30 @@ namespace Infrastructure.Models
                     .HasForeignKey(d => d.IdWizyta)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Wizyta_choroba_Wizyta");
+            });
+
+            modelBuilder.Entity<WizytaLek>(entity =>
+            {
+                entity.HasKey(e => new { e.IdWizyta, e.IdLek })
+                    .HasName("Wizyta_lek_pk");
+
+                entity.ToTable("Wizyta_lek");
+
+                entity.Property(e => e.IdWizyta).HasColumnName("ID_wizyta");
+
+                entity.Property(e => e.IdLek).HasColumnName("ID_lek");
+
+                entity.HasOne(d => d.IdLekNavigation)
+                    .WithMany(p => p.WizytaLeks)
+                    .HasForeignKey(d => d.IdLek)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Lek_wizyta_Lek");
+
+                entity.HasOne(d => d.IdWizytaNavigation)
+                    .WithMany(p => p.WizytaLeks)
+                    .HasForeignKey(d => d.IdWizyta)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Lek_wizyta_Wizyta");
             });
 
             modelBuilder.Entity<WizytaUsluga>(entity =>

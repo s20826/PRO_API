@@ -22,6 +22,16 @@ namespace PRO_API.Controllers
         }
 
         [Authorize(Roles = "admin,weterynarz")]
+        [HttpGet("lekOnly")]
+        public async Task<IActionResult> GetLekOnlyList(CancellationToken token)
+        {
+            return Ok(await Mediator.Send(new LekOnlyListQuery
+            {
+
+            }, token));
+        }
+
+        [Authorize(Roles = "admin,weterynarz")]
         [HttpGet("{ID_lek}")]
         public async Task<IActionResult> GetLekById(string ID_lek, CancellationToken token)
         {

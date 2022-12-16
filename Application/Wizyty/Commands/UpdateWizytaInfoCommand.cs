@@ -4,6 +4,7 @@ using Application.Interfaces;
 using Domain.Enums;
 using Domain.Models;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,12 +37,15 @@ namespace Application.Wizyty.Commands
         {
             (int wizytaID, int weterynarzID) = hash.Decode(req.ID_wizyta, req.ID_weterynarz);
 
-            var wizyta = context.Wizyta.Where(x => x.IdWizyta.Equals(wizytaID)).FirstOrDefault();
-            var harmonogram = context.Harmonograms.Where(x => x.IdWizyta.Equals(wizytaID)).FirstOrDefault();
+            var wizyta = context.Wizyta.Where(x => x.IdWizyta.Equals(wizytaID)).Include(x => x.Harmonograms).FirstOrDefault();
+            var harmonogram = wizyta.Harmonograms.ToList();
 
-            if (!harmonogram.WeterynarzIdOsoba.Equals(weterynarzID))
+            foreach (var h in harmonogram)
             {
-                throw new UserNotAuthorizedException();
+                if (!h.WeterynarzIdOsoba.Equals(weterynarzID))
+                {
+                    throw new UserNotAuthorizedException();
+                }
             }
 
             /*List<Usluga> uslugas = new List<Usluga>();

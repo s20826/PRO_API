@@ -56,7 +56,8 @@ namespace Application.Wizyty.Commands
                         NotatkaKlient = req.Notatka,
                         Status = WizytaStatus.Zaplanowana.ToString(),
                         Cena = 0,
-                        CzyOplacona = false
+                        CzyOplacona = false,
+                        CzyZaakceptowanaCena = false
                     });
 
                     await context.SaveChangesAsync(cancellationToken);

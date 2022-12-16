@@ -25,7 +25,7 @@ namespace Domain.Models
         public decimal Cena { get; set; }
         public decimal? CenaZnizka { get; set; }
         public bool CzyOplacona { get; set; }
-        public bool? CzyZaakceptowanaCena { get; set; }
+        public bool CzyZaakceptowanaCena { get; set; }
 
         public virtual Klient IdOsobaNavigation { get; set; }
         public virtual Pacjent IdPacjentNavigation { get; set; }

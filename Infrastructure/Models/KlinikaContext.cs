@@ -744,6 +744,8 @@ namespace Infrastructure.Models
 
                 entity.Property(e => e.CzyOplacona).HasColumnName("Czy_oplacona");
 
+                entity.Property(e => e.CzyZaakceptowanaCena).HasColumnName("Czy_zaakceptowana_cena");
+
                 entity.Property(e => e.IdOsoba).HasColumnName("ID_osoba");
 
                 entity.Property(e => e.IdPacjent).HasColumnName("ID_pacjent");

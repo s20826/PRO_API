@@ -48,7 +48,12 @@ namespace Application.Wizyty.Queries
                         Status = g.Key.Status,
                         CzyOplacona = g.Key.CzyOplacona,
                         Data = g.Key.WeterynarzIdOsoba != null ? context.Harmonograms.Where(x => x.IdWizyta.Equals(g.Key.IdWizyta)).OrderBy(x => x.DataRozpoczecia).Select(x => x.DataRozpoczecia).First() : null
-                    }).ToList().OrderByDescending(x => x.Data).ToList();
+                    })
+                    .AsParallel()
+                    .WithCancellation(cancellationToken)
+                    .ToList()
+                    .OrderByDescending(x => x.Data)
+                    .ToList();
         }
     }
 }

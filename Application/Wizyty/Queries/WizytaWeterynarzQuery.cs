@@ -43,14 +43,19 @@ namespace Application.Wizyty.Queries
                         IdWizyta = hash.Encode(g.Key.IdWizyta),
                         IdPacjent = g.Key.IdPacjent != null ? hash.Encode((int)g.Key.IdPacjent) : null,
                         Pacjent = g.Key.IdPacjent != null ? g.Key.Nazwa : null,
-                        IdKlient = g.Key.IdOsoba != null ? hash.Encode((int)g.Key.IdOsoba) : "",
+                        IdKlient = g.Key.IdOsoba != null ? hash.Encode(g.Key.IdOsoba) : "",
                         Klient = g.Key.Imie + " " + g.Key.Nazwisko,
                         IdWeterynarz = req.ID_weterynarz,
                         Weterynarz = g.Key.WeterynarzIdOsoba != null ? context.Osobas.Where(i => i.IdOsoba.Equals(g.Key.WeterynarzIdOsoba)).Select(i => i.Imie + " " + i.Nazwisko).First() : null,
                         Status = g.Key.Status,
                         CzyOplacona = g.Key.CzyOplacona,
                         Data = g.Key.WeterynarzIdOsoba != null ? context.Harmonograms.Where(x => x.IdWizyta.Equals(g.Key.IdWizyta)).OrderBy(x => x.DataRozpoczecia).Select(x => x.DataRozpoczecia).First() : null
-                    }).ToList().OrderByDescending(x => x.Data).ToList();
+                    })
+                    .AsParallel()
+                    .WithCancellation(cancellationToken)
+                    .ToList()
+                    .OrderByDescending(x => x.Data)
+                    .ToList();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using Application.WizytaUslugi.Commands;
+using Domain.Enums;
 using HashidsNet;
 using Infrastructure.Services;
 using Moq;
@@ -21,6 +22,40 @@ namespace Test.Mock
         {
             mockContext = MockKlinikaContext.GetMockDbContext();
             hash = new HashService(new Hashids("zscfhulp36", 7));
+        }
+
+        [Test]
+        public async Task AcceptWizytaUslugaShouldBeCorrectTest()
+        {
+            var handler = new AcceptWizytaUslugaCommandHandler(mockContext.Object, hash);
+
+            AcceptWizytaUslugaCommand command = new AcceptWizytaUslugaCommand()
+            {
+                ID_wizyta = hash.Encode(1)
+            };
+
+            var result = await handler.Handle(command, CancellationToken.None);
+            mockContext.Verify(m => m.SaveChangesAsync(CancellationToken.None), Times.Once());
+
+            var wizyta = mockContext.Object.Wizyta.First(x => x.IdWizyta == 1);
+
+            Assert.AreEqual(wizyta.Status, WizytaStatus.Zrealizowana.ToString());
+            Assert.IsTrue(wizyta.CzyZaakceptowanaCena);
+            Assert.AreEqual(200, wizyta.Cena);
+            Assert.AreEqual(180, wizyta.CenaZnizka);
+        }
+
+        [Test]
+        public void AcceptWizytaUslugaShouldThrowAnExceptionTest()
+        {
+            var handler = new AcceptWizytaUslugaCommandHandler(mockContext.Object, hash);
+
+            AcceptWizytaUslugaCommand command = new AcceptWizytaUslugaCommand()
+            {
+                ID_wizyta = hash.Encode(2)
+            };
+
+            Assert.ThrowsAsync<Exception>(async () => await handler.Handle(command, CancellationToken.None));
         }
 
         [Test]

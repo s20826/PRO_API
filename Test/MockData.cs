@@ -273,7 +273,21 @@ namespace Test
                 {
                     IdZnizka = 1,
                     NazwaZnizki = "Znizka 1",
-                    ProcentZnizki = 12.5M
+                    ProcentZnizki = 10.0M
+                }
+            };
+        }
+
+        public static List<KlientZnizka> GetKlientZnizkaList()
+        {
+            return new List<KlientZnizka>
+            {
+                new KlientZnizka
+                {
+                    IdOsoba= 1,
+                    IdZnizka = 1,
+                    DataPrzyznania = DateTime.Now,
+                    CzyWykorzystana = false
                 }
             };
         }
@@ -305,6 +319,14 @@ namespace Test
                     DataZakonczenia = new DateTime(2022,10,27,13,30,0),
                     WeterynarzIdOsoba = 2,
                     IdWizyta = 1
+                },
+                new Harmonogram
+                {
+                    IdHarmonogram = 4,
+                    DataRozpoczecia = new DateTime(2022,10,28,15,0,0),
+                    DataZakonczenia = new DateTime(2022,10,28,15,30,0),
+                    WeterynarzIdOsoba = 2,
+                    IdWizyta = 2
                 }
             };
         }
@@ -332,7 +354,17 @@ namespace Test
                     IdOsoba = 1,
                     IdPacjent = 1,
                     Status = WizytaStatus.Zaplanowana.ToString(),
-                    Cena = 200
+                    Cena = 200,
+                    CzyZaakceptowanaCena = false
+                },
+                new Wizytum
+                {
+                    IdWizyta = 2,
+                    IdOsoba = 1,
+                    IdPacjent = 1,
+                    Status = WizytaStatus.Zrealizowana.ToString(),
+                    Cena = 200,
+                    CzyZaakceptowanaCena = true
                 }
             };
         }

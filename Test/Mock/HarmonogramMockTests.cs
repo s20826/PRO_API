@@ -86,7 +86,7 @@ namespace Test.Mock
 
             await handler.Handle(command, CancellationToken.None);
             Assert.AreNotEqual(mockContext.Object.Harmonograms.Count(), before);
-            Assert.AreEqual(mockContext.Object.Harmonograms.Count(), 0);
+            Assert.AreEqual(mockContext.Object.Harmonograms.Count(), before - 3);
             Assert.AreEqual(mockContext.Object.Wizyta.Where(x => x.Status == WizytaStatus.AnulowanaKlinika.ToString()).Count(), before2 + 1);
         }
     }

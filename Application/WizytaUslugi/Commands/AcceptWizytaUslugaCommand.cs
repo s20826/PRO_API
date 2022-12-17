@@ -2,6 +2,7 @@
 using Domain.Enums;
 using Domain.Models;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,10 +39,13 @@ namespace Application.WizytaUslugi.Commands
                 throw new Exception();
             }
 
-            var klientZnizka = context.KlientZnizkas.FirstOrDefault(x => x.IdOsoba.Equals(wizyta.IdOsoba) && x.CzyWykorzystana == false);
+            var klientZnizka = context.KlientZnizkas
+                //.Include(x => x.IdZnizkaNavigation)
+                .FirstOrDefault(x => x.IdOsoba.Equals(wizyta.IdOsoba) && x.CzyWykorzystana == false);
+
             if (klientZnizka != null)
             {
-                var znizka = klientZnizka.IdZnizkaNavigation;
+                var znizka = context.Znizkas.First(x => x.IdZnizka == klientZnizka.IdZnizka);
                 wizyta.IdZnizka = znizka.IdZnizka;
                 wizyta.CenaZnizka = wizyta.Cena * (1 - (znizka.ProcentZnizki / 100));
                 klientZnizka.CzyWykorzystana = true;

@@ -57,6 +57,23 @@ namespace PRO_API.Controllers
             }
         }
 
+        [Authorize]
+        [HttpGet("pacjent/{ID_pacjent}")]
+        public async Task<IActionResult> GetPacjentUslugaList(string ID_pacjent, CancellationToken token)
+        {
+            try
+            {
+                return Ok(await Mediator.Send(new UslugaPacjentListQuery
+                {
+                    ID_pacjent = ID_pacjent
+                }, token));
+            }
+            catch (Exception)
+            {
+                return NotFound();
+            }
+        }
+
         [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<IActionResult> AddUsluga(UslugaRequest request, CancellationToken token)

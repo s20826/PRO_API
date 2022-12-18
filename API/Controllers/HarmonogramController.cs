@@ -11,7 +11,7 @@ namespace PRO_API.Controllers
     public class HarmonogramController : ApiControllerBase
     {
         //ustawia harmonogramy (według godzin pracy) weterynarzom na tydzień do przodu względem ostatniego harmonogramu w systemie
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         [HttpPost("auto")]
         public async Task<IActionResult> AddHarmonogramsForAWeek(CancellationToken token)
         {
@@ -30,7 +30,7 @@ namespace PRO_API.Controllers
 
         //ustawia harmonogramy weterynarzom od dzisiejszej daty do daty ostatniego harmonogramu w systemie
         //(może być użyty w przypadku nowych weterynarzy)
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         [HttpPut("auto")]
         public async Task<IActionResult> AddWeterynarzHarmonograms(CancellationToken token)
         {
@@ -126,7 +126,7 @@ namespace PRO_API.Controllers
 
 
         //klient umawia wizytę albo pracownik kliniki umówia wizytę na prośbę klienta
-        //[Authorize(Roles = "klient,weterynarz,admin")]
+        [Authorize(Roles = "klient,weterynarz,admin")]
         [HttpGet]
         public async Task<IActionResult> GetHarmonogram(DateTime date, CancellationToken token)
         {
@@ -145,7 +145,7 @@ namespace PRO_API.Controllers
 
 
         //admin wyświetla harmonogram weterynarza
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         [HttpGet("klinika/{ID_osoba}")]
         public async Task<IActionResult> GetKlinikaAdminHarmonogram(string ID_osoba, DateTime Date, CancellationToken token)
         {

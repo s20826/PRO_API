@@ -49,7 +49,6 @@ namespace Application.Wizyty.Commands
             }
 
             /*List<Usluga> uslugas = new List<Usluga>();
-
             for(int i = 0; i < req.request.Uslugi.Length; i++)
             {
                 context.WizytaUslugas.Add(new WizytaUsluga

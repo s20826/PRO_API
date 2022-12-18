@@ -149,7 +149,7 @@ namespace PRO_API.Controllers
             }
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPut("przeloz/{ID_wizyta}")]
         public async Task<IActionResult> UpdateWizytaData(UmowWizyteRequest request, string ID_wizyta, CancellationToken token)   //klient albo weterynarz lub admin zmienia termin wizyty dla klienta (telefonicznie albo na miejscu)
         {
@@ -162,7 +162,7 @@ namespace PRO_API.Controllers
                         ID_wizyta = ID_wizyta,
                         ID_klient = GetUserId(),
                         ID_pacjent = request.ID_Pacjent,
-                        ID_Harmonogram = request.ID_Harmonogram,
+                        ID_harmonogram = request.ID_Harmonogram,
                         Notatka = request.Notatka
                     }, token));
                 }
@@ -172,18 +172,18 @@ namespace PRO_API.Controllers
                     ID_wizyta = ID_wizyta,
                     ID_klient = request.ID_Klient,
                     ID_pacjent = request.ID_Pacjent,
-                    ID_Harmonogram = request.ID_Harmonogram,
+                    ID_harmonogram = request.ID_Harmonogram,
                     Notatka = request.Notatka
                 }, token));
             }
-            catch (ConstraintException e)
+            /*catch (ConstraintException e)
             {
                 return BadRequest(new
                 {
                     message = e.Message,
                     value = e.ConstraintValue
                 });
-            }
+            }*/
             catch (Exception e)
             {
                 return BadRequest(e.Message);

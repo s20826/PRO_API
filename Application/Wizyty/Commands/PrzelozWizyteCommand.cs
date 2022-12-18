@@ -16,7 +16,7 @@ namespace Application.Wizyty.Commands
         public string ID_wizyta { get; set; }   //stare
         public string ID_klient { get; set; }
         public string ID_pacjent { get; set; }
-        public string ID_Harmonogram { get; set; }  //nowe
+        public string ID_harmonogram { get; set; }  //nowe
         public string Notatka { get; set; }
     }
 
@@ -35,12 +35,12 @@ namespace Application.Wizyty.Commands
         public async Task<int> Handle(PrzelozWizyteCommand req, CancellationToken cancellationToken)
         {
             (int klientID, int wizytaID) = hash.Decode(req.ID_klient, req.ID_wizyta);
-            int harmonogramID = hash.Decode(req.ID_Harmonogram);
+            int harmonogramID = hash.Decode(req.ID_harmonogram);
 
-            var wizyta = context.Wizyta.Where(x => x.IdWizyta.Equals(wizytaID)).FirstOrDefault();
+            var wizyta = context.Wizyta.Where(x => x.IdWizyta.Equals(wizytaID)).First();
             var oldHarmonograms = context.Harmonograms.Where(x => x.IdWizyta.Equals(wizytaID)).ToList();
 
-            if (!((WizytaStatus)Enum.Parse(typeof(WizytaStatus), wizyta.Status, true)).Equals(WizytaStatus.Zaplanowana))
+            if (!wizyta.Status.Equals(WizytaStatus.Zaplanowana.ToString()))
             {
                 throw new Exception();
             }
@@ -62,11 +62,11 @@ namespace Application.Wizyty.Commands
             }
 
             //wyliczenie długości przekładanej wizyty
-            int wizytaLength = oldHarmonograms.Count();
+            //int wizytaLength = oldHarmonograms.Count();
 
             //ID weterynarza z nowej wizyty
-            int weterynarzID = context.Harmonograms.Where(x => x.IdHarmonogram.Equals(harmonogramID)).First().WeterynarzIdOsoba;
-            var newDataRozpoczecia = context.Harmonograms.Where(x => x.IdHarmonogram.Equals(harmonogramID)).First().DataRozpoczecia;
+            //int weterynarzID = context.Harmonograms.Where(x => x.IdHarmonogram.Equals(harmonogramID)).First().WeterynarzIdOsoba;
+            //var newDataRozpoczecia = context.Harmonograms.Where(x => x.IdHarmonogram.Equals(harmonogramID)).First().DataRozpoczecia;
 
             //usuwanie poprzednich zarezerwowanych terminów z harmonogramu
             foreach (Harmonogram h in oldHarmonograms)
@@ -75,28 +75,30 @@ namespace Application.Wizyty.Commands
             }
 
             //nowe harmonogramy wyciągnięte na podstawie nowego ID harmonogramu
-            var newHarmonograms = context.Harmonograms
+            /*var newHarmonograms = context.Harmonograms
                 .Where(x => x.WeterynarzIdOsoba.Equals(weterynarzID) && x.DataRozpoczecia >= newDataRozpoczecia)
                 .OrderBy(x => x.DataRozpoczecia)
                 .Take(wizytaLength)
-                .ToList();
+                .ToList();*/
 
             //sprawdzenie czy są dostępne terminy do danego weterynarz w harmonogramie
-            if (!wizytaRepository.IsWizytaAbleToReschedule(newHarmonograms, newDataRozpoczecia))
+            /*if (!wizytaRepository.IsWizytaAbleToReschedule(newHarmonograms, newDataRozpoczecia))
             {
                 throw new NotFoundException();
-            }
+            }*/
 
-            for (int i = 0; i <= newHarmonograms.Count; i++)
+            /*for (int i = 0; i <= newHarmonograms.Count; i++)
             {
                 newHarmonograms.ElementAt(i).IdWizyta = wizytaID;
-            }
+            }*/
+
+            var harmonogram = context.Harmonograms.First(x => x.IdHarmonogram == harmonogramID);
+            harmonogram.IdWizyta = wizytaID;
 
             wizyta.IdPacjent = req.ID_pacjent != null ? hash.Decode(req.ID_pacjent) : null;
             wizyta.NotatkaKlient = req.Notatka;
 
-            int result = await context.SaveChangesAsync(cancellationToken);
-            return result;
+            return await context.SaveChangesAsync(cancellationToken);
         }
     }
 }

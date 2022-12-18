@@ -6,7 +6,7 @@ namespace Application.Wizyty.Commands
     {
         public PrzelozWizyteCommandValidator()
         {
-            RuleFor(x => x.ID_Harmonogram).NotEmpty();
+            RuleFor(x => x.ID_harmonogram).NotEmpty();
 
             RuleFor(x => x.ID_klient).NotEmpty();
 

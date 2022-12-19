@@ -331,19 +331,6 @@ namespace Test
             };
         }
 
-        public static List<Urlop> GetUrlopList()
-        {
-            return new List<Urlop>
-            {
-                new Urlop
-                {
-                    IdUrlop = 1,
-                    IdOsoba = 2,
-                    Dzien = new DateTime(2022,11,16)
-                }
-            };
-        }
-
         public static List<Wizytum> GetWizytaList()
         {
             return new List<Wizytum>
@@ -365,7 +352,49 @@ namespace Test
                     Status = WizytaStatus.Zrealizowana.ToString(),
                     Cena = 200,
                     CzyZaakceptowanaCena = true
-                }
+                },
+                new Wizytum
+                {
+                    IdWizyta = 3,
+                    IdOsoba = 4,
+                    IdPacjent = 1,
+                    Status = WizytaStatus.Zaplanowana.ToString()
+                },
+                new Wizytum
+                {
+                    IdWizyta = 4,
+                    IdOsoba = 4,
+                    IdPacjent = 1,
+                    Status = WizytaStatus.Zaplanowana.ToString()
+                },
+                new Wizytum
+                {
+                    IdWizyta = 5,
+                    IdOsoba = 4,
+                    IdPacjent = 1,
+                    Status = WizytaStatus.Zaplanowana.ToString()
+                },
+                new Wizytum
+                {
+                    IdWizyta = 6,
+                    IdOsoba = 4,
+                    IdPacjent = 1,
+                    Status = WizytaStatus.Zaplanowana.ToString()
+                },
+                new Wizytum
+                {
+                    IdWizyta = 7,
+                    IdOsoba = 4,
+                    IdPacjent = 1,
+                    Status = WizytaStatus.Zaplanowana.ToString()
+                },
+                new Wizytum
+                {
+                    IdWizyta = 8,
+                    IdOsoba = 4,
+                    IdPacjent = 1,
+                    Status = WizytaStatus.Zaplanowana.ToString()
+                },
             };
         }
 
@@ -402,6 +431,19 @@ namespace Test
                 {
                     IdUsluga = 1,
                     IdWizyta = 1
+                }
+            };
+        }
+
+        public static List<Urlop> GetUrlopList()
+        {
+            return new List<Urlop>
+            {
+                new Urlop
+                {
+                    IdUrlop = 1,
+                    IdOsoba = 2,
+                    Dzien = new DateTime(2022,11,16)
                 }
             };
         }

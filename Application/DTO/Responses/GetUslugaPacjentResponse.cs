@@ -8,6 +8,7 @@ namespace Application.DTO.Responses
 {
     public class GetUslugaPacjentResponse
     {
+        public string ID_wizyta { get; set; }
         public string ID_Usluga { get; set; }
         public string NazwaUslugi { get; set; }
         public string Opis { get; set; }

@@ -21,12 +21,12 @@ namespace Application.Wizyty.Commands
         public WizytaInfoUpdateRequest request { get; set; }
     }
 
-    public class UpdateWizytaInfoCommandHandle : IRequestHandler<UpdateWizytaInfoCommand, int>
+    public class UpdateWizytaInfoCommandHandler : IRequestHandler<UpdateWizytaInfoCommand, int>
     {
         private readonly IKlinikaContext context;
         private readonly IHash hash;
         private readonly IWizytaRepository wizytaRepository;
-        public UpdateWizytaInfoCommandHandle(IKlinikaContext klinikaContext, IHash _hash, IWizytaRepository _wizytaRepository)
+        public UpdateWizytaInfoCommandHandler(IKlinikaContext klinikaContext, IHash _hash, IWizytaRepository _wizytaRepository)
         {
             context = klinikaContext;
             hash = _hash;
@@ -38,7 +38,7 @@ namespace Application.Wizyty.Commands
             (int wizytaID, int weterynarzID) = hash.Decode(req.ID_wizyta, req.ID_weterynarz);
 
             var wizyta = context.Wizyta.Where(x => x.IdWizyta.Equals(wizytaID)).Include(x => x.Harmonograms).FirstOrDefault();
-            var harmonogram = wizyta.Harmonograms.ToList();
+            var harmonogram = context.Harmonograms.Where(x => x.IdWizyta == wizytaID).ToList();
 
             foreach (var h in harmonogram)
             {

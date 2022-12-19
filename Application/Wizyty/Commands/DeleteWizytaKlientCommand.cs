@@ -19,13 +19,13 @@ namespace Application.Wizyty.Commands
         public string ID_klient { get; set; }
     }
 
-    public class DeleteWizytaKlientCommandHandle : IRequestHandler<DeleteWizytaKlientCommand, int>
+    public class DeleteWizytaKlientCommandHandler : IRequestHandler<DeleteWizytaKlientCommand, int>
     {
         private readonly IKlinikaContext context;
         private readonly IHash hash;
         private readonly IWizytaRepository wizytaRepository;
         private readonly IEmailSender sender;
-        public DeleteWizytaKlientCommandHandle(IKlinikaContext klinikaContext, IHash _hash, IWizytaRepository _wizytaRepository, IEmailSender emailSender)
+        public DeleteWizytaKlientCommandHandler(IKlinikaContext klinikaContext, IHash _hash, IWizytaRepository _wizytaRepository, IEmailSender emailSender)
         {
             context = klinikaContext;
             hash = _hash;
@@ -40,7 +40,7 @@ namespace Application.Wizyty.Commands
 
             //var harmonograms = context.Harmonograms.Where(x => x.IdWizyta.Equals(id)).OrderBy(x => x.DataRozpoczecia).ToList();
             var wizyta = context.Wizyta.Where(x => x.IdWizyta.Equals(id)).Include(x => x.Harmonograms).FirstOrDefault();
-            var harmonograms = wizyta.Harmonograms.OrderBy(x => x.DataRozpoczecia).ToList();
+            var harmonograms = context.Harmonograms.Where(x => x.IdWizyta.Equals(id)).OrderBy(x => x.DataRozpoczecia).ToList();
 
             if (!((WizytaStatus)Enum.Parse(typeof(WizytaStatus), wizyta.Status, true)).Equals(WizytaStatus.Zaplanowana))
             {
@@ -70,13 +70,13 @@ namespace Application.Wizyty.Commands
             }
 
             wizyta.Status = WizytaStatus.AnulowanaKlient.ToString();
-            await context.SaveChangesAsync(cancellationToken);
+            var result = await context.SaveChangesAsync(cancellationToken);
 
             //wysłanie maila z potwierdzeniem anulowania wizyty
             var to = context.Osobas.Where(x => x.IdOsoba.Equals(klientID)).First().Email;
             await sender.SendAnulujWizyteEmail(to, harmonograms.ElementAt(0).DataRozpoczecia);
 
-            return 0;
+            return result;
         }
     }
 }

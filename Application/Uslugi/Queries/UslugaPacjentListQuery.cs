@@ -36,6 +36,7 @@ namespace Application.Uslugi.Queries
                     select new GetUslugaPacjentResponse()
                     {
                         ID_Usluga = hash.Encode(x.IdUsluga),
+                        ID_wizyta = hash.Encode(w.IdWizyta),
                         NazwaUslugi = y.NazwaUslugi,
                         Opis = y.Opis,
                         Data = w.Harmonograms.Min(x => x.DataRozpoczecia)

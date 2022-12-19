@@ -20,12 +20,12 @@ namespace Application.Wizyty.Commands
         public string Notatka { get; set; }
     }
 
-    public class PrzelozWizyteCommandHandle : IRequestHandler<PrzelozWizyteCommand, int>
+    public class PrzelozWizyteCommandHandler : IRequestHandler<PrzelozWizyteCommand, int>
     {
         private readonly IKlinikaContext context;
         private readonly IHash hash;
         private readonly IWizytaRepository wizytaRepository;
-        public PrzelozWizyteCommandHandle(IKlinikaContext klinikaContext, IHash _hash, IWizytaRepository _wizytaRepository)
+        public PrzelozWizyteCommandHandler(IKlinikaContext klinikaContext, IHash _hash, IWizytaRepository _wizytaRepository)
         {
             context = klinikaContext;
             hash = _hash;

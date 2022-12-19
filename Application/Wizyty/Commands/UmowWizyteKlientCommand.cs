@@ -20,13 +20,13 @@ namespace Application.Wizyty.Commands
         public string Notatka { get; set; }
     }
 
-    public class UmowWizyteKlientCommandHandle : IRequestHandler<UmowWizyteKlientCommand, int>
+    public class UmowWizyteKlientCommandHandler : IRequestHandler<UmowWizyteKlientCommand, int>
     {
         private readonly IKlinikaContext context;
         private readonly IHash hash;
         private readonly IWizytaRepository wizytaRepository;
         private readonly IEmailSender sender;
-        public UmowWizyteKlientCommandHandle(IKlinikaContext klinikaContext, IHash _hash, IWizytaRepository _wizytaRepository, IEmailSender emailSender)
+        public UmowWizyteKlientCommandHandler(IKlinikaContext klinikaContext, IHash _hash, IWizytaRepository _wizytaRepository, IEmailSender emailSender)
         {
             context = klinikaContext;
             hash = _hash;
@@ -41,7 +41,7 @@ namespace Application.Wizyty.Commands
 
             if (!wizytaRepository.IsWizytaAbleToCreate(context.Wizyta.Where(x => x.IdOsoba == id1).ToList()))
             {
-                //throw new ConstraintException("To many wizytas made", GlobalValues.MAX_UMOWIONYCH_WIZYT);
+                throw new ConstraintException("Nie można umówić wizyty, osiągnięto limit umówionych wizyt", GlobalValues.MAX_UMOWIONYCH_WIZYT);
             }
 
             using (var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
@@ -63,7 +63,7 @@ namespace Application.Wizyty.Commands
                     await context.SaveChangesAsync(cancellationToken);
 
                     var harmonogram = context.Harmonograms.Where(x => x.IdHarmonogram == id_harmonogram).First();
-                    harmonogram.IdWizyta = result.Entity.IdWizyta;
+                    harmonogram.IdWizyta = result != null ? result.Entity.IdWizyta : 0;
 
                     await context.SaveChangesAsync(cancellationToken);
                     
@@ -73,10 +73,10 @@ namespace Application.Wizyty.Commands
                     await sender.SendUmowWizytaEmail(to, harmonogram.DataRozpoczecia, weterynarz);
                     transaction.Complete();
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     transaction.Dispose();
-                    throw new Exception();
+                    throw e;
                 }
 
                 transaction.Dispose();

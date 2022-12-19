@@ -16,27 +16,27 @@ namespace Test
 
         public Task SendCreateAccountEmail(string to)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         public Task SendHasloEmail(string to, string content)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         public Task SendPrzypomnienieEmail(string to, DateTime data, string weterynarz)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         public Task SendSzczepienieEmail(string to, DateTime data, string pacjent)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         public Task SendUmowWizytaEmail(string to, DateTime data, string weterynarz)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
     }
 }

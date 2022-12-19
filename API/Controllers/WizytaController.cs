@@ -149,9 +149,9 @@ namespace PRO_API.Controllers
             }
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPut("przeloz/{ID_wizyta}")]
-        public async Task<IActionResult> UpdateWizytaData(UmowWizyteRequest request, string ID_wizyta, CancellationToken token)   //klient albo weterynarz lub admin zmienia termin wizyty dla klienta (telefonicznie albo na miejscu)
+        public async Task<IActionResult> PrzelozWizyte(UmowWizyteRequest request, string ID_wizyta, CancellationToken token)   //klient albo weterynarz lub admin zmienia termin wizyty dla klienta (telefonicznie albo na miejscu)
         {
             try
             {

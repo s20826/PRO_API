@@ -109,7 +109,7 @@ namespace PRO_API.Controllers
 
         [Authorize]
         [HttpPost("umowWizyte")]
-        public async Task<IActionResult> AddWizyta(UmowWizyteRequest request, CancellationToken token)    //klient albo weterynarz lub admin umówia wizytę dla klienta (telefonicznie albo na miejscu)
+        public async Task<IActionResult> UmowWizyte(UmowWizyteRequest request, CancellationToken token)    //klient albo weterynarz lub admin umówia wizytę dla klienta (telefonicznie albo na miejscu)
         {
             try
             {
@@ -142,10 +142,25 @@ namespace PRO_API.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(new
+                return BadRequest(e.Message);
+            }
+        }
+
+        [Authorize(Roles = "weterynarz")]
+        [HttpPost]
+        public async Task<IActionResult> AddWizyta(string ID_Harmonogram, string ID_Pacjent, CancellationToken token)    //klient albo weterynarz lub admin umówia wizytę dla klienta (telefonicznie albo na miejscu)
+        {
+            try
+            {
+                return Ok(await Mediator.Send(new CreateWizytaCommand
                 {
-                    massage = e.Message
-                });
+                    ID_pacjent = ID_Pacjent,
+                    ID_harmonogram = ID_Harmonogram
+                }, token));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
             }
         }
 

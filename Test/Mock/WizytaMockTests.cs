@@ -161,6 +161,37 @@ namespace Test.Mock
         }
 
         [Test]
+        public async Task CreateWizytaShouldBeCorrectTest()
+        {
+            var before = mockContext.Object.Wizyta.Count();
+            var handler = new CreateWizytaCommandHandler(mockContext.Object, hash, new WizytaService());
+
+            CreateWizytaCommand command = new CreateWizytaCommand()
+            {
+                ID_pacjent = hash.Encode(1),
+                ID_harmonogram = hash.Encode(1)
+            };
+
+            var result = await handler.Handle(command, CancellationToken.None);
+            mockContext.Verify(m => m.SaveChangesAsync(CancellationToken.None), Times.Exactly(2));
+            Assert.AreEqual(before + 1, mockContext.Object.Wizyta.Count());
+        }
+
+        [Test]
+        public void CreateWizytaShouldThrowAnExceptionTest()
+        {
+            var handler = new CreateWizytaCommandHandler(mockContext.Object, hash, new WizytaService());
+
+            CreateWizytaCommand command = new CreateWizytaCommand()
+            {
+                ID_pacjent = hash.Encode(1),
+                ID_harmonogram = hash.Encode(-1)
+            };
+
+            Assert.ThrowsAsync<Exception>(async () => await handler.Handle(command, CancellationToken.None));
+        }
+
+        [Test]
         public async Task DeleteWizytaAdminShouldBeCorrectTest()
         {
             var handler = new DeleteWizytaAdminCommandHandler(mockContext.Object, hash, new WizytaService(), new MockEmailSender());

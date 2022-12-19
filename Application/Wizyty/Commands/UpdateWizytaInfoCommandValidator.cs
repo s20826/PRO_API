@@ -12,8 +12,6 @@ namespace Application.Wizyty.Commands
 
             RuleFor(x => x.request.ID_Pacjent).NotEmpty();
 
-            //RuleFor(x => x.request.Uslugi).NotEmpty();
-
             RuleFor(x => x.request.Opis).MinimumLength(2).MaximumLength(500);
         }
     }

@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using Application.DTO.Requests;
+using Application.Interfaces;
 using Domain.Enums;
 using Domain.Models;
 using MediatR;
@@ -14,8 +15,9 @@ namespace Application.Wizyty.Commands
 {
     public class CreateWizytaCommand : IRequest<string>
     {
-        public string ID_pacjent { get; set; }
+        public string? ID_pacjent { get; set; }
         public string ID_harmonogram { get; set; }
+        public string ID_klient { get; set; }
     }
 
     public class CreateWizytaCommandHandler : IRequestHandler<CreateWizytaCommand, string>
@@ -32,20 +34,18 @@ namespace Application.Wizyty.Commands
 
         public async Task<string> Handle(CreateWizytaCommand req, CancellationToken cancellationToken)
         {
-            var pacjentID = hash.Decode(req.ID_pacjent);
             var harmonogramID = hash.Decode(req.ID_harmonogram);
+            var klientID = hash.Decode(req.ID_klient);
             var id = 0;
 
             using (var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
                 try
                 {
-                    var pacjent = context.Pacjents.First(x => x.IdPacjent == pacjentID);
-
                     var result = context.Wizyta.Add(new Wizytum
                     {
-                        IdOsoba = pacjent.IdOsoba,
-                        IdPacjent = pacjentID,
+                        IdOsoba = klientID,
+                        IdPacjent = req.ID_pacjent != "0" ? hash.Decode(req.ID_pacjent) : null,
                         Opis = "",
                         Status = WizytaStatus.Zaplanowana.ToString(),
                         Cena = 0,

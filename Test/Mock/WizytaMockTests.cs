@@ -169,7 +169,8 @@ namespace Test.Mock
             CreateWizytaCommand command = new CreateWizytaCommand()
             {
                 ID_pacjent = hash.Encode(1),
-                ID_harmonogram = hash.Encode(1)
+                ID_harmonogram = hash.Encode(1),
+                ID_klient = hash.Encode(1)
             };
 
             var result = await handler.Handle(command, CancellationToken.None);

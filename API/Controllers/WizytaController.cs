@@ -228,13 +228,23 @@ namespace PRO_API.Controllers
 
         [Authorize]
         [HttpDelete("{ID_wizyta}")]
-        public async Task<IActionResult> DeleteWizyta(string ID_wizyta, CancellationToken token)  //klient albo weterynarz lub admin aunuluje wizytę dla klienta (telefonicznie albo na miejscu)
+        public async Task<IActionResult> DeleteWizyta(string ID_wizyta, string ID_klient, CancellationToken token)  //klient albo weterynarz lub admin aunuluje wizytę dla klienta (telefonicznie albo na miejscu)
         {
             try
             {
+                if (isKlient())
+                {
+                    return Ok(await Mediator.Send(new DeleteWizytaKlientCommand
+                    {
+                        ID_wizyta = ID_wizyta,
+                        ID_klient = GetUserId()
+                    }, token));
+                }
+
                 return Ok(await Mediator.Send(new DeleteWizytaKlientCommand
                 {
-                    ID_wizyta = ID_wizyta
+                    ID_wizyta = ID_wizyta,
+                    ID_klient = ID_klient
                 }, token));
             }
             catch (Exception e)

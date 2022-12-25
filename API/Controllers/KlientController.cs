@@ -1,4 +1,5 @@
 ﻿using Application.DTO;
+using Application.DTO.Requests;
 using Application.Klienci.Commands;
 using Application.Klienci.Queries;
 using Microsoft.AspNetCore.Authorization;
@@ -51,6 +52,23 @@ namespace PRO_API.Controllers
                     request = request
                 }, token));
             } 
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [Authorize(Roles = "weterynarz,admin")]
+        [HttpPost("Klinika")]
+        public async Task<IActionResult> AddKlient(KlientCreateKlinikaRequest request, CancellationToken token)
+        {
+            try
+            {
+                return Ok(await Mediator.Send(new CreateKlientKlinikaCommand
+                {
+                    request = request
+                }, token));
+            }
             catch (Exception e)
             {
                 return BadRequest(e.Message);

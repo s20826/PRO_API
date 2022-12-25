@@ -61,7 +61,7 @@ namespace Application.Wizyty.Commands
             }*/
 
             wizyta.Opis = req.request.Opis;
-            wizyta.IdPacjent = req.request.ID_Pacjent != null ? hash.Decode(req.request.ID_Pacjent) : null;
+            wizyta.IdPacjent = req.request.ID_Pacjent != "0" ? hash.Decode(req.request.ID_Pacjent) : null;
 
             return await context.SaveChangesAsync(cancellationToken);
         }

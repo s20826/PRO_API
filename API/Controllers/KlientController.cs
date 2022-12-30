@@ -90,15 +90,15 @@ namespace PRO_API.Controllers
                     }, token);
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return NotFound();
+                return BadRequest(e.Message);
             }
 
             return NoContent();
         }
 
-        [Authorize(Roles = "admin")]
+        //[Authorize(Roles = "admin")]
         [HttpDelete("admin/{ID_osoba}")]
         public async Task<IActionResult> DeleteKlientByAdmin(string ID_osoba, CancellationToken token)
         {
@@ -109,9 +109,9 @@ namespace PRO_API.Controllers
                     ID_osoba = ID_osoba
                 }, token);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return NotFound();
+                return BadRequest(e.Message);
             }
             
             return NoContent();

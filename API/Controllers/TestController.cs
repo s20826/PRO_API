@@ -141,8 +141,9 @@ namespace PRO_API.Controllers
         {
             try
             {
-                var result = context.Osobas.AsParallel().WithCancellation(token).ToList();
                 await Task.Delay(3000, token);
+                var result = context.Osobas.AsParallel().WithCancellation(token).ToList();
+                logger.LogWarning(result.Count().ToString());
                 return Ok(result);
             }
             catch (TaskCanceledException)

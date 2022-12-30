@@ -2,9 +2,13 @@
 using Application.DTO.Responses;
 using Application.Interfaces;
 using MediatR;
+using System.IO;
+using System;
 using System.Linq;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Domain.Enums;
 
 namespace Application.Klienci.Commands
 {
@@ -29,18 +33,35 @@ namespace Application.Klienci.Commands
         {
             int id = hash.Decode(req.ID_osoba);
 
-            var osoba = context.Osobas.Where(x => x.IdOsoba == id).FirstOrDefault();
+            if(context.Wizyta.Where(x => x.IdOsoba== id && !x.CzyOplacona && x.Status.Equals(WizytaStatus.Zrealizowana.ToString())).Any()) 
+            {
+                throw new Exception("Klient ma nieopłaconą wizytę");
+            }
+
+            var osoba = context.Osobas.First(x => x.IdOsoba == id);
+            var klient = context.Klients.First(x => x.IdOsoba == id);
             osoba.Nazwisko = osoba.Nazwisko.ElementAt(0).ToString();
             osoba.Haslo = "";
             osoba.Salt = "";
-            osoba.RefreshToken = "";
+            osoba.RefreshToken = new Guid().ToString();
             osoba.Email = "";
             osoba.NumerTelefonu = "";
 
-            int result = await context.SaveChangesAsync(cancellationToken);
-            cache.Remove();
+            using (StreamWriter fileStream = new StreamWriter(new FileStream(@"Klienci.log", FileMode.Append)))
+            {
+                
+                string outputString = osoba.Imie + " " + osoba.Nazwisko.ElementAt(0).ToString() + 
+                    " (" + klient.DataZalozeniaKonta.ToShortDateString() + " - " + DateTime.Now.ToShortDateString() + ")" + "\n";
 
-            return result;
+                string stats = "wizyty: " + context.Wizyta.Where(x => x.IdOsoba == id).Count() + "\n" + "\n";
+
+                await fileStream.WriteAsync(outputString + stats);
+            }
+
+            return 0;
+
+            //cache.Remove();
+            //return await context.SaveChangesAsync(cancellationToken);
         }
     }
 }

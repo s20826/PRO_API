@@ -33,13 +33,19 @@ namespace Application.Klienci.Commands
         {
             int id = hash.Decode(req.ID_osoba);
 
+            var osoba = context.Osobas.FirstOrDefault(x => x.IdOsoba == id);
+            var klient = context.Klients.FirstOrDefault(x => x.IdOsoba == id);
+
+            if (!osoba.Rola.Equals("K"))
+            {
+                throw new Exception("");
+            }
+
             if(context.Wizyta.Where(x => x.IdOsoba== id && !x.CzyOplacona && x.Status.Equals(WizytaStatus.Zrealizowana.ToString())).Any()) 
             {
                 throw new Exception("Klient ma nieopłaconą wizytę");
             }
-
-            var osoba = context.Osobas.First(x => x.IdOsoba == id);
-            var klient = context.Klients.First(x => x.IdOsoba == id);
+            
             osoba.Nazwisko = osoba.Nazwisko.ElementAt(0).ToString();
             osoba.Haslo = "";
             osoba.Salt = "";
@@ -53,9 +59,10 @@ namespace Application.Klienci.Commands
                 string outputString = osoba.Imie + " " + osoba.Nazwisko.ElementAt(0).ToString() + 
                     " (" + klient.DataZalozeniaKonta.ToShortDateString() + " - " + DateTime.Now.ToShortDateString() + ")" + "\n";
 
-                string stats = "wizyty: " + context.Wizyta.Where(x => x.IdOsoba == id).Count() + "\n" + "\n";
+                string total = "koszt wizyt: " + context.Wizyta.Where(x => x.IdOsoba == id).Sum(x => x.Cena).ToString() + "\n";
+                string stats = "liczba wizyt: " + context.Wizyta.Where(x => x.IdOsoba == id).Count() + "\n" + "\n";
 
-                await fileStream.WriteAsync(outputString + stats);
+                await fileStream.WriteAsync(outputString + total + stats);
             }
 
             return 0;

@@ -98,7 +98,7 @@ namespace PRO_API.Controllers
             return NoContent();
         }
 
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         [HttpDelete("admin/{ID_osoba}")]
         public async Task<IActionResult> DeleteKlientByAdmin(string ID_osoba, CancellationToken token)
         {

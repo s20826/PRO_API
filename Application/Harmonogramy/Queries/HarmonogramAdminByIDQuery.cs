@@ -37,9 +37,11 @@ namespace Application.Harmonogramy.Queries
                  join z in context.Wizyta on x.IdWizyta equals z.IdWizyta into wizyta
                  from t in wizyta.DefaultIfEmpty()
                  where x.DataRozpoczecia.Date >= StartDate && x.DataZakonczenia.Date <= EndDate && x.WeterynarzIdOsoba == id
+                 orderby x.DataRozpoczecia
                  select new GetHarmonogramAdminResponse()
                  {
                      IdHarmonogram = hash.Encode(x.IdHarmonogram),
+                     IdWizyta = x.IdWizyta != null ? hash.Encode((int)x.IdWizyta) : null,
                      //IdWeterynarz = req.ID_osoba,
                      //Weterynarz = w.Imie + " " + w.Nazwisko,
                      Data = x.DataRozpoczecia,

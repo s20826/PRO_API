@@ -9,6 +9,7 @@ namespace Application.DTO.Responses
     public class GetHarmonogramAdminResponse
     {
         public string IdHarmonogram { get; set; }
+        public string? IdWizyta { get; set; }
         public string IdWeterynarz { get; set; }
         public string Weterynarz { get; set; }
         public string? IdKlient { get; set; }

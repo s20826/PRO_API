@@ -34,10 +34,13 @@ namespace Application.Recepty.Queries
                     join s in context.Wizyta on x.IdWizyta equals s.IdWizyta
                     join l in context.ReceptaLeks on x.IdWizyta equals l.IdWizyta into receptaLek
                     from y in receptaLek.DefaultIfEmpty()
+                    join z in context.Pacjents on s.IdPacjent equals z.IdPacjent into pacjent
+                    from p in pacjent.DefaultIfEmpty()
                     where s.IdOsoba == id
                     select new GetReceptaResponse()
                     {
                         ID_Recepta = hash.Encode(x.IdWizyta),
+                        Pacjent = s.IdPacjent != null ? p.Nazwa : null,
                         Zalecenia = x.Zalecenia,
                         Leki = x.ReceptaLeks.Select(x => new GetReceptaLekResponse
                         {

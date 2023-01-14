@@ -35,7 +35,6 @@ namespace Application.Harmonogramy.Queries
                  from t in wizyta.DefaultIfEmpty()
                  join w in context.Osobas on x.WeterynarzIdOsoba equals w.IdOsoba
                  where x.DataRozpoczecia.Date >= StartDate && x.DataZakonczenia.Date <= EndDate
-                 orderby x.DataRozpoczecia
                  select new GetHarmonogramAdminResponse()
                  {
                      IdHarmonogram = hash.Encode(x.IdHarmonogram),
@@ -49,7 +48,7 @@ namespace Application.Harmonogramy.Queries
                      IdPacjent = x.IdWizyta != null ? hash.Encode((int)t.IdPacjent) : null,
                      Pacjent = x.IdWizyta != null ? context.Pacjents.Where(p => p.IdPacjent == t.IdPacjent).Select(p => p.Nazwa).First() : null,
                      CzyZajete = x.IdWizyta != null
-                 }).AsParallel().WithCancellation(cancellationToken).ToList();
+                 }).AsParallel().WithCancellation(cancellationToken).OrderBy(x => x.Data).ToList();
 
             return new 
             {

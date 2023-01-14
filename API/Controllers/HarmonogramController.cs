@@ -164,7 +164,7 @@ namespace PRO_API.Controllers
         }
 
 
-        //[Authorize(Roles = "weterynarz,admin")]
+        [Authorize(Roles = "weterynarz,admin")]
         [HttpGet("klinika")]
         public async Task<IActionResult> GetKlinikaHarmonogram(DateTime date, CancellationToken token)
         {

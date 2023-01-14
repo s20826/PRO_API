@@ -95,7 +95,7 @@ namespace Application.Wizyty.Commands
             var harmonogram = context.Harmonograms.First(x => x.IdHarmonogram == harmonogramID);
             harmonogram.IdWizyta = wizytaID;
 
-            wizyta.IdPacjent = req.ID_pacjent != null ? hash.Decode(req.ID_pacjent) : null;
+            wizyta.IdPacjent = req.ID_pacjent != "0" ? hash.Decode(req.ID_pacjent) : null;
             wizyta.NotatkaKlient = req.Notatka;
 
             return await context.SaveChangesAsync(cancellationToken);

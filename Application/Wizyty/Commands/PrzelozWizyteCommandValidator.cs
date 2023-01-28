@@ -8,7 +8,7 @@ namespace Application.Wizyty.Commands
         {
             RuleFor(x => x.ID_harmonogram).NotEmpty();
 
-            RuleFor(x => x.ID_klient).NotEmpty();
+            //RuleFor(x => x.ID_klient).NotEmpty();
 
             RuleFor(x => x.ID_pacjent).NotEmpty();
 

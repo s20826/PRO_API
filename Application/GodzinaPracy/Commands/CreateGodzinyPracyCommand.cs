@@ -38,7 +38,7 @@ namespace Application.GodzinaPracy.Commands
                 i = request.DzienTygodnia;
                 if (context.GodzinyPracies.Where(x => x.DzienTygodnia == i && x.IdOsoba == id).Any())
                 {
-                    throw new Exception();
+                    throw new Exception("Ten weterynarz ma już ustawione godziny pracy tego dnia");
                 }
 
                 context.GodzinyPracies.Add(new GodzinyPracy

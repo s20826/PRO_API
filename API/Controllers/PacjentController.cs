@@ -107,7 +107,7 @@ namespace PRO_API.Controllers
             }
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,weterynarz")]
         [HttpDelete("{ID_Pacjent}")]
         public async Task<IActionResult> DeletePacjent(string ID_Pacjent, CancellationToken token)
         {

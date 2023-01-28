@@ -34,7 +34,7 @@ namespace Application.Wizyty.Commands
 
         public async Task<int> Handle(PrzelozWizyteCommand req, CancellationToken cancellationToken)
         {
-            (int klientID, int wizytaID) = hash.Decode(req.ID_klient, req.ID_wizyta);
+            int wizytaID = hash.Decode(req.ID_wizyta);
             int harmonogramID = hash.Decode(req.ID_harmonogram);
 
             var wizyta = context.Wizyta.Where(x => x.IdWizyta.Equals(wizytaID)).First();
@@ -45,10 +45,10 @@ namespace Application.Wizyty.Commands
                 throw new Exception();
             }
 
-            if (!klientID.Equals(wizyta.IdOsoba))
+            /*if (!klientID.Equals(wizyta.IdOsoba))
             {
                 throw new UserNotAuthorizedException();
-            }
+            }*/
 
             if (!oldHarmonograms.Any())
             {

@@ -175,7 +175,7 @@ namespace PRO_API.Controllers
                     return Ok(await Mediator.Send(new PrzelozWizyteCommand
                     {
                         ID_wizyta = ID_wizyta,
-                        ID_klient = GetUserId(),
+                        //ID_klient = GetUserId(),
                         ID_pacjent = request.ID_Pacjent,
                         ID_harmonogram = request.ID_Harmonogram,
                         Notatka = request.Notatka
@@ -185,7 +185,7 @@ namespace PRO_API.Controllers
                 return Ok(await Mediator.Send(new PrzelozWizyteCommand
                 {
                     ID_wizyta = ID_wizyta,
-                    ID_klient = request.ID_Klient,
+                    //ID_klient = request.ID_Klient,
                     ID_pacjent = request.ID_Pacjent,
                     ID_harmonogram = request.ID_Harmonogram,
                     Notatka = request.Notatka

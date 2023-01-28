@@ -144,23 +144,6 @@ namespace Test.Mock
         }
 
         [Test]
-        public void PrzelozWizyteShouldThrowAnExceptionTest2()
-        {
-            var handler = new PrzelozWizyteCommandHandler(mockContext.Object, hash, new WizytaService());
-
-            PrzelozWizyteCommand command = new PrzelozWizyteCommand()
-            {
-                ID_klient = hash.Encode(2),
-                ID_wizyta = hash.Encode(1),
-                ID_pacjent = hash.Encode(1),
-                ID_harmonogram = hash.Encode(1),
-                Notatka = "przelozWizyte"
-            };
-
-            Assert.ThrowsAsync<UserNotAuthorizedException>(async () => await handler.Handle(command, CancellationToken.None));
-        }
-
-        [Test]
         public async Task CreateWizytaShouldBeCorrectTest()
         {
             var before = mockContext.Object.Wizyta.Count();

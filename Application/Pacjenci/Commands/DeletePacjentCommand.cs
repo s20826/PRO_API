@@ -31,9 +31,8 @@ namespace Application.Pacjenci.Commands
         {
             int id = hash.Decode(req.ID_Pacjent);
 
-            var pacjent = context.Pacjents.Where(x => x.IdPacjent == id).First();
-
-            context.Pacjents.Remove(pacjent);
+            context.Szczepienies.RemoveRange(context.Szczepienies.Where(x => x.IdPacjent == id).ToList());
+            context.Pacjents.Remove(context.Pacjents.Where(x => x.IdPacjent == id).First());
 
             int result = await context.SaveChangesAsync(cancellationToken);
             cache.Remove();

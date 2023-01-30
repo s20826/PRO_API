@@ -32,7 +32,7 @@ namespace Application.LekiWMagazynie.Commands
 
             var stanLeku = context.LekWMagazynies.Where(x => x.IdStanLeku == id).FirstOrDefault();
             stanLeku.Ilosc = req.request.Ilosc;
-            stanLeku.DataWaznosci = req.request.DataWaznosci;
+            stanLeku.DataWaznosci = req.request.DataWaznosci.Date;
 
             return await context.SaveChangesAsync(cancellationToken);
         }

@@ -40,7 +40,7 @@ namespace Application.Urlopy.Commands
                 context);
 
             urlop.IdOsoba = hash.Decode(req.request.ID_weterynarz);
-            urlop.Dzien = req.request.Dzien;
+            urlop.Dzien = req.request.Dzien.Date;
 
             return await context.SaveChangesAsync(cancellationToken);
         }

@@ -20,7 +20,7 @@ namespace Application.DTO.Request
 
         public string Plec { get; set; }
 
-        public DateTime DataUrodzenia { get; set; }
+        public DateTimeOffset DataUrodzenia { get; set; }
 
         public decimal Waga { get; set; }
 

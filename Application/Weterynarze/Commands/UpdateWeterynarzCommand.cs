@@ -39,9 +39,9 @@ namespace Application.Weterynarze.Commands
             konto.Email = req.request.Email;
             konto.NumerTelefonu = req.request.NumerTelefonu;
 
-            weterynarz.DataUrodzenia = req.request.DataUrodzenia;
+            weterynarz.DataUrodzenia = req.request.DataUrodzenia.Date;
             weterynarz.Pensja = req.request.Pensja;
-            weterynarz.DataZatrudnienia = req.request.DataZatrudnienia;
+            weterynarz.DataZatrudnienia = req.request.DataZatrudnienia.Date;
 
             int result = await context.SaveChangesAsync(cancellationToken);
             cache.Remove();

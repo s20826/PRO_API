@@ -43,7 +43,7 @@ namespace Application.Pacjenci.Commands
             pacjent.Rasa = req.request.Rasa;
             pacjent.Masc = req.request.Masc;
             pacjent.Plec = req.request.Plec;
-            pacjent.DataUrodzenia = req.request.DataUrodzenia;
+            pacjent.DataUrodzenia = req.request.DataUrodzenia.Date;
             pacjent.Waga = req.request.Waga;
             pacjent.Agresywne = req.request.Agresywne;
             pacjent.Ubezplodnienie = req.request.Ubezplodnienie;

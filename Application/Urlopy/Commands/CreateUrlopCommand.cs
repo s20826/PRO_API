@@ -37,7 +37,7 @@ namespace Application.Urlopy.Commands
             context.Urlops.Add(new Domain.Models.Urlop
             {
                 IdOsoba = id,
-                Dzien = req.request.Dzien
+                Dzien = req.request.Dzien.Date
             });
 
             var harmonograms = context.Harmonograms.Where(x => x.DataRozpoczecia.Date.Equals(req.request.Dzien.Date) && x.WeterynarzIdOsoba.Equals(id)).ToList();

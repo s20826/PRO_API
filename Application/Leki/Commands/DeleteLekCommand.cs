@@ -29,6 +29,11 @@ namespace Application.Leki.Commands
             context.ChorobaLeks.RemoveRange(context.ChorobaLeks.Where(x => x.IdLek.Equals(id)).ToList());
             context.WizytaLeks.RemoveRange(context.WizytaLeks.Where(x => x.IdLek.Equals(id)).ToList());
             context.ReceptaLeks.RemoveRange(context.ReceptaLeks.Where(x => x.IdLek.Equals(id)).ToList());
+
+            if(context.Szczepionkas.Where(x => x.IdLek.Equals(id)).Any())
+            {
+                context.Szczepionkas.Remove(context.Szczepionkas.Where(x => x.IdLek.Equals(id)).First());
+            }
             context.Leks.Remove(context.Leks.Where(x => x.IdLek.Equals(id)).First());
 
             return await context.SaveChangesAsync(cancellationToken);

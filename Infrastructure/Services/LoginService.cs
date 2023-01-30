@@ -33,6 +33,7 @@ namespace Infrastructure.Services
                 if (user.LiczbaProb >= GlobalValues.LICZBA_PROB)
                 {
                     user.DataBlokady = DateTime.Now.AddHours(GlobalValues.GODZINY_BLOKADY);
+                    user.LiczbaProb = 0;
                 }
                 return false;
             }

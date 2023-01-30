@@ -34,7 +34,7 @@ namespace Application.LekiWMagazynie.Commands
             context.LekWMagazynies.Add(new LekWMagazynie
             {
                 IdLek = id,
-                DataWaznosci = req.request.DataWaznosci,
+                DataWaznosci = req.request.DataWaznosci.Date,
                 Ilosc = req.request.Ilosc
             });
 

@@ -12,8 +12,6 @@ namespace Application.Szczepionki.Commands
 
             RuleFor(x => x.request.Zastosowanie).MinimumLength(2).MaximumLength(100);
 
-            RuleFor(x => x.request.CzyObowiazkowa).NotEmpty();
-
             RuleFor(x => x.request.OkresWaznosci).GreaterThan(0);
         }
     }

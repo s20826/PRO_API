@@ -20,7 +20,7 @@ namespace PRO_API.Controllers
 {
     public class TestController : ApiControllerBase
     {
-        private readonly IConfiguration configuration;
+        /*private readonly IConfiguration configuration;
         private readonly IHashids hashids;
         private readonly KlinikaContext context;
         private readonly IEmailSender _emailSender;
@@ -59,6 +59,18 @@ namespace PRO_API.Controllers
         public IActionResult GetHashedID(int id)
         {
             return Ok(hashids.Encode(id));
+        }
+
+        [HttpGet("time")]
+        public IActionResult GetHashedID(DateTime dateTime, DateTimeOffset dateTimeOffset)
+        {
+            return Ok(new
+            {
+                utc = dateTime.ToUniversalTime(),
+                local = dateTime.ToLocalTime(),
+                offset = dateTimeOffset,
+                offset2 = dateTimeOffset.ToUniversalTime(),
+            });
         }
 
         [HttpPost("email/haslo")]
@@ -119,6 +131,6 @@ namespace PRO_API.Controllers
             {
                 return BadRequest(e);
             }
-        }
+        }*/
     }
 }

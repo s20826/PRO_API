@@ -13,7 +13,7 @@ namespace Application.DTO
 
         public string Nazwisko { get; set; }
 
-        public DateTime DataUrodzenia { get; set; }
+        public DateTimeOffset DataUrodzenia { get; set; }
 
         public string NumerTelefonu { get; set; }
 
@@ -21,6 +21,6 @@ namespace Application.DTO
 
         public decimal Pensja { get; set; }
 
-        public DateTime DataZatrudnienia { get; set; }
+        public DateTimeOffset DataZatrudnienia { get; set; }
     }
 }

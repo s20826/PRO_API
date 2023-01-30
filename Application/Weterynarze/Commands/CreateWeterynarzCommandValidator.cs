@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using System;
 
 namespace Application.Weterynarze.Commands
 {
@@ -14,7 +15,7 @@ namespace Application.Weterynarze.Commands
 
             RuleFor(x => x.request.NumerTelefonu).NotEmpty().Matches(@"^(\+?[0-9]{9,11})");
 
-            RuleFor(x => x.request.DataUrodzenia).NotEmpty();
+            RuleFor(x => x.request.DataUrodzenia).NotEmpty().LessThan(DateTime.Now);
 
             RuleFor(x => x.request.DataZatrudnienia).NotEmpty();
 

@@ -60,13 +60,13 @@ namespace Application.Weterynarze.Commands
             SqlCommand command = new SqlCommand(query, connection);
             command.Parameters.AddWithValue("@imie", req.request.Imie);
             command.Parameters.AddWithValue("@nazwisko", req.request.Nazwisko);
-            command.Parameters.AddWithValue("@dataUr", req.request.DataUrodzenia);
+            command.Parameters.AddWithValue("@dataUr", req.request.DataUrodzenia.Date);
             command.Parameters.AddWithValue("@numerTel", req.request.NumerTelefonu);
             command.Parameters.AddWithValue("@email", req.request.Email);
             command.Parameters.AddWithValue("@login", generatedLogin);
             command.Parameters.AddWithValue("@haslo", hashedPassword);
             command.Parameters.AddWithValue("@pensja", req.request.Pensja);
-            command.Parameters.AddWithValue("@dataZatrudnienia", req.request.DataZatrudnienia);
+            command.Parameters.AddWithValue("@dataZatrudnienia", req.request.DataZatrudnienia.Date);
             command.Parameters.AddWithValue("@salt", saltBase64);
 
             int resultID = Convert.ToInt32(command.ExecuteScalar());

@@ -50,7 +50,7 @@ namespace Application.Szczepionki.Commands
                         IdLek = id,
                         Zastosowanie = req.request.Zastosowanie,
                         CzyObowiazkowa = req.request.CzyObowiazkowa,
-                        OkresWaznosci = TimeSpan.FromDays((double)req.request.OkresWaznosci).Ticks
+                        OkresWaznosci = req.request.OkresWaznosci != null ? TimeSpan.FromDays((double)req.request.OkresWaznosci).Ticks : null
                     });
 
 

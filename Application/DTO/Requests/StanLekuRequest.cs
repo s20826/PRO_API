@@ -10,6 +10,6 @@ namespace Application.DTO.Request
     {
         public int Ilosc { get; set; }
 
-        public DateTime DataWaznosci { get; set; }
+        public DateTimeOffset DataWaznosci { get; set; }
     }
 }

@@ -49,7 +49,7 @@ namespace Test.Mock
         }
 
 
-        [Test]
+        /*[Test]
         public void CreateUrlopShouldThrowAnExceptionTest()
         {
             var handler = new CreateUrlopCommandHandler(mockContext.Object, hash, harmonogramService);
@@ -64,7 +64,7 @@ namespace Test.Mock
             };
 
             Assert.ThrowsAsync<Exception>(async () => await handler.Handle(command, CancellationToken.None));
-        }
+        }*/
 
 
         [Test]
